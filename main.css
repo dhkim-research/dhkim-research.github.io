@@ -1,165 +1,57 @@
-/* Global base */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ========== GLOBAL ==================================================== */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;color:#222;line-height:1.7;background:#fff}
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  color: #222;
-  line-height: 1.7;
-  background-color: #ffffff;
+/* ========== HERO ====================================================== */
+.hero{background:#f0f0f0;padding:6rem 2rem}
+.hero-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:3rem}
+.hero-text{max-width:550px;text-align:left}
+.hero h2{font-family:'Raleway',sans-serif;font-size:1.6rem;color:#83C5C9;font-weight:700;margin-bottom:.5rem}
+.hero h1{font-size:2.4rem;font-weight:700;margin-bottom:1.5rem}
+.hero p{font-size:1.05rem;color:#333;margin-bottom:1.5rem}
+.hero-links a{display:inline-block;margin-right:1.2rem;font-weight:600;text-decoration:none;color:#83C5C9;font-size:1rem}
+.hero-links a:hover{text-decoration:underline}
+.hero-graphic{display:flex;justify-content:center;align-items:center}
+#scene{width:260px;height:200px}
+
+/* two-column for large screens */
+@media(min-width:900px){
+  .hero-inner{flex-direction:row;justify-content:space-between;align-items:center}
+  .hero-text{text-align:left}
+  .hero-graphic{flex-shrink:0}
 }
 
-/* Hero section */
-.hero {
-  background: #f0f0f0;
-  padding: 6rem 2rem;
-}
+/* ========== SECTION BASE ============================================= */
+section{padding:6rem 2rem}
+.section-inner{max-width:800px;margin:0 auto;text-align:left}
+section h2{font-family:'Raleway',sans-serif;font-size:1.8rem;color:#83C5C9;margin-bottom:1rem}
+section h3{font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:#111}
+section p{font-size:1rem;color:#222;line-height:1.8;margin-bottom:1.5rem}
 
-.hero-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-}
+/* ========== TIMELINE / PHOTOS ======================================== */
+.timeline{display:flex;flex-direction:column;align-items:center;position:relative;margin-top:2rem}
+.timeline::before{content:"";position:absolute;top:0;bottom:0;width:3px;background:#83C5C9}
+.photo{position:relative;background:#fff;border:5px solid #83C5C9;border-radius:50%;overflow:hidden;width:160px;height:160px;margin:2rem 0}
+.photo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 
-.hero-text {
-  max-width: 550px;
-  text-align: left;
-}
+/* ========== PROJECTS ================================================== */
+.projects{background:#fff}
+.projects.past{background:#f7f7f7}
+.projects h2{margin-bottom:1.5rem}
+.project h3{font-size:1.05rem;margin-bottom:.5rem;color:#000}
+.project p{margin-bottom:1.5rem}
 
-.hero h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.6rem;
-  color: #83C5C9;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
+/* ========== OUTREACH ================================================== */
+.outreach ul{margin-top:.5rem;margin-left:1.2rem}
+.outreach li{margin-bottom:.5rem}
 
-.hero h1 {
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
+/* ========== FOOTER ==================================================== */
+footer{text-align:center;background:#fff;color:#555;padding:3rem 1rem;border-top:1px solid #e0e0e0}
+.footer-links{margin-bottom:1rem}
+.footer-links a{margin:0 .8rem;text-decoration:none;color:#83C5C9;font-weight:600;font-size:1rem}
+.footer-links a:hover{text-decoration:underline}
+footer p{font-size:.85rem;color:#888}
 
-.hero p {
-  font-size: 1.05rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
-.hero-links a {
-  display: inline-block;
-  margin-right: 1.2rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #83C5C9;
-  font-size: 1rem;
-}
-
-.hero-links a:hover {
-  text-decoration: underline;
-}
-
-/* Canvas brain graphic */
-.hero-graphic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#scene {
-  width: 260px;
-  height: 200px;
-}
-
-/* Two-column layout for larger screens */
-@media (min-width: 900px) {
-  .hero-inner {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .hero-text {
-    text-align: left;
-  }
-
-  .hero-graphic {
-    flex-shrink: 0;
-  }
-}
-
-/* About section */
-.about {
-  background: #ffffff;
-  padding: 6rem 2rem;
-}
-
-.about-inner {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.about h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.8rem;
-  color: #83C5C9;
-  margin-bottom: 1rem;
-}
-
-.about p {
-  font-size: 1rem;
-  color: #222;
-  line-height: 1.8;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  background: #ffffff;
-  color: #555;
-  padding: 3rem 1rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.footer-links {
-  margin-bottom: 1rem;
-}
-
-.footer-links a {
-  margin: 0 0.8rem;
-  text-decoration: none;
-  color: #83C5C9;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-}
-
-footer p {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 1.9rem;
-  }
-}
-
-/* ===== Fade-in animation ===== */
-.fade {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s ease-out, transform 1s ease-out;
-  will-change: opacity, transform;
-}
-
-.fade.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ========== FADE-IN =================================================== */
+.fade{opacity:0;transform:translateY(40px);transition:opacity 1s ease-out,transform 1s ease-out}
+.fade.show{opacity:1;transform:translateY(0)}

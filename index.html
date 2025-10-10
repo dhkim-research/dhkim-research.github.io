@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Dong Hyun Kim, PhD | Lighting & Building Scientist</title>
+  <title>Dong Hyun Kim | Lighting & Building Scientist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades.">
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -11,15 +11,13 @@
 </head>
 
 <body>
-  <!-- Hero section -->
+  <!-- HERO -------------------------------------------------------------->
   <header class="hero fade">
     <div class="hero-inner">
       <div class="hero-text fade">
         <h2>Dong Hyun Kim</h2>
         <h1>Building scientist<br>and lighting researcher</h1>
-        <p>
-          Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.
-        </p>
+        <p>Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.</p>
         <div class="hero-links">
           <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
           <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
@@ -27,28 +25,73 @@
       </div>
 
       <div class="hero-graphic fade">
-        <canvas
-          id="scene"
-          onmouseover="mouseStatus(true);"
-          onmouseout="mouseStatus(false);"
-        ></canvas>
+        <canvas id="scene" onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);"></canvas>
       </div>
     </div>
   </header>
 
-  <!-- About section -->
+  <!-- ABOUT ME ----------------------------------------------------------->
   <section class="about fade">
-    <div class="about-inner">
+    <div class="section-inner">
       <h2>About me</h2>
-      <p>
-        I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems.
-        My work bridges building physics, human perception, and data-driven design. 
-        Previously, I was part of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
-      </p>
+      <h3>Building Scientist (PhD) and Lighting Researcher (MSc)</h3>
+      <p>I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work bridges building physics, human perception and data-driven design. Previously, I was part of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.</p>
+      <div class="timeline">
+        <div class="photo">
+          <img src="profile.png" alt="Dong Hyun Kim portrait">
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- CURRENT PROJECTS --------------------------------------------------->
+  <section class="projects fade">
+    <div class="section-inner">
+      <h2>Current Projects</h2>
+      <div class="project">
+        <h3>Solskin AI project – ETH Zürich</h3>
+        <p>to be added</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAST PROJECTS ------------------------------------------------------>
+  <section class="projects fade past">
+    <div class="section-inner">
+      <h2>Past Projects</h2>
+      <div class="project">
+        <h3>HiDyn project – EPFL</h3>
+        <p>to be added</p>
+      </div>
+      <div class="project"><h3>Project B</h3><p>to be added</p></div>
+      <div class="project"><h3>Project C</h3><p>to be added</p></div>
+      <div class="project"><h3>Project D</h3><p>to be added</p></div>
+
+      <div class="timeline">
+        <div class="photo"><img src="profile.png" alt=""></div>
+        <div class="photo"><img src="profile.png" alt=""></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESENTATIONS & OUTREACH ----------------------------------------->
+  <section class="projects fade outreach">
+    <div class="section-inner">
+      <h2>Presentations and Outreach</h2>
+      <ul>
+        <li>to be added</li>
+        <li>to be added</li>
+        <li>to be added</li>
+      </ul>
+      <div class="timeline">
+        <div class="photo"><img src="profile.png" alt=""></div>
+        <div class="photo"><img src="profile.png" alt=""></div>
+        <div class="photo"><img src="profile.png" alt=""></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER ------------------------------------------------------------->
   <footer class="fade">
     <div class="footer-links">
       <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
@@ -58,7 +101,7 @@
     <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
   </footer>
 
-  <!-- === Scripts === -->
+  <!-- SCRIPTS ------------------------------------------------------------>
   <script src="scripts/particleEffect.js"></script>
   <script>
     const brainShape =
@@ -76,18 +119,12 @@
       mouseAvoidanceDistanceNoise: 50
     });
 
-    /* Fade-in on scroll using IntersectionObserver */
+    // Fade-in on scroll
     const faders = document.querySelectorAll('.fade');
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-          obs.unobserve(entry.target);
-        }
-      });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
     }, { threshold: 0.15 });
-
-    faders.forEach(el => observer.observe(el));
+    faders.forEach(el => obs.observe(el));
   </script>
 </body>
 </html>
