@@ -1,3 +1,4 @@
+// Particle canvas
 const canvas = document.getElementById('scene');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -16,9 +17,9 @@ class Particle {
     this.y = Math.random() * wh;
     this.dest = { x, y };
     this.r = 2;
-    this.vx = (Math.random() - 0.5) * 10;
-    this.vy = (Math.random() - 0.5) * 10;
-    this.color = `rgb(${150 + Math.random() * 100},${150 + Math.random() * 100},255)`;
+    this.vx = (Math.random() - 0.5) * 5;
+    this.vy = (Math.random() - 0.5) * 5;
+    this.color = `rgba(${150 + Math.random()*100},${150 + Math.random()*100},255,0.7)`;
   }
   update() {
     this.x += (this.dest.x - this.x) * 0.02 + this.vx * 0.9;
@@ -37,13 +38,25 @@ function init() {
   const cols = 40, rows = 25;
   for (let i = 0; i < cols; i++)
     for (let j = 0; j < rows; j++)
-      particles.push(new Particle((i / cols) * ww, (j / rows) * wh));
+      particles.push(new Particle((i/cols)*ww, (j/rows)*wh));
 }
 init();
-
 function animate() {
   requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, ww, wh);
+  ctx.clearRect(0,0,ww,wh);
   particles.forEach(p => { p.update(); p.draw(); });
 }
 animate();
+
+// Fade-in on scroll
+const faders = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+},{ threshold: 0.2 });
+
+faders.forEach(fader => observer.observe(fader));
