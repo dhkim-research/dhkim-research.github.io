@@ -1,188 +1,147 @@
-/* ===== Base & wrapper =============================================== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Dong Hyun Kim | Lighting & Building Scientist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="main.css" />
+</head>
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  color: #222;
-  line-height: 1.7;
-  background: #fff;
-}
+<body>
+  <!-- HERO -->
+  <header class="hero fade">
+    <div class="wrap grid">
+      <div class="col-text">
+        <h2>Dong Hyun Kim</h2>
+        <h1>Building scientist<br />and lighting researcher</h1>
+        <p>Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.</p>
+        <div class="hero-links">
+          <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
+          <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
+        </div>
+      </div>
+      <div class="col-aside hero-graphic">
+        <canvas id="scene" onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);"></canvas>
+      </div>
+    </div>
+  </header>
 
-/* single wrapper used everywhere so left edges align perfectly */
-.wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 6rem 2rem;
-}
+  <!-- ABOUT -->
+  <section class="about fade">
+    <div class="wrap grid">
+      <div class="col-text">
+        <h2>About me</h2>
+        <h3>Building Scientist (PhD) and Lighting Researcher (MSc)</h3>
+        <p>
+          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work bridges building physics, human perception and data-driven design. Previously, I was part of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
+        </p>
+      </div>
+      <aside class="col-aside">
+        <div class="timeline">
+          <div class="photo"><img src="profile.png" alt="Portrait of Dong Hyun Kim" /></div>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-/* 2-col grid → collapses to 1 column */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
+  <!-- CURRENT PROJECTS -->
+  <section class="projects fade">
+    <div class="wrap grid">
+      <div class="col-text">
+        <h2>Current Projects</h2>
+        <div class="project">
+          <h3>Solskin AI project – ETH Zürich</h3>
+          <p>to be added</p>
+        </div>
+      </div>
+      <aside class="col-aside">
+        <div class="timeline">
+          <div class="photo"><img src="profile.png" alt="" /></div>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-.col-text     { max-width: 640px; }
-.col-aside    { display: flex; justify-content: center; position: relative; }
+  <!-- PAST PROJECTS -->
+  <section class="projects past fade">
+    <div class="wrap grid">
+      <div class="col-text">
+        <h2>Past Projects</h2>
+        <div class="project"><h3>HiDyn project – EPFL</h3><p>to be added</p></div>
+        <div class="project"><h3>Project B</h3><p>to be added</p></div>
+        <div class="project"><h3>Project C</h3><p>to be added</p></div>
+        <div class="project"><h3>Project D</h3><p>to be added</p></div>
+      </div>
+      <aside class="col-aside">
+        <div class="timeline">
+          <div class="photo"><img src="profile.png" alt="" /></div>
+          <div class="photo"><img src="profile.png" alt="" /></div>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-/* wide screens → two columns */
-@media (min-width: 980px) {
-  .grid { grid-template-columns: 58% 42%; align-items: center; }
-  .col-aside { justify-content: center; }
-}
+  <!-- PRESENTATIONS & OUTREACH -->
+  <section class="projects outreach fade">
+    <div class="wrap grid">
+      <div class="col-text">
+        <h2>Presentations and Outreach</h2>
+        <ul>
+          <li>to be added</li>
+          <li>to be added</li>
+          <li>to be added</li>
+        </ul>
+      </div>
+      <aside class="col-aside">
+        <div class="timeline">
+          <div class="photo"><img src="profile.png" alt="" /></div>
+          <div class="photo"><img src="profile.png" alt="" /></div>
+          <div class="photo"><img src="profile.png" alt="" /></div>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-/* ===== Typography (matched to reference proportions) ================ */
-:root{
-  --teal:#83C5C9;
-  --body:1rem;
-}
+  <!-- FOOTER -->
+  <footer class="fade">
+    <div class="wrap footer-inner">
+      <div class="footer-links">
+        <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+      </div>
+      <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
+    </div>
+  </footer>
 
-body { font-size: var(--body); }
+  <!-- PARTICLES + FADE-IN -->
+  <script src="scripts/particleEffect.js"></script>
+  <script>
+    const brainShape =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
 
-.hero { background:#f0f0f0; padding:0; }
-.hero .wrap { padding-top:6rem; padding-bottom:6rem; }
+    window.initScene(brainShape);
+    window.updateConfig({
+      particleColor: [131, 197, 201],
+      colorNoise: 80,
+      particleFriction: 0.18,
+      particleFrictionNoise: 0.05,
+      mouseAvoidanceStrength: 2,
+      mouseAvoidanceStrengthNoise: 2,
+      mouseAvoidanceDistance: 50,
+      mouseAvoidanceDistanceNoise: 50
+    });
 
-.hero h2{
-  font-family:'Raleway',sans-serif;
-  color:var(--teal);
-  font-weight:700;
-  font-size:1.55rem;
-  letter-spacing:.2px;
-  margin-bottom:.5rem;
-}
-
-.hero h1{
-  font-weight:800;
-  line-height:1.15;
-  font-size:2.6rem;
-  margin-bottom:1.4rem;
-}
-
-.hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
-
-@media (min-width:980px){
-  .hero h1{ font-size:3.05rem; }
-  body{ font-size:1.03rem; } /* slightly larger body on desktop */
-}
-
-.hero-links a{
-  display:inline-block;
-  margin-right:1.1rem;
-  font-weight:700;
-  text-decoration:none;
-  color:var(--teal);
-  font-size:1rem;
-}
-.hero-links a:hover{ text-decoration:underline; }
-
-/* section text */
-section{ padding:0; }
-section .wrap{ padding-top:6rem; padding-bottom:6rem; }
-
-section h2{
-  font-family:'Raleway',sans-serif;
-  color:var(--teal);
-  font-weight:800;
-  letter-spacing:.2px;
-  margin-bottom:1rem;
-  font-size:2rem;           /* mobile/tablet */
-}
-@media(min-width:980px){
-  section h2{ font-size:2.6rem; }   /* big, like the reference */
-}
-
-section h3{
-  font-weight:800;
-  margin-bottom:1rem;
-  color:#111;
-  font-size:1.15rem;
-}
-
-section p{
-  color:#222;
-  line-height:1.85;
-  margin-bottom:1.5rem;
-  font-size:1.02rem;
-}
-
-.projects.past{ background:#f7f7f7; }
-
-/* ===== Particle canvas =============================================== */
-.hero-graphic{ align-items:center; }
-#scene{ width:260px; height:200px; }
-
-/* ===== Timeline & photos ============================================ */
-/* photos are always visible; the teal line only on wide screens */
-.timeline{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:2.6rem;
-  z-index:0;                 /* create stacking context */
-  min-height: 180px;
-}
-
-/* by default (mobile) no line */
-.timeline::before{ display:none; }
-
-/* wide screens: show a centered line that extends beyond photos */
-@media(min-width:980px){
-  .timeline::before{
-    content:"";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:-60px;               /* extend above photo stack */
-    bottom:-60px;            /* extend below photo stack */
-    width:3px;
-    background:var(--teal);
-    display:block;
-    z-index:0;               /* behind photos but above background */
-  }
-}
-
-.photo{
-  width:180px; height:180px;
-  border-radius:50%;
-  border:5px solid var(--teal);
-  overflow:hidden;
-  background:#fff;
-  flex-shrink:0;
-  position:relative;
-  z-index:1;                 /* ensure line appears behind circle */
-}
-.photo img{
-  width:100%; height:100%;
-  object-fit:cover; border-radius:50%;
-}
-
-@media(max-width:640px){
-  .photo{ width:140px; height:140px; }
-}
-
-/* Projects text blocks */
-.project h3{ font-size:1.06rem; margin-bottom:.55rem; color:#000; }
-.project p{ margin-bottom:1.2rem; }
-
-/* Outreach list */
-.outreach ul{ margin-top:.25rem; margin-left:1.2rem; }
-.outreach li{ margin-bottom:.5rem; }
-
-/* ===== Footer ======================================================== */
-footer{ background:#fff; border-top:1px solid #e0e0e0; }
-.footer-inner{ text-align:center; padding-top:3rem; padding-bottom:3rem; }
-.footer-links{ margin-bottom:1rem; }
-.footer-links a{
-  margin:0 .8rem;
-  text-decoration:none;
-  color:var(--teal);
-  font-weight:700;
-  font-size:1rem;
-}
-.footer-links a:hover{ text-decoration:underline; }
-footer p{ font-size:.85rem; color:#888; }
-
-/* ===== Fade-in ======================================================= */
-.fade{ opacity:0; transform:translateY(40px); transition:opacity 1s ease-out, transform 1s ease-out; }
-.fade.show{ opacity:1; transform:translateY(0); }
+    // Fade-in on scroll
+    const faders = document.querySelectorAll('.fade');
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); }),
+      { threshold: 0.15 }
+    );
+    faders.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
