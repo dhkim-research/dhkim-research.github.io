@@ -14,8 +14,18 @@
 
   <!-- ===== Hero ==================================================== -->
   <header class="hero">
-    <div class="wrap grid">
-      <div class="col-text">
+    <div class="wrap hero-wrap">
+      <!-- Particle brain canvas (top-right, above the name) -->
+      <div class="hero-brain">
+        <canvas
+          id="scene"
+          onmouseover="mouseStatus(true);"
+          onmouseout="mouseStatus(false);"
+          aria-label="Animated brain made of particles">
+        </canvas>
+      </div>
+
+      <div class="hero-copy">
         <h2>Dong Hyun Kim</h2>
         <h1>Building scientist<br>and lighting researcher</h1>
         <p>
@@ -25,11 +35,6 @@
           <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
           <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
         </div>
-      </div>
-
-      <div class="col-aside hero-graphic">
-        <!-- Particle brain canvas -->
-        <canvas id="scene" onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);"></canvas>
       </div>
     </div>
   </header>
@@ -96,7 +101,7 @@
         </aside>
       </div>
 
-      <!-- Project B (1 photo) -->
+      <!-- Project B -->
       <div class="grid project">
         <div class="col-text">
           <h3>Project B</h3>
@@ -109,7 +114,7 @@
         </aside>
       </div>
 
-      <!-- Project C (1 photo) -->
+      <!-- Project C -->
       <div class="grid project">
         <div class="col-text">
           <h3>Project C</h3>
@@ -122,7 +127,7 @@
         </aside>
       </div>
 
-      <!-- Project D (1 photo) -->
+      <!-- Project D -->
       <div class="grid project">
         <div class="col-text">
           <h3>Project D</h3>
@@ -151,14 +156,12 @@
             <li>to be added</li>
           </ul>
 
-          <div class="footer-links" style="margin-top:1.25rem">
-            <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-            <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-          </div>
+          <p class="email-line">
+            <i class="far fa-envelope"></i> <a href="mailto:kim@arch.ethz.ch">kim@arch.ethz.ch</a>
+          </p>
         </div>
 
-        <!-- simple 2x2 image grid (no connectors) -->
+        <!-- 2x2 image grid (no connectors) -->
         <aside class="col-aside">
           <div class="timeline" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.6rem;">
             <figure class="photo"><img src="profile.png" alt=""></figure>
@@ -185,23 +188,61 @@
   <!-- Particle animation -->
   <script src="scripts/particleEffect.js"></script>
   <script>
-    // paste your base64 brain silhouette here (kept short for readability)
-    const BRAIN_PNG_BASE64 =
-      "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
-    window.initScene(BRAIN_PNG_BASE64);
-    // Teal family: 83C5C9 -> 131,197,201
-    window.updateConfig({
-      particleColor: [131,197,201],
-      colorNoise: 60,
-      particleFriction: 0.18,
-      particleFrictionNoise: 0.05,
-      mouseAvoidanceStrength: 2,
-      mouseAvoidanceStrengthNoise: 2,
-      mouseAvoidanceDistance: 50,
-      mouseAvoidanceDistanceNoise: 50
+    // === Responsive canvas sizing + init ===================================
+    const B64 = "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
+
+    function sizeCanvas() {
+      const c = document.getElementById('scene');
+      const box = c.parentElement.getBoundingClientRect();
+
+      // Keep a pleasant aspect ratio; scale with container
+      const w = Math.max(260, Math.min(box.width, 520));
+      const h = Math.round(w * 0.72);
+
+      // IMPORTANT: set the element ATTRIBUTES, not only CSS, so the
+      // particle engine draws at the right resolution.
+      c.width  = w;
+      c.height = h;
+
+      // Also ensure CSS matches (prevents layout jumps)
+      c.style.width  = w + 'px';
+      c.style.height = h + 'px';
+    }
+
+    function initParticles() {
+      sizeCanvas();
+      window.initScene(B64); // from the provided library
+
+      // match Edoardo's color family
+      window.updateConfig({
+        particleColor: [131,197,201], // #83C5C9
+        colorNoise: 60,
+        particleFriction: 0.18,
+        particleFrictionNoise: 0.05,
+        mouseAvoidanceStrength: 2,
+        mouseAvoidanceStrengthNoise: 2,
+        mouseAvoidanceDistance: 50,
+        mouseAvoidanceDistanceNoise: 50
+      });
+    }
+
+    // Debounced resize → keep animation responsive without reload
+    let resizeTid = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTid);
+      resizeTid = setTimeout(() => {
+        // If the library exposes a destroy/reset, call it; otherwise re-init.
+        const canvas = document.getElementById('scene');
+        const ctx = canvas.getContext('2d');
+        ctx && ctx.clearRect(0, 0, canvas.width, canvas.height);
+        initParticles();
+      }, 120);
     });
 
-    // fade-in on view
+    // kick off
+    initParticles();
+
+    // Fade-in on scroll
     const els = document.querySelectorAll('.fade');
     const obs = new IntersectionObserver((entries)=> {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });

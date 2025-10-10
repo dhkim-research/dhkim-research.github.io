@@ -8,28 +8,49 @@ body{
   background:#fff;
 }
 
+/* Shared wrapper */
 .wrap{ max-width:1100px; margin:0 auto; padding:6rem 2rem; }
 
-/* 2-col grid → collapses to 1 column */
-.grid{ display:grid; grid-template-columns:1fr; gap:3rem; }
-.col-text{ max-width:640px; }
-.col-aside{ display:flex; justify-content:center; position:relative; }
-
-/* wide screens → two columns */
-@media (min-width:980px){
-  .grid{ grid-template-columns:58% 42%; align-items:center; }
-  .col-aside{ justify-content:center; }
-}
-
-/* ===== Colors & type scale ========================================= */
+/* ===== Hero ========================================================= */
 :root{
   --teal:#83C5C9;
   --bg-hero:#f0f0f0;
 }
 
-.hero{ background:var(--bg-hero); padding:0; }
+.hero{ background:var(--bg-hero); }
 .hero .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
+/* Place the brain above the title on desktop, stacked on mobile */
+.hero-wrap{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:2rem;
+}
+.hero-brain{
+  justify-self:end;
+  order:0;
+}
+.hero-copy{
+  order:1;
+  max-width:720px;
+}
+
+@media (min-width:980px){
+  .hero-wrap{
+    grid-template-columns: 58% 42%;
+    align-items:center;
+  }
+  .hero-brain{ grid-column: 2; grid-row: 1; }
+  .hero-copy { grid-column: 1; grid-row: 1; }
+}
+
+#scene{
+  display:block;
+  pointer-events:auto;      /* ensure hover events reach the canvas */
+}
+
+/* Headings & text (scaled to match reference proportions) */
 .hero h2{
   font-family:'Raleway',sans-serif;
   color:var(--teal);
@@ -38,7 +59,6 @@ body{
   font-size:1.75rem;
   margin-bottom:.6rem;
 }
-
 .hero h1{
   font-weight:800;
   line-height:1.12;
@@ -48,7 +68,6 @@ body{
 @media (min-width:980px){
   .hero h1{ font-size:3.25rem; }
 }
-
 .hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
 
 .hero-links a{
@@ -61,7 +80,17 @@ body{
 }
 .hero-links a:hover{ text-decoration:underline; }
 
-/* sections */
+/* ===== Layout utilities ============================================ */
+.grid{ display:grid; grid-template-columns:1fr; gap:3rem; }
+.col-text{ max-width:640px; }
+.col-aside{ display:flex; justify-content:center; position:relative; }
+
+@media (min-width:980px){
+  .grid{ grid-template-columns:58% 42%; align-items:center; }
+  .col-aside{ justify-content:center; }
+}
+
+/* ===== Section typography ========================================== */
 section{ padding:0; }
 section .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
@@ -76,7 +105,6 @@ section h2{
 @media (min-width:980px){
   section h2{ font-size:2.8rem; }
 }
-
 section h3{
   font-weight:800;
   color:#111;
@@ -92,14 +120,9 @@ section p{
 
 .projects.past{ background:#f7f7f7; }
 
-/* ===== Particle canvas ============================================== */
-.hero-graphic{ align-items:center; }
-#scene{ width:260px; height:200px; }
-
 /* ===== Timeline & photos =========================================== */
-/* photos always visible; connectors appear only on wide screens */
 .timeline{
-  --gap: 2.6rem;                 /* vertical space between circles (desktop) */
+  --gap: 2.6rem;
   position:relative;
   display:flex;
   flex-direction:column;
@@ -107,7 +130,6 @@ section p{
   gap:var(--gap);
   z-index:0;
 }
-
 .photo{
   width:180px; height:180px;
   border-radius:50%;
@@ -118,27 +140,24 @@ section p{
   position:relative;
   z-index:1;
 }
-.photo img{
-  width:100%; height:100%;
-  object-fit:cover; border-radius:50%;
-}
+.photo img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
 
-/* DESKTOP: short teal line BETWEEN circles, never through them */
+/* DESKTOP: short teal connector BETWEEN circles only */
 @media (min-width:980px){
   .photo:not(:last-child)::before{
     content:"";
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    top:calc(100% + 6px);        /* start below border */
+    top:calc(100% + 6px);               /* start just outside the border */
     width:3px;
-    height:calc(var(--gap) - 12px); /* stop before next border */
+    height:calc(var(--gap) - 12px);     /* stop before the next border */
     background:var(--teal);
     z-index:0;
   }
 }
 
-/* MOBILE: images below text in a 2-per-row grid, no connectors */
+/* MOBILE: grid of two per row; no connectors */
 @media (max-width:979px){
   .timeline{
     display:grid;
@@ -150,9 +169,12 @@ section p{
   .photo::before{ display:none !important; }
 }
 
-/* Outreach list */
+/* Outreach */
 .outreach ul{ margin-top:.35rem; margin-left:1.2rem; }
 .outreach li{ margin-bottom:.55rem; }
+.email-line{ margin-top:1.2rem; font-weight:700; }
+.email-line a{ color:#4b4b4b; text-decoration:none; }
+.email-line a:hover{ text-decoration:underline; }
 
 /* ===== Footer ======================================================= */
 footer{ background:#fff; border-top:1px solid #e0e0e0; }
