@@ -13,33 +13,36 @@
 <body>
   <!-- Hero section -->
   <header class="hero">
-    <div class="hero-content">
-      <div class="hero-icon">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h2>Dong Hyun Kim</h2>
+        <h1>Building scientist<br>and lighting researcher</h1>
+        <p>
+          Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.
+        </p>
+        <div class="hero-links">
+          <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
+          <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
+        </div>
+      </div>
+
+      <div class="hero-graphic">
         <canvas
           id="scene"
           onmouseover="mouseStatus(true);"
           onmouseout="mouseStatus(false);"
         ></canvas>
       </div>
-      <h2>Dong Hyun Kim</h2>
-      <h1>Building scientist<br>and lighting researcher</h1>
-      <p>
-        Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.
-      </p>
-      <div class="hero-links">
-        <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
-        <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
-      </div>
     </div>
   </header>
 
   <!-- About section -->
   <section class="about">
-    <div class="container">
+    <div class="about-inner">
       <h2>About me</h2>
       <p>
         I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems.
-        My work bridges building physics, human perception and data-driven design. 
+        My work bridges building physics, human perception, and data-driven design. 
         Previously, I was part of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
       </p>
     </div>
@@ -55,19 +58,15 @@
     <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
   </footer>
 
-  <!-- === Scripts === -->
+  <!-- Particle script -->
   <script src="scripts/particleEffect.js"></script>
   <script>
-    /* Simplified brain-shaped silhouette, encoded as base64 PNG */
-    const brainShape =
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
+    // Simplified brain silhouette (Base64 PNG)
+    const brainShape = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
 
-    /* Initialize Edoardo D’Anna’s particle effect */
     window.initScene(brainShape);
-
-    /* Adjust colors and particle dynamics */
     window.updateConfig({
-      particleColor: [131, 197, 201],   // #83C5C9
+      particleColor: [131, 197, 201],  // #83C5C9
       colorNoise: 80,
       particleFriction: 0.18,
       particleFrictionNoise: 0.05,
