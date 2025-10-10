@@ -12,9 +12,9 @@
 
 <body>
   <!-- Hero section -->
-  <header class="hero">
+  <header class="hero fade">
     <div class="hero-inner">
-      <div class="hero-text">
+      <div class="hero-text fade">
         <h2>Dong Hyun Kim</h2>
         <h1>Building scientist<br>and lighting researcher</h1>
         <p>
@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="hero-graphic">
+      <div class="hero-graphic fade">
         <canvas
           id="scene"
           onmouseover="mouseStatus(true);"
@@ -37,7 +37,7 @@
   </header>
 
   <!-- About section -->
-  <section class="about">
+  <section class="about fade">
     <div class="about-inner">
       <h2>About me</h2>
       <p>
@@ -49,7 +49,7 @@
   </section>
 
   <!-- Footer -->
-  <footer>
+  <footer class="fade">
     <div class="footer-links">
       <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
       <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
@@ -58,15 +58,15 @@
     <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
   </footer>
 
-  <!-- Particle script -->
+  <!-- === Scripts === -->
   <script src="scripts/particleEffect.js"></script>
   <script>
-    // Simplified brain silhouette (Base64 PNG)
-    const brainShape = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
+    const brainShape =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
 
     window.initScene(brainShape);
     window.updateConfig({
-      particleColor: [131, 197, 201],  // #83C5C9
+      particleColor: [131, 197, 201],
       colorNoise: 80,
       particleFriction: 0.18,
       particleFrictionNoise: 0.05,
@@ -75,6 +75,19 @@
       mouseAvoidanceDistance: 50,
       mouseAvoidanceDistanceNoise: 50
     });
+
+    /* Fade-in on scroll using IntersectionObserver */
+    const faders = document.querySelectorAll('.fade');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    faders.forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
