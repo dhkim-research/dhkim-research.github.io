@@ -2,13 +2,12 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body{
-  font-family: 'Montserrat', sans-serif;
+  font-family:'Montserrat',sans-serif;
   color:#222;
   line-height:1.7;
   background:#fff;
 }
 
-/* single wrapper so left edges align perfectly */
 .wrap{ max-width:1100px; margin:0 auto; padding:6rem 2rem; }
 
 /* 2-col grid → collapses to 1 column */
@@ -22,7 +21,7 @@ body{
   .col-aside{ justify-content:center; }
 }
 
-/* ===== Colors & type scale (close to reference) ===================== */
+/* ===== Colors & type scale ========================================= */
 :root{
   --teal:#83C5C9;
   --bg-hero:#f0f0f0;
@@ -31,7 +30,6 @@ body{
 .hero{ background:var(--bg-hero); padding:0; }
 .hero .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
-/* name */
 .hero h2{
   font-family:'Raleway',sans-serif;
   color:var(--teal);
@@ -41,7 +39,6 @@ body{
   margin-bottom:.6rem;
 }
 
-/* big headline */
 .hero h1{
   font-weight:800;
   line-height:1.12;
@@ -49,12 +46,11 @@ body{
   margin-bottom:1.4rem;
 }
 @media (min-width:980px){
-  .hero h1{ font-size:3.25rem; }  /* ~52px */
+  .hero h1{ font-size:3.25rem; }
 }
 
 .hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
 
-/* links under hero */
 .hero-links a{
   display:inline-block;
   margin-right:1.1rem;
@@ -65,7 +61,7 @@ body{
 }
 .hero-links a:hover{ text-decoration:underline; }
 
-/* section headings / text */
+/* sections */
 section{ padding:0; }
 section .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
@@ -75,10 +71,10 @@ section h2{
   font-weight:900;
   letter-spacing:.2px;
   margin-bottom:1.1rem;
-  font-size:2.1rem;            /* mobile */
+  font-size:2.1rem;
 }
 @media (min-width:980px){
-  section h2{ font-size:2.8rem; } /* large like reference */
+  section h2{ font-size:2.8rem; }
 }
 
 section h3{
@@ -101,20 +97,17 @@ section p{
 #scene{ width:260px; height:200px; }
 
 /* ===== Timeline & photos =========================================== */
-/* Photos always visible. On desktop, draw short connectors BETWEEN circles only. */
+/* photos always visible; connectors appear only on wide screens */
 .timeline{
-  /* keep the inter-item spacing as a CSS variable so the connector can match it */
-  --gap: 2.6rem;
+  --gap: 2.6rem;                 /* vertical space between circles (desktop) */
   position:relative;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:var(--gap);
   z-index:0;
-  min-height:180px;
 }
 
-/* circles */
 .photo{
   width:180px; height:180px;
   border-radius:50%;
@@ -130,41 +123,22 @@ section p{
   object-fit:cover; border-radius:50%;
 }
 
-/* DESKTOP-ONLY: draw the connector from the bottom of each circle down to the next.
-   No line above the first or below the last; the line never pierces circles. */
+/* DESKTOP: short teal line BETWEEN circles, never through them */
 @media (min-width:980px){
-  /* connector segment */
   .photo:not(:last-child)::before{
     content:"";
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    top:100%;                  /* start exactly at the bottom edge of the circle */
+    top:calc(100% + 6px);        /* start below border */
     width:3px;
-    height:var(--gap);         /* exactly fills the space to the next circle */
+    height:calc(var(--gap) - 12px); /* stop before next border */
     background:var(--teal);
-    z-index:0;                 /* stays behind the next circle */
-  }
-
-  /* safety mask: if rounding puts the segment a hair inside the circle,
-     hide it inside the circle so it looks like the line merely touches */
-  .photo::after{
-    content:"";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:-10px;                 /* overlap slightly */
-    bottom:-10px;
-    width:8px;                 /* wider than the 3px line */
-    background:#fff;           /* page background */
-    z-index:2;
-    pointer-events:none;
+    z-index:0;
   }
 }
 
-/* Mobile / narrow screens:
-   - Show photos in a 2-per-row grid
-   - Hide connectors entirely */
+/* MOBILE: images below text in a 2-per-row grid, no connectors */
 @media (max-width:979px){
   .timeline{
     display:grid;
@@ -173,10 +147,10 @@ section p{
     gap:1.6rem;
   }
   .photo{ width:150px; height:150px; }
-  .photo::before, .photo::after{ display:none !important; }
+  .photo::before{ display:none !important; }
 }
 
-/* Outreach bullets */
+/* Outreach list */
 .outreach ul{ margin-top:.35rem; margin-left:1.2rem; }
 .outreach li{ margin-bottom:.55rem; }
 

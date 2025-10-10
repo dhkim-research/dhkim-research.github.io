@@ -6,180 +6,207 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="main.css" />
 </head>
 
 <body>
-  <!-- =================== HERO =================== -->
+
+  <!-- ===== Hero ==================================================== -->
   <header class="hero">
-    <div class="wrap grid hero-graphic fade">
+    <div class="wrap grid">
       <div class="col-text">
         <h2>Dong Hyun Kim</h2>
         <h1>Building scientist<br>and lighting researcher</h1>
         <p>
-          Exploring the intersection of daylight, adaptive façades and
-          human-centred comfort – toward smarter, healthier buildings.
+          Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.
         </p>
         <div class="hero-links">
-          <a href="#"><span aria-hidden="true">📄</span> Download CV</a>
-          <a href="#"><span aria-hidden="true">📰</span> Research Blog</a>
+          <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
+          <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
         </div>
       </div>
 
-      <!-- particle brain -->
-      <div class="col-aside">
-        <canvas id="scene"
-          onmouseover="mouseStatus(true);"
-          onmouseout="mouseStatus(false);"></canvas>
+      <div class="col-aside hero-graphic">
+        <!-- Particle brain canvas -->
+        <canvas id="scene" onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);"></canvas>
       </div>
     </div>
   </header>
 
-  <!-- =================== ABOUT =================== -->
-  <section class="about">
-    <div class="wrap grid fade">
+  <!-- ===== About =================================================== -->
+  <section id="about" class="fade">
+    <div class="wrap grid">
       <div class="col-text">
         <h2>About me</h2>
         <h3>Building Scientist (PhD) and Lighting Researcher (MSc)</h3>
         <p>
-          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems.
-          My work bridges building physics, human perception and data-driven design. Previously, I was part of
-          EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
+          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work
+          bridges building physics, human perception and data-driven design. Previously, I was part of EPFL’s LIPID Lab and
+          TU Delft’s Indoor Environment Group.
         </p>
       </div>
 
-      <!-- two photos, line should TOUCH the circles (not cross through) -->
+      <!-- Two photos with connector only between them -->
       <aside class="col-aside">
         <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="Portrait" /></div>
-          <div class="photo"><img src="profile.png" alt="Portrait" /></div>
+          <figure class="photo"><img src="profile.png" alt="Portrait of Dong Hyun Kim"></figure>
+          <figure class="photo"><img src="profile.png" alt="Portrait of Dong Hyun Kim"></figure>
         </div>
       </aside>
     </div>
   </section>
 
-  <!-- =================== CURRENT PROJECTS =================== -->
-  <section class="projects current">
-    <div class="wrap grid fade">
-      <div class="col-text">
-        <h2>Current Projects</h2>
+  <!-- ===== Current Projects ======================================= -->
+  <section id="current-projects" class="fade">
+    <div class="wrap">
+      <h2>Current Projects</h2>
 
-        <article class="project">
+      <!-- Solskin AI project (2 photos) -->
+      <div class="grid project">
+        <div class="col-text">
           <h3>Solskin AI project – ETH Zürich</h3>
           <p>to be added</p>
-        </article>
+        </div>
+        <aside class="col-aside">
+          <div class="timeline">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
       </div>
-
-      <!-- no image here (to match the reference layout) -->
-      <aside class="col-aside">
-        <div class="timeline timeline--empty"></div>
-      </aside>
     </div>
   </section>
 
-  <!-- =================== PAST PROJECTS =================== -->
-  <section class="projects past">
-    <div class="wrap grid fade">
-      <div class="col-text">
-        <h2>Past Projects</h2>
+  <!-- ===== Past Projects ========================================== -->
+  <section id="past-projects" class="projects past fade">
+    <div class="wrap">
+      <h2>Past Projects</h2>
 
-        <article class="project">
+      <!-- HiDyn (1 photo) -->
+      <div class="grid project">
+        <div class="col-text">
           <h3>HiDyn project – EPFL</h3>
           <p>to be added</p>
-        </article>
+        </div>
+        <aside class="col-aside">
+          <div class="timeline">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
+      </div>
 
-        <article class="project">
+      <!-- Project B (1 photo) -->
+      <div class="grid project">
+        <div class="col-text">
           <h3>Project B</h3>
           <p>to be added</p>
-        </article>
+        </div>
+        <aside class="col-aside">
+          <div class="timeline">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
+      </div>
 
-        <article class="project">
+      <!-- Project C (1 photo) -->
+      <div class="grid project">
+        <div class="col-text">
           <h3>Project C</h3>
           <p>to be added</p>
-        </article>
+        </div>
+        <aside class="col-aside">
+          <div class="timeline">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
+      </div>
 
-        <article class="project">
+      <!-- Project D (1 photo) -->
+      <div class="grid project">
+        <div class="col-text">
           <h3>Project D</h3>
           <p>to be added</p>
-        </article>
-      </div>
-
-      <!-- one circle per past project (placeholder same photo) -->
-      <aside class="col-aside">
-        <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
         </div>
-      </aside>
+        <aside class="col-aside">
+          <div class="timeline">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 
-  <!-- =================== PRESENTATIONS & OUTREACH =================== -->
-  <section class="outreach">
-    <div class="wrap grid fade">
-      <div class="col-text">
-        <h2>Presentations and Outreach</h2>
-        <ul>
-          <li>to be added</li>
-          <li>to be added</li>
-          <li>to be added</li>
-        </ul>
-      </div>
+  <!-- ===== Presentations & Outreach ================================ -->
+  <section id="outreach" class="fade">
+    <div class="wrap">
+      <h2>Presentations and Outreach</h2>
 
-      <!-- four images for the mosaic stack -->
-      <aside class="col-aside">
-        <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
+      <div class="grid">
+        <div class="col-text outreach">
+          <h3>Talks / Media</h3>
+          <ul>
+            <li>to be added</li>
+            <li>to be added</li>
+            <li>to be added</li>
+          </ul>
+
+          <div class="footer-links" style="margin-top:1.25rem">
+            <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+          </div>
         </div>
-      </aside>
+
+        <!-- simple 2x2 image grid (no connectors) -->
+        <aside class="col-aside">
+          <div class="timeline" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.6rem;">
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+            <figure class="photo"><img src="profile.png" alt=""></figure>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 
-  <!-- =================== FOOTER =================== -->
   <footer>
     <div class="footer-inner">
       <div class="footer-links">
-        <a href="https://github.com/dhkim-research" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/donghkim" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
       </div>
       <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
     </div>
   </footer>
 
-  <!-- particles (Edoardo’s helper) -->
+  <!-- Particle animation -->
   <script src="scripts/particleEffect.js"></script>
   <script>
-    // Brain silhouette (teal dots) for the canvas
-    const brainDotsTeal =
-      "iVBORw0KGgoAAAANSUhEUgAAAywAAALlCAYAAAAmHmJVAAAACXBIWXMAAC4jAAAuIwF4pT92AAAgAElEQVR4nOzd/VUcR9o34K49..." /* (keep your long base64 here) */;
-
-    window.addEventListener('DOMContentLoaded', () => {
-      window.initScene(brainDotsTeal);
-      // Match colors from reference
-      window.updateConfig({
-        particleColor: [131, 197, 201], // #83C5C9
-        colorNoise: 35,
-        particleFriction: 0.18,
-        particleFrictionNoise: 0.05,
-        mouseAvoidanceStrength: 2,
-        mouseAvoidanceStrengthNoise: 2,
-        mouseAvoidanceDistance: 50,
-        mouseAvoidanceDistanceNoise: 50
-      });
-
-      // fade-in on scroll
-      const faders = document.querySelectorAll('.fade');
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-      }, { threshold: 0.15 });
-      faders.forEach(n => io.observe(n));
+    // paste your base64 brain silhouette here (kept short for readability)
+    const BRAIN_PNG_BASE64 =
+      "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
+    window.initScene(BRAIN_PNG_BASE64);
+    // Teal family: 83C5C9 -> 131,197,201
+    window.updateConfig({
+      particleColor: [131,197,201],
+      colorNoise: 60,
+      particleFriction: 0.18,
+      particleFrictionNoise: 0.05,
+      mouseAvoidanceStrength: 2,
+      mouseAvoidanceStrengthNoise: 2,
+      mouseAvoidanceDistance: 50,
+      mouseAvoidanceDistanceNoise: 50
     });
+
+    // fade-in on view
+    const els = document.querySelectorAll('.fade');
+    const obs = new IntersectionObserver((entries)=> {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
   </script>
 </body>
 </html>
