@@ -1,4 +1,4 @@
-// Particle canvas
+
 const canvas = document.getElementById('scene');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -16,14 +16,22 @@ class Particle {
     this.x = Math.random() * ww;
     this.y = Math.random() * wh;
     this.dest = { x, y };
-    this.r = 2;
-    this.vx = (Math.random() - 0.5) * 5;
-    this.vy = (Math.random() - 0.5) * 5;
-    this.color = `rgba(${150 + Math.random()*100},${150 + Math.random()*100},255,0.7)`;
+    this.r = 1.6 + Math.random() * 1.4; // slightly smaller dots
+    this.vx = (Math.random() - 0.5) * 1.2;
+    this.vy = (Math.random() - 0.5) * 1.2;
+    // bluish-white tone
+    const shade = 210 + Math.random() * 30;
+    this.color = `rgba(${shade}, ${shade + 10}, 255, 0.55)`;
   }
   update() {
-    this.x += (this.dest.x - this.x) * 0.02 + this.vx * 0.9;
-    this.y += (this.dest.y - this.y) * 0.02 + this.vy * 0.9;
+    // soft motion toward “dest”
+    this.x += (this.dest.x - this.x) * 0.015 + this.vx * 0.6;
+    this.y += (this.dest.y - this.y) * 0.015 + this.vy * 0.6;
+    // small random jitter
+    this.vx += (Math.random() - 0.5) * 0.05;
+    this.vy += (Math.random() - 0.5) * 0.05;
+    this.vx *= 0.98;
+    this.vy *= 0.98;
   }
   draw() {
     ctx.beginPath();
@@ -36,27 +44,20 @@ class Particle {
 function init() {
   particles = [];
   const cols = 40, rows = 25;
-  for (let i = 0; i < cols; i++)
-    for (let j = 0; j < rows; j++)
-      particles.push(new Particle((i/cols)*ww, (j/rows)*wh));
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      particles.push(new Particle((i / cols) * ww, (j / rows) * wh));
+    }
+  }
 }
 init();
+
 function animate() {
   requestAnimationFrame(animate);
-  ctx.clearRect(0,0,ww,wh);
-  particles.forEach(p => { p.update(); p.draw(); });
+  ctx.clearRect(0, 0, ww, wh);
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
 }
 animate();
-
-// Fade-in on scroll
-const faders = document.querySelectorAll('.fade-in');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-},{ threshold: 0.2 });
-
-faders.forEach(fader => observer.observe(fader));
