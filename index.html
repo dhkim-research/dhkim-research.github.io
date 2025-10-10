@@ -15,7 +15,11 @@
   <header class="hero">
     <div class="hero-content">
       <div class="hero-icon">
-        <canvas id="brain"></canvas>
+        <canvas
+          id="scene"
+          onmouseover="mouseStatus(true);"
+          onmouseout="mouseStatus(false);"
+        ></canvas>
       </div>
       <h2>Dong Hyun Kim</h2>
       <h1>Building scientist<br>and lighting researcher</h1>
@@ -50,5 +54,28 @@
     </div>
     <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
   </footer>
+
+  <!-- === Scripts === -->
+  <script src="scripts/particleEffect.js"></script>
+  <script>
+    /* Simplified brain-shaped silhouette, encoded as base64 PNG */
+    const brainShape =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
+
+    /* Initialize Edoardo D’Anna’s particle effect */
+    window.initScene(brainShape);
+
+    /* Adjust colors and particle dynamics */
+    window.updateConfig({
+      particleColor: [131, 197, 201],   // #83C5C9
+      colorNoise: 80,
+      particleFriction: 0.18,
+      particleFrictionNoise: 0.05,
+      mouseAvoidanceStrength: 2,
+      mouseAvoidanceStrengthNoise: 2,
+      mouseAvoidanceDistance: 50,
+      mouseAvoidanceDistanceNoise: 50
+    });
+  </script>
 </body>
 </html>
