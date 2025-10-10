@@ -33,8 +33,21 @@ body{
 }
 .hero-copy{
   order:1;
-  max-width:720px;
 }
+
+/* Desktop: keep hero text the same width as the content columns */
+@media (min-width:980px){
+  .hero-copy{
+    grid-column: 1; 
+    grid-row: 1;
+    max-width: 640px;          /* MATCH col-text width */
+  }
+  /* ensure each child (title, paragraph, links) respects the same line length */
+  .hero-copy > *{
+    max-width: 640px;
+  }
+}
+
 
 @media (min-width:980px){
   .hero-wrap{
