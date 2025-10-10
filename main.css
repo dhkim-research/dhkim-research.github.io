@@ -1,4 +1,4 @@
-/* ===== Base & container ================================================= */
+/* ===== Base & wrapper =============================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -8,145 +8,181 @@ body {
   background: #fff;
 }
 
-/* one consistent wrapper used everywhere so left margins line up */
+/* single wrapper used everywhere so left edges align perfectly */
 .wrap {
   max-width: 1100px;
   margin: 0 auto;
   padding: 6rem 2rem;
 }
 
-/* 2-col grid that collapses to 1 column on narrow viewports */
+/* 2-col grid → collapses to 1 column */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
 }
-.col-text { max-width: 620px; } /* readable line-length */
-.col-aside { display: flex; justify-content: center; }
 
-/* wide screens → two columns (text left, visuals right) */
+.col-text     { max-width: 640px; }
+.col-aside    { display: flex; justify-content: center; position: relative; }
+
+/* wide screens → two columns */
 @media (min-width: 980px) {
   .grid { grid-template-columns: 58% 42%; align-items: center; }
-  .col-aside { justify-content: flex-start; } /* keeps photos/brain near text */
+  .col-aside { justify-content: center; }
 }
 
-/* ===== Hero ============================================================= */
-.hero { background: #f0f0f0; padding: 0; }
-.hero .wrap { padding-top: 6rem; padding-bottom: 6rem; }
-
-.hero h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.6rem;
-  color: #83C5C9;
-  font-weight: 700;
-  margin-bottom: .5rem;
+/* ===== Typography (matched to reference proportions) ================ */
+:root{
+  --teal:#83C5C9;
+  --body:1rem;
 }
 
-.hero h1 {
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+body { font-size: var(--body); }
+
+.hero { background:#f0f0f0; padding:0; }
+.hero .wrap { padding-top:6rem; padding-bottom:6rem; }
+
+.hero h2{
+  font-family:'Raleway',sans-serif;
+  color:var(--teal);
+  font-weight:700;
+  font-size:1.55rem;
+  letter-spacing:.2px;
+  margin-bottom:.5rem;
 }
 
-.hero p { font-size: 1.05rem; color: #333; margin-bottom: 1.5rem; }
-
-.hero-links a {
-  display: inline-block;
-  margin-right: 1.2rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #83C5C9;
-  font-size: 1rem;
-}
-.hero-links a:hover { text-decoration: underline; }
-
-/* particle canvas */
-.hero-graphic { align-items: center; }
-#scene { width: 260px; height: 200px; }
-
-/* ===== Sections (About/Projects/Outreach) ============================== */
-section { padding: 0; }          /* reset */
-section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
-
-section h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.8rem;
-  color: #83C5C9;
-  margin-bottom: 1rem;
+.hero h1{
+  font-weight:800;
+  line-height:1.15;
+  font-size:2.6rem;
+  margin-bottom:1.4rem;
 }
 
-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #111; }
-section p  { font-size: 1rem; color: #222; line-height: 1.8; margin-bottom: 1.5rem; }
+.hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
 
-.projects.past { background: #f7f7f7; }
-
-/* ===== Timeline & photos ============================================== */
-/* photos are always visible; the vertical line only on wide screens */
-.timeline {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  align-items: center;
+@media (min-width:980px){
+  .hero h1{ font-size:3.05rem; }
+  body{ font-size:1.03rem; } /* slightly larger body on desktop */
 }
 
-/* no line by default (mobile/narrow) */
-.timeline::before { display: none; }
+.hero-links a{
+  display:inline-block;
+  margin-right:1.1rem;
+  font-weight:700;
+  text-decoration:none;
+  color:var(--teal);
+  font-size:1rem;
+}
+.hero-links a:hover{ text-decoration:underline; }
 
-/* show line on wide screens and align it vertically through the photos */
-@media (min-width: 980px) {
-  .timeline {
-    align-items: center;
-    padding: 1rem 0;  /* room for the cap above/below the top photo */
+/* section text */
+section{ padding:0; }
+section .wrap{ padding-top:6rem; padding-bottom:6rem; }
+
+section h2{
+  font-family:'Raleway',sans-serif;
+  color:var(--teal);
+  font-weight:800;
+  letter-spacing:.2px;
+  margin-bottom:1rem;
+  font-size:2rem;           /* mobile/tablet */
+}
+@media(min-width:980px){
+  section h2{ font-size:2.6rem; }   /* big, like the reference */
+}
+
+section h3{
+  font-weight:800;
+  margin-bottom:1rem;
+  color:#111;
+  font-size:1.15rem;
+}
+
+section p{
+  color:#222;
+  line-height:1.85;
+  margin-bottom:1.5rem;
+  font-size:1.02rem;
+}
+
+.projects.past{ background:#f7f7f7; }
+
+/* ===== Particle canvas =============================================== */
+.hero-graphic{ align-items:center; }
+#scene{ width:260px; height:200px; }
+
+/* ===== Timeline & photos ============================================ */
+/* photos are always visible; the teal line only on wide screens */
+.timeline{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.6rem;
+  z-index:0;                 /* create stacking context */
+  min-height: 180px;
+}
+
+/* by default (mobile) no line */
+.timeline::before{ display:none; }
+
+/* wide screens: show a centered line that extends beyond photos */
+@media(min-width:980px){
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    top:-60px;               /* extend above photo stack */
+    bottom:-60px;            /* extend below photo stack */
+    width:3px;
+    background:var(--teal);
+    display:block;
+    z-index:0;               /* behind photos but above background */
   }
-  .timeline::before {
-    content: "";
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 3px;
-    background: #83C5C9;
-    display: block;
-  }
 }
 
-.photo {
-  width: 180px; height: 180px;
-  border-radius: 50%;
-  border: 5px solid #83C5C9;
-  overflow: hidden;
-  background: #fff;
-  flex-shrink: 0;
+.photo{
+  width:180px; height:180px;
+  border-radius:50%;
+  border:5px solid var(--teal);
+  overflow:hidden;
+  background:#fff;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;                 /* ensure line appears behind circle */
 }
-.photo img {
-  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+.photo img{
+  width:100%; height:100%;
+  object-fit:cover; border-radius:50%;
 }
 
-@media (max-width: 640px) {
-  .photo { width: 140px; height: 140px; }
+@media(max-width:640px){
+  .photo{ width:140px; height:140px; }
 }
 
 /* Projects text blocks */
-.project h3 { font-size: 1.05rem; margin-bottom: .5rem; color: #000; }
-.project p  { margin-bottom: 1.2rem; }
+.project h3{ font-size:1.06rem; margin-bottom:.55rem; color:#000; }
+.project p{ margin-bottom:1.2rem; }
 
-/* ===== Outreach list =================================================== */
-.outreach ul { margin-top: .25rem; margin-left: 1.2rem; }
-.outreach li { margin-bottom: .5rem; }
+/* Outreach list */
+.outreach ul{ margin-top:.25rem; margin-left:1.2rem; }
+.outreach li{ margin-bottom:.5rem; }
 
-/* ===== Footer ========================================================== */
-footer { background: #fff; border-top: 1px solid #e0e0e0; }
-.footer-inner { text-align: center; padding-top: 3rem; padding-bottom: 3rem; }
-.footer-links { margin-bottom: 1rem; }
-.footer-links a {
-  margin: 0 .8rem;
-  text-decoration: none;
-  color: #83C5C9;
-  font-weight: 600;
-  font-size: 1rem;
+/* ===== Footer ======================================================== */
+footer{ background:#fff; border-top:1px solid #e0e0e0; }
+.footer-inner{ text-align:center; padding-top:3rem; padding-bottom:3rem; }
+.footer-links{ margin-bottom:1rem; }
+.footer-links a{
+  margin:0 .8rem;
+  text-decoration:none;
+  color:var(--teal);
+  font-weight:700;
+  font-size:1rem;
 }
-.footer-links a:hover { text-decoration: underline; }
-footer p { font-size: .85rem; color: #888; }
+.footer-links a:hover{ text-decoration:underline; }
+footer p{ font-size:.85rem; color:#888; }
 
-/* ===== Fade-in on scroll ============================================= */
-.fade { opacity: 0; transform: translateY(40px); transition: opacity 1s ease-out, transform 1s ease-out; }
-.fade.show { opacity: 1; transform: translateY(0); }
+/* ===== Fade-in ======================================================= */
+.fade{ opacity:0; transform:translateY(40px); transition:opacity 1s ease-out, transform 1s ease-out; }
+.fade.show{ opacity:1; transform:translateY(0); }
