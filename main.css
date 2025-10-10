@@ -1,4 +1,4 @@
-/* ===== GLOBAL ====================================================== */
+/* ===== Base & container ================================================= */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -8,42 +8,38 @@ body {
   background: #fff;
 }
 
-section, header, footer {
+/* one consistent wrapper used everywhere so left margins line up */
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 6rem 2rem;
 }
 
-@media (min-width: 1100px) {
-  section, header, footer {
-    padding-left: calc((100% - 1100px) / 2 + 2rem);
-    padding-right: calc((100% - 1100px) / 2 + 2rem);
-  }
-}
-
-/* ===== HERO ======================================================== */
-.hero {
-  background: #f0f0f0;
-}
-
-.hero-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+/* 2-col grid that collapses to 1 column on narrow viewports */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 3rem;
-  max-width: 1100px;
-  margin: 0 auto;
+}
+.col-text { max-width: 620px; } /* readable line-length */
+.col-aside { display: flex; justify-content: center; }
+
+/* wide screens → two columns (text left, visuals right) */
+@media (min-width: 980px) {
+  .grid { grid-template-columns: 58% 42%; align-items: center; }
+  .col-aside { justify-content: flex-start; } /* keeps photos/brain near text */
 }
 
-.hero-text {
-  max-width: 550px;
-  text-align: left;
-}
+/* ===== Hero ============================================================= */
+.hero { background: #f0f0f0; padding: 0; }
+.hero .wrap { padding-top: 6rem; padding-bottom: 6rem; }
 
 .hero h2 {
   font-family: 'Raleway', sans-serif;
   font-size: 1.6rem;
   color: #83C5C9;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: .5rem;
 }
 
 .hero h1 {
@@ -52,11 +48,7 @@ section, header, footer {
   margin-bottom: 1.5rem;
 }
 
-.hero p {
-  font-size: 1.05rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
+.hero p { font-size: 1.05rem; color: #333; margin-bottom: 1.5rem; }
 
 .hero-links a {
   display: inline-block;
@@ -66,38 +58,15 @@ section, header, footer {
   color: #83C5C9;
   font-size: 1rem;
 }
+.hero-links a:hover { text-decoration: underline; }
 
-.hero-links a:hover {
-  text-decoration: underline;
-}
+/* particle canvas */
+.hero-graphic { align-items: center; }
+#scene { width: 260px; height: 200px; }
 
-.hero-graphic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-#scene {
-  width: 260px;
-  height: 200px;
-}
-
-/* Two-column on wide screens */
-@media (min-width: 900px) {
-  .hero-inner {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-/* ===== SECTIONS ==================================================== */
-.section-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  text-align: left;
-}
+/* ===== Sections (About/Projects/Outreach) ============================== */
+section { padding: 0; }          /* reset */
+section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
 
 section h2 {
   font-family: 'Raleway', sans-serif;
@@ -106,151 +75,78 @@ section h2 {
   margin-bottom: 1rem;
 }
 
-section h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #111;
-}
+section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #111; }
+section p  { font-size: 1rem; color: #222; line-height: 1.8; margin-bottom: 1.5rem; }
 
-section p {
-  font-size: 1rem;
-  color: #222;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
+.projects.past { background: #f7f7f7; }
 
-/* ===== TIMELINE & PHOTOS =========================================== */
+/* ===== Timeline & photos ============================================== */
+/* photos are always visible; the vertical line only on wide screens */
 .timeline {
+  position: relative;
   display: flex;
   flex-direction: column;
+  gap: 2.5rem;
   align-items: center;
-  position: relative;
-  margin-top: 3rem;
-  gap: 4rem;
 }
 
-/* Hide line by default */
-.timeline::before {
-  display: none;
-}
+/* no line by default (mobile/narrow) */
+.timeline::before { display: none; }
 
-/* Show connecting line only on large viewports */
-@media (min-width: 900px) {
+/* show line on wide screens and align it vertically through the photos */
+@media (min-width: 980px) {
   .timeline {
-    flex-direction: column;
     align-items: center;
+    padding: 1rem 0;  /* room for the cap above/below the top photo */
   }
-
   .timeline::before {
     content: "";
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 0; bottom: 0;
     width: 3px;
     background: #83C5C9;
     display: block;
   }
 }
 
-/* Circular images */
 .photo {
-  position: relative;
-  background: #fff;
-  border: 5px solid #83C5C9;
+  width: 180px; height: 180px;
   border-radius: 50%;
+  border: 5px solid #83C5C9;
   overflow: hidden;
-  width: 180px;
-  height: 180px;
+  background: #fff;
   flex-shrink: 0;
 }
-
 .photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
 }
 
-/* Responsive photo scaling */
-@media (max-width: 768px) {
-  .photo {
-    width: 140px;
-    height: 140px;
-  }
+@media (max-width: 640px) {
+  .photo { width: 140px; height: 140px; }
 }
 
-/* ===== PROJECTS ==================================================== */
-.projects {
-  background: #fff;
-}
+/* Projects text blocks */
+.project h3 { font-size: 1.05rem; margin-bottom: .5rem; color: #000; }
+.project p  { margin-bottom: 1.2rem; }
 
-.projects.past {
-  background: #f7f7f7;
-}
+/* ===== Outreach list =================================================== */
+.outreach ul { margin-top: .25rem; margin-left: 1.2rem; }
+.outreach li { margin-bottom: .5rem; }
 
-.projects h2 {
-  margin-bottom: 1.5rem;
-}
-
-.project h3 {
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-  color: #000;
-}
-
-.project p {
-  margin-bottom: 1.5rem;
-}
-
-/* ===== OUTREACH ==================================================== */
-.outreach ul {
-  margin-top: 0.5rem;
-  margin-left: 1.2rem;
-}
-
-.outreach li {
-  margin-bottom: 0.5rem;
-}
-
-/* ===== FOOTER ====================================================== */
-footer {
-  text-align: center;
-  background: #fff;
-  color: #555;
-  padding: 3rem 1rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.footer-links {
-  margin-bottom: 1rem;
-}
-
+/* ===== Footer ========================================================== */
+footer { background: #fff; border-top: 1px solid #e0e0e0; }
+.footer-inner { text-align: center; padding-top: 3rem; padding-bottom: 3rem; }
+.footer-links { margin-bottom: 1rem; }
 .footer-links a {
-  margin: 0 0.8rem;
+  margin: 0 .8rem;
   text-decoration: none;
   color: #83C5C9;
   font-weight: 600;
   font-size: 1rem;
 }
+.footer-links a:hover { text-decoration: underline; }
+footer p { font-size: .85rem; color: #888; }
 
-.footer-links a:hover {
-  text-decoration: underline;
-}
-
-footer p {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-/* ===== FADE-IN ===================================================== */
-.fade {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-.fade.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ===== Fade-in on scroll ============================================= */
+.fade { opacity: 0; transform: translateY(40px); transition: opacity 1s ease-out, transform 1s ease-out; }
+.fade.show { opacity: 1; transform: translateY(0); }
