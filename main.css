@@ -21,16 +21,21 @@ body {
   margin: 0 auto;
 }
 
-.hero-icon img {
-  width: 80px;
-  height: 80px;
+.hero-icon {
+  display: flex;
+  justify-content: center;
   margin-bottom: 2rem;
-  opacity: 0.8;
+}
+
+#brain {
+  width: 280px;
+  height: 220px;
+  cursor: none;
 }
 
 .hero h2 {
   font-family: 'Raleway', sans-serif;
-  color: #2c73e8;
+  color: #83C5C9;
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
