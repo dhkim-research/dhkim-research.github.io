@@ -1,68 +1,59 @@
 /* ===== Base & wrapper =============================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  color: #222;
-  line-height: 1.7;
-  background: #fff;
+body{
+  font-family:'Montserrat',sans-serif;
+  color:#222;
+  line-height:1.7;
+  background:#fff;
 }
 
-/* single wrapper used everywhere so left edges align perfectly */
-.wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 6rem 2rem;
-}
+/* single wrapper so left edges align perfectly */
+.wrap{ max-width:1100px; margin:0 auto; padding:6rem 2rem; }
 
 /* 2-col grid → collapses to 1 column */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
+.grid{ display:grid; grid-template-columns:1fr; gap:3rem; }
 
-.col-text     { max-width: 640px; }
-.col-aside    { display: flex; justify-content: center; position: relative; }
+.col-text  { max-width:640px; }
+.col-aside { display:flex; justify-content:center; position:relative; }
 
 /* wide screens → two columns */
-@media (min-width: 980px) {
-  .grid { grid-template-columns: 58% 42%; align-items: center; }
-  .col-aside { justify-content: center; }
+@media (min-width:980px){
+  .grid{ grid-template-columns:58% 42%; align-items:center; }
+  .col-aside{ justify-content:center; }
 }
 
-/* ===== Typography (matched to reference proportions) ================ */
+/* ===== Colors & type scale ========================================= */
 :root{
   --teal:#83C5C9;
   --body:1rem;
 }
 
-body { font-size: var(--body); }
+body{ font-size:var(--body); }
 
-.hero { background:#f0f0f0; padding:0; }
-.hero .wrap { padding-top:6rem; padding-bottom:6rem; }
+/* HERO */
+.hero{ background:#f0f0f0; padding:0; }
+.hero .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
 .hero h2{
   font-family:'Raleway',sans-serif;
   color:var(--teal);
   font-weight:700;
-  font-size:1.55rem;
+  font-size:1.65rem;
   letter-spacing:.2px;
   margin-bottom:.5rem;
 }
-
 .hero h1{
   font-weight:800;
-  line-height:1.15;
-  font-size:2.6rem;
+  line-height:1.12;
+  font-size:2.8rem;          /* mobile/tablet */
   margin-bottom:1.4rem;
 }
-
 .hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
 
 @media (min-width:980px){
-  .hero h1{ font-size:3.05rem; }
-  body{ font-size:1.03rem; } /* slightly larger body on desktop */
+  .hero h1{ font-size:3.25rem; }
+  body{ font-size:1.06rem; } /* slightly larger body on desktop */
 }
 
 .hero-links a{
@@ -75,7 +66,7 @@ body { font-size: var(--body); }
 }
 .hero-links a:hover{ text-decoration:underline; }
 
-/* section text */
+/* Sections */
 section{ padding:0; }
 section .wrap{ padding-top:6rem; padding-bottom:6rem; }
 
@@ -85,83 +76,101 @@ section h2{
   font-weight:800;
   letter-spacing:.2px;
   margin-bottom:1rem;
-  font-size:2rem;           /* mobile/tablet */
+  font-size:2.2rem;           /* mobile/tablet */
 }
 @media(min-width:980px){
-  section h2{ font-size:2.6rem; }   /* big, like the reference */
+  section h2{ font-size:2.8rem; }
 }
 
 section h3{
   font-weight:800;
   margin-bottom:1rem;
   color:#111;
-  font-size:1.15rem;
+  font-size:1.2rem;
 }
-
 section p{
   color:#222;
   line-height:1.85;
   margin-bottom:1.5rem;
-  font-size:1.02rem;
+  font-size:1.06rem;
 }
 
 .projects.past{ background:#f7f7f7; }
 
-/* ===== Particle canvas =============================================== */
+/* ===== Particle canvas ============================================= */
 .hero-graphic{ align-items:center; }
 #scene{ width:260px; height:200px; }
 
-/* ===== Timeline & photos ============================================ */
-/* photos are always visible; the teal line only on wide screens */
+/* ===== Timeline & photos ========================================== */
+/* Stack of photos; the teal line shows only on wide screens */
 .timeline{
   position:relative;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:2.6rem;
-  z-index:0;                 /* create stacking context */
-  min-height: 180px;
+  min-height:180px;
 }
 
-/* by default (mobile) no line */
+/* No line on mobile */
 .timeline::before{ display:none; }
 
-/* wide screens: show a centered line that extends beyond photos */
+/* Wide screens: centered line BEHIND photos and long enough to connect,
+   but visually it should only TOUCH, not run THROUGH circles.
+   We'll also add a small white mask inside each circle (see .photo::after) */
 @media(min-width:980px){
   .timeline::before{
     content:"";
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    top:-60px;               /* extend above photo stack */
-    bottom:-60px;            /* extend below photo stack */
+    top:-40vh;               /* reach above the photo stack */
+    bottom:-40vh;            /* reach below the photo stack */
     width:3px;
     background:var(--teal);
     display:block;
-    z-index:0;               /* behind photos but above background */
+    z-index:-1;              /* BEHIND the photo circles */
   }
 }
 
+/* Photo circles */
 .photo{
   width:180px; height:180px;
   border-radius:50%;
   border:5px solid var(--teal);
   overflow:hidden;
   background:#fff;
-  flex-shrink:0;
   position:relative;
-  z-index:1;                 /* ensure line appears behind circle */
+  flex-shrink:0;
+  z-index:1;                 /* above the line */
 }
 .photo img{
   width:100%; height:100%;
   object-fit:cover; border-radius:50%;
 }
 
+/* White mask that hides any part of the line that would pass through.
+   Because the line is behind, you usually won't see it; this mask ensures
+   the line visually "stops" at the circle’s edge (no anti-aliased bleed). */
+@media(min-width:980px){
+  .photo::after{
+    content:"";
+    position:absolute;
+    left:50%; top:-6px;      /* extend slightly beyond the border */
+    transform:translateX(-50%);
+    width:7px;               /* just wider than the 3px line */
+    height:calc(100% + 12px);
+    background:#fff;
+    z-index:2;               /* above image; blends with white interior */
+    pointer-events:none;
+  }
+}
+
 @media(max-width:640px){
   .photo{ width:140px; height:140px; }
 }
 
-/* Projects text blocks */
+/* Project text blocks */
 .project h3{ font-size:1.06rem; margin-bottom:.55rem; color:#000; }
 .project p{ margin-bottom:1.2rem; }
 
@@ -169,7 +178,7 @@ section p{
 .outreach ul{ margin-top:.25rem; margin-left:1.2rem; }
 .outreach li{ margin-bottom:.5rem; }
 
-/* ===== Footer ======================================================== */
+/* ===== Footer ====================================================== */
 footer{ background:#fff; border-top:1px solid #e0e0e0; }
 .footer-inner{ text-align:center; padding-top:3rem; padding-bottom:3rem; }
 .footer-links{ margin-bottom:1rem; }
@@ -183,6 +192,6 @@ footer{ background:#fff; border-top:1px solid #e0e0e0; }
 .footer-links a:hover{ text-decoration:underline; }
 footer p{ font-size:.85rem; color:#888; }
 
-/* ===== Fade-in ======================================================= */
+/* ===== Fade-in ===================================================== */
 .fade{ opacity:0; transform:translateY(40px); transition:opacity 1s ease-out, transform 1s ease-out; }
 .fade.show{ opacity:1; transform:translateY(0); }

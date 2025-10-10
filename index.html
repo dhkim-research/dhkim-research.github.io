@@ -2,92 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Dong Hyun Kim | Lighting & Building Scientist</title>
+  <title>Dong Hyun Kim, PhD | Lighting & Building Scientist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+
+  <!-- Fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="main.css" />
 </head>
-
 <body>
-  <!-- HERO -->
-  <header class="hero fade">
-    <div class="wrap grid">
-      <div class="col-text">
+
+  <!-- HERO (same layout rhythm & colors as reference) -->
+  <header class="hero">
+    <div class="wrap grid hero-graphic">
+      <div class="col-text fade">
         <h2>Dong Hyun Kim</h2>
-        <h1>Building scientist<br />and lighting researcher</h1>
+        <h1>Building scientist<br>and lighting researcher</h1>
         <p>Exploring the intersection of daylight, adaptive façades and human-centred comfort – toward smarter, healthier buildings.</p>
         <div class="hero-links">
           <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
           <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
         </div>
       </div>
-      <div class="col-aside hero-graphic">
-        <canvas id="scene" onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);"></canvas>
+
+      <!-- Particle brain -->
+      <div class="col-aside fade">
+        <canvas id="scene"
+          onmouseover="mouseStatus(true);" onmouseout="mouseStatus(false);">
+        </canvas>
       </div>
     </div>
   </header>
 
   <!-- ABOUT -->
-  <section class="about fade">
+  <section id="about">
     <div class="wrap grid">
-      <div class="col-text">
+      <div class="col-text fade">
         <h2>About me</h2>
         <h3>Building Scientist (PhD) and Lighting Researcher (MSc)</h3>
         <p>
-          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work bridges building physics, human perception and data-driven design. Previously, I was part of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
+          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems.
+          My work bridges building physics, human perception and data-driven design. Previously, I was part
+          of EPFL’s LIPID Lab and TU Delft’s Indoor Environment Group.
         </p>
       </div>
-      <aside class="col-aside">
+
+      <!-- Responsive photo stack with connector that only touches circles -->
+      <aside class="col-aside fade">
         <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="Portrait of Dong Hyun Kim" /></div>
+          <figure class="photo">
+            <img src="profile.png" alt="Profile photo">
+          </figure>
         </div>
       </aside>
     </div>
   </section>
 
   <!-- CURRENT PROJECTS -->
-  <section class="projects fade">
+  <section class="projects current">
     <div class="wrap grid">
-      <div class="col-text">
+      <div class="col-text fade">
         <h2>Current Projects</h2>
+
         <div class="project">
           <h3>Solskin AI project – ETH Zürich</h3>
           <p>to be added</p>
         </div>
       </div>
-      <aside class="col-aside">
+
+      <aside class="col-aside fade">
         <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="" /></div>
+          <figure class="photo">
+            <img src="profile.png" alt="Project image">
+          </figure>
         </div>
       </aside>
     </div>
   </section>
 
   <!-- PAST PROJECTS -->
-  <section class="projects past fade">
+  <section class="projects past">
     <div class="wrap grid">
-      <div class="col-text">
-        <h2>Past Projects</h2>
-        <div class="project"><h3>HiDyn project – EPFL</h3><p>to be added</p></div>
-        <div class="project"><h3>Project B</h3><p>to be added</p></div>
-        <div class="project"><h3>Project C</h3><p>to be added</p></div>
-        <div class="project"><h3>Project D</h3><p>to be added</p></div>
+      <div class="col-text fade">
+        <h2>Past projects</h2>
+
+        <div class="project">
+          <h3>HiDyn project – EPFL</h3>
+          <p>to be added</p>
+        </div>
+        <div class="project">
+          <h3>Project B</h3>
+          <p>to be added</p>
+        </div>
+        <div class="project">
+          <h3>Project C</h3>
+          <p>to be added</p>
+        </div>
+        <div class="project">
+          <h3>Project D</h3>
+          <p>to be added</p>
+        </div>
       </div>
-      <aside class="col-aside">
+
+      <aside class="col-aside fade">
         <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
         </div>
       </aside>
     </div>
   </section>
 
-  <!-- PRESENTATIONS & OUTREACH -->
-  <section class="projects outreach fade">
+  <!-- OUTREACH -->
+  <section class="outreach">
     <div class="wrap grid">
-      <div class="col-text">
+      <div class="col-text fade">
         <h2>Presentations and Outreach</h2>
         <ul>
           <li>to be added</li>
@@ -95,19 +129,20 @@
           <li>to be added</li>
         </ul>
       </div>
-      <aside class="col-aside">
+
+      <aside class="col-aside fade">
         <div class="timeline">
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
-          <div class="photo"><img src="profile.png" alt="" /></div>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
+          <figure class="photo"><img src="profile.png" alt=""></figure>
         </div>
       </aside>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="fade">
-    <div class="wrap footer-inner">
+  <footer>
+    <div class="footer-inner wrap">
       <div class="footer-links">
         <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
         <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
@@ -117,31 +152,31 @@
     </div>
   </footer>
 
-  <!-- PARTICLES + FADE-IN -->
+  <!-- Particle script -->
   <script src="scripts/particleEffect.js"></script>
   <script>
-    const brainShape =
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////8Gvm3fAAAAGnRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGhsYJvw9AAAAVElEQVQY022PUQ6AIAxECSjAosz/f9FpRKfQIEiHQOaRt1uFvF8KQQAYdjN1YspJO3jPdiCso1b1+1Vh+kZ9RygFvAFZcEPFtE6KcghFkTkp0hoIkecJDjFzY7D47gAAAABJRU5ErkJggg==";
-
-    window.initScene(brainShape);
-    window.updateConfig({
-      particleColor: [131, 197, 201],
-      colorNoise: 80,
+    // palette & feel close to reference
+    window.updateConfig?.({
+      particleColor: [131, 197, 201],   // #83C5C9
+      colorNoise: 24,
       particleFriction: 0.18,
       particleFrictionNoise: 0.05,
       mouseAvoidanceStrength: 2,
-      mouseAvoidanceStrengthNoise: 2,
+      mouseAvoidanceStrengthNoise: 1.5,
       mouseAvoidanceDistance: 50,
-      mouseAvoidanceDistanceNoise: 50
+      mouseAvoidanceDistanceNoise: 35
     });
 
-    // Fade-in on scroll
-    const faders = document.querySelectorAll('.fade');
-    const io = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); }),
-      { threshold: 0.15 }
-    );
-    faders.forEach(el => io.observe(el));
+    // Initialize with a tiny placeholder (you can swap for your brain PNG base64 later)
+    window.initScene?.("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAACEN3D/AAAAD0lEQVQYV2P4z8DwnwEIYwA1s8c0m1bnNQAAAABJRU5ErkJggg==");
+  </script>
+
+  <!-- Fade-in on view -->
+  <script>
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
