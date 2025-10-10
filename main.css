@@ -101,41 +101,25 @@ section p{
 #scene{ width:260px; height:200px; }
 
 /* ===== Timeline & photos =========================================== */
-/* photos always visible; teal line appears only on wide screens */
+/* Photos always visible. On desktop, draw short connectors BETWEEN circles only. */
 .timeline{
+  /* keep the inter-item spacing as a CSS variable so the connector can match it */
+  --gap: 2.6rem;
   position:relative;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:2.6rem;
-  z-index:0;        /* stacking context for masking trick below */
+  gap:var(--gap);
+  z-index:0;
   min-height:180px;
 }
-/* by default (mobile) no line */
-.timeline::before{ display:none; }
 
-/* wide screens: vertical line centered between images */
-@media (min-width:980px){
-  .timeline::before{
-    content:"";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:-60px;             /* extend beyond first circle */
-    bottom:-60px;          /* extend beyond last circle */
-    width:3px;
-    background:var(--teal);
-    display:block;
-    z-index:0;             /* behind circles */
-  }
-}
-
-/* circle images */
+/* circles */
 .photo{
   width:180px; height:180px;
   border-radius:50%;
   border:5px solid var(--teal);
-  overflow:hidden;      /* lets us mask inside the circle */
+  overflow:hidden;
   background:#fff;
   flex-shrink:0;
   position:relative;
@@ -146,29 +130,50 @@ section p{
   object-fit:cover; border-radius:50%;
 }
 
-/* ---- IMPORTANT: make the line TOUCH the circle (not cross it) ---- */
-/* On wide screens, we draw a thin mask inside each circle to hide the line
-   where it would pass through. Because .photo has overflow:hidden, the
-   mask only affects the interior of the circle, so the global line appears
-   to stop at the border and continue after the circle. */
+/* DESKTOP-ONLY: draw the connector from the bottom of each circle down to the next.
+   No line above the first or below the last; the line never pierces circles. */
 @media (min-width:980px){
+  /* connector segment */
+  .photo:not(:last-child)::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    top:100%;                  /* start exactly at the bottom edge of the circle */
+    width:3px;
+    height:var(--gap);         /* exactly fills the space to the next circle */
+    background:var(--teal);
+    z-index:0;                 /* stays behind the next circle */
+  }
+
+  /* safety mask: if rounding puts the segment a hair inside the circle,
+     hide it inside the circle so it looks like the line merely touches */
   .photo::after{
     content:"";
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    top:-10px;                   /* overlap slightly */
+    top:-10px;                 /* overlap slightly */
     bottom:-10px;
-    width:8px;                   /* wider than the 3px line */
-    background:#fff;             /* page background */
-    z-index:2;                   /* above the line, inside the circle */
+    width:8px;                 /* wider than the 3px line */
+    background:#fff;           /* page background */
+    z-index:2;
     pointer-events:none;
   }
 }
 
-/* smaller circles on small devices */
-@media (max-width:640px){
-  .photo{ width:140px; height:140px; }
+/* Mobile / narrow screens:
+   - Show photos in a 2-per-row grid
+   - Hide connectors entirely */
+@media (max-width:979px){
+  .timeline{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(120px, 1fr));
+    justify-items:center;
+    gap:1.6rem;
+  }
+  .photo{ width:150px; height:150px; }
+  .photo::before, .photo::after{ display:none !important; }
 }
 
 /* Outreach bullets */
@@ -192,6 +197,3 @@ footer p{ font-size:.86rem; color:#888; }
 /* ===== Fade-in ====================================================== */
 .fade{ opacity:0; transform:translateY(40px); transition:opacity .9s ease-out, transform .9s ease-out; }
 .fade.show{ opacity:1; transform:translateY(0); }
-
-/* ===== Utility when no images for a section ========================= */
-.timeline--empty{ min-height:0; }
