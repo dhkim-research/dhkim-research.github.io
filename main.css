@@ -1,244 +1,229 @@
 /* ===== Base & wrapper =============================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{
-  font-family:'Montserrat',sans-serif;
-  color:#222;
-  line-height:1.7;
-  background:#fff;
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: #222;
+  line-height: 1.7;
+  background: #fff;
 }
 
 /* Shared wrapper */
-.wrap{ max-width:1100px; margin:0 auto; padding:6rem 2rem; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
 
 /* ===== Hero ========================================================= */
-:root{
-  --teal:#83C5C9;
-  --bg-hero:#f0f0f0;
+:root {
+  --teal: #83C5C9;
+  --bg-hero: #f0f0f0;
 }
 
-.hero{ background:var(--bg-hero); }
-.hero .wrap{ padding-top:6rem; padding-bottom:6rem; }
-
-/* Place the brain above the title on desktop, stacked on mobile */
-.hero-wrap{
-  position:relative;
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:2rem;
-}
-.hero-brain{
-  justify-self:end;
-  order:0;
-}
-.hero-copy{
-  order:1;
+/* Updated Hero for Particles */
+.hero { 
+  position: relative; /* Acts as the anchor for the absolute particles */
+  background: var(--bg-hero);
+  overflow: hidden;   /* Prevents scrollbars if particles fly out */
+  z-index: 1;         /* Establishes stacking context */
 }
 
-/* Desktop: keep hero text the same width as the content columns */
-@media (min-width:980px){
-  .hero-copy{
-    grid-column: 1; 
-    grid-row: 1;
-    max-width: 640px;          /* MATCH col-text width */
-  }
-  /* ensure each child (title, paragraph, links) respects the same line length */
-  .hero-copy > *{
-    max-width: 640px;
-  }
-}
-
-
-@media (min-width:980px){
-  .hero-wrap{
-    grid-template-columns: 58% 42%;
-    align-items:center;
-  }
-  .hero-brain{ grid-column: 2; grid-row: 1; }
-  .hero-copy { grid-column: 1; grid-row: 1; }
-}
-
-#scene{
-  display:block;
-  pointer-events:auto;      /* ensure hover events reach the canvas */
-}
-
-/* Headings & text (scaled to match reference proportions) */
-.hero h2{
-  font-family:'Raleway',sans-serif;
-  color:var(--teal);
-  font-weight:900;
-  letter-spacing:.2px;
-  font-size:1.75rem;
-  margin-bottom:.6rem;
-}
-.hero h1{
-  font-weight:800;
-  line-height:1.12;
-  font-size:2.85rem;
-  margin-bottom:1.4rem;
-}
-@media (min-width:980px){
-  .hero h1{ font-size:3.25rem; }
-}
-.hero p{ font-size:1.08rem; color:#333; margin-bottom:1.4rem; }
-
-.hero-links a{
-  display:inline-block;
-  margin-right:1.1rem;
-  font-weight:800;
-  text-decoration:none;
-  color:var(--teal);
-  font-size:1.02rem;
-}
-.hero-links a:hover{ text-decoration:underline; }
-
-/* ===== Layout utilities ============================================ */
-.grid{ display:grid; grid-template-columns:1fr; gap:3rem; }
-.col-text{ max-width:640px; }
-.col-aside{ display:flex; justify-content:center; position:relative; }
-
-@media (min-width:980px){
-  .grid{ grid-template-columns:58% 42%; align-items:center; }
-  .col-aside{ justify-content:center; }
-}
-
-/* ===== Section typography ========================================== */
-section{ padding:0; }
-section .wrap{ padding-top:6rem; padding-bottom:6rem; }
-
-section h2{
-  font-family:'Raleway',sans-serif;
-  color:var(--teal);
-  font-weight:900;
-  letter-spacing:.2px;
-  margin-bottom:1.1rem;
-  font-size:2.1rem;
-}
-@media (min-width:980px){
-  section h2{ font-size:2.8rem; }
-}
-section h3{
-  font-weight:800;
-  color:#111;
-  font-size:1.2rem;
-  margin-bottom:1rem;
-}
-section p{
-  color:#222;
-  line-height:1.85;
-  margin-bottom:1.5rem;
-  font-size:1.05rem;
-}
-
-.projects.past{ background:#f7f7f7; }
-
-/* ===== Timeline & photos =========================================== */
-.timeline{
-  --gap: 2.6rem;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:var(--gap);
-  z-index:0;
-}
-.photo{
-  width:180px; height:180px;
-  border-radius:50%;
-  border:5px solid var(--teal);
-  overflow:hidden;
-  background:#fff;
-  flex-shrink:0;
-  position:relative;
-  z-index:1;
-}
-.photo img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
-
-/* DESKTOP: short teal connector BETWEEN circles only */
-@media (min-width:980px){
-  .photo:not(:last-child)::before{
-    content:"";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:calc(100% + 6px);               /* start just outside the border */
-    width:3px;
-    height:calc(var(--gap) - 12px);     /* stop before the next border */
-    background:var(--teal);
-    z-index:0;
-  }
-}
-
-/* MOBILE: grid of two per row; no connectors */
-@media (max-width:979px){
-  .timeline{
-    display:grid;
-    grid-template-columns:repeat(2, minmax(120px, 1fr));
-    justify-items:center;
-    gap:1.6rem;
-  }
-  .photo{ width:150px; height:150px; }
-  .photo::before{ display:none !important; }
-}
-
-/* Outreach */
-.outreach ul{ margin-top:.35rem; margin-left:1.2rem; }
-.outreach li{ margin-bottom:.55rem; }
-.email-line{ margin-top:1.2rem; font-weight:700; }
-.email-line a{ color:#4b4b4b; text-decoration:none; }
-.email-line a:hover{ text-decoration:underline; }
-
-/* ===== Footer ======================================================= */
-footer{ background:#fff; border-top:1px solid #e0e0e0; }
-.footer-inner{ text-align:center; padding:3rem 2rem; }
-.footer-links{ margin-bottom:1rem; }
-.footer-links a{
-  margin:0 .8rem;
-  text-decoration:none;
-  color:var(--teal);
-  font-weight:800;
-  font-size:1rem;
-}
-.footer-links a:hover{ text-decoration:underline; }
-footer p{ font-size:.86rem; color:#888; }
-
-/* ===== Fade-in ====================================================== */
-.fade{ opacity:0; transform:translateY(40px); transition:opacity .9s ease-out, transform .9s ease-out; }
-.fade.show{ opacity:1; transform:translateY(0); }
-
-/* =============================================================================
-   Particles.js Container Styling
-   ========================================================================== */
-
-/* 1. Position the Hero relative so the absolute particles sit inside it */
-.hero {
-  position: relative;
-  /* Optional: a subtle gradient fade at the bottom of the hero looks nice */
-  background: linear-gradient(to bottom, #f9f9f9 0%, #ffffff 100%);
-  z-index: 1;
-}
-
-/* 2. The Particle Canvas itself */
+/* This is the container for the particle canvas */
 #particles-js {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background-color: transparent; /* Let the hero background show through */
-  z-index: -1; /* Puts the canvas BEHIND the text */
+  z-index: 0; /* Behind content */
 }
 
-/* 3. Text Legibility Layer */
-/* We ensure the text sits ON TOP of the particles */
-.hero-wrap {
+.hero .wrap { 
+  padding-top: 6rem; 
+  padding-bottom: 6rem;
   position: relative;
-  z-index: 2; 
+  z-index: 2; /* Content sits on top of particles */
+  pointer-events: none; /* Allows mouse to pass through text to the particles */
 }
 
-/* 4. Remove the old static brain canvas if you want to replace it entirely,
-      or keep it if you want both. For a clean Apple look, I recommend hiding the old one: */
-.hero-brain canvas {
-  /* display: none; */ /* Uncomment this if you want to remove the old brain effect */
+/* Re-enable pointer events on interactive elements */
+.hero-wrap a, .hero-wrap button, .hero-wrap input {
+  pointer-events: auto;
 }
+
+/* Place the brain/particles above the title on desktop, stacked on mobile */
+.hero-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.hero-brain {
+  justify-self: end;
+  order: 0;
+  /* Optional: If you want to hide the old brain canvas entirely to let particles dominate */
+  /* display: none; */ 
+}
+
+.hero-copy {
+  order: 1;
+}
+
+/* Desktop: keep hero text the same width as the content columns */
+@media (min-width: 980px) {
+  .hero-copy {
+    grid-column: 1; 
+    grid-row: 1;
+    max-width: 640px; /* MATCH col-text width */
+  }
+  .hero-copy > * {
+    max-width: 640px;
+  }
+  .hero-wrap {
+    grid-template-columns: 58% 42%;
+    align-items: center;
+  }
+  .hero-brain { grid-column: 2; grid-row: 1; }
+  .hero-copy { grid-column: 1; grid-row: 1; }
+}
+
+/* Headings & text */
+.hero h2 {
+  font-family: 'Raleway', sans-serif;
+  color: var(--teal);
+  font-weight: 900;
+  letter-spacing: .2px;
+  font-size: 1.75rem;
+  margin-bottom: .6rem;
+}
+.hero h1 {
+  font-weight: 800;
+  line-height: 1.12;
+  font-size: 2.85rem;
+  margin-bottom: 1.4rem;
+}
+@media (min-width: 980px) {
+  .hero h1 { font-size: 3.25rem; }
+}
+.hero p { font-size: 1.08rem; color: #333; margin-bottom: 1.4rem; }
+
+.hero-links a {
+  display: inline-block;
+  margin-right: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--teal);
+  font-size: 1.02rem;
+}
+.hero-links a:hover { text-decoration: underline; }
+
+/* ===== Layout utilities ============================================ */
+.grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+.col-text { max-width: 640px; }
+.col-aside { display: flex; justify-content: center; position: relative; }
+
+@media (min-width: 980px) {
+  .grid { grid-template-columns: 58% 42%; align-items: center; }
+  .col-aside { justify-content: center; }
+}
+
+/* ===== Section typography ========================================== */
+section { padding: 0; }
+section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
+
+section h2 {
+  font-family: 'Raleway', sans-serif;
+  color: var(--teal);
+  font-weight: 900;
+  letter-spacing: .2px;
+  margin-bottom: 1.1rem;
+  font-size: 2.1rem;
+}
+@media (min-width: 980px) {
+  section h2 { font-size: 2.8rem; }
+}
+section h3 {
+  font-weight: 800;
+  color: #111;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+section p {
+  color: #222;
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.projects.past { background: #f7f7f7; }
+
+/* ===== Timeline & photos =========================================== */
+.timeline {
+  --gap: 2.6rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+  z-index: 0;
+}
+.photo {
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 5px solid var(--teal);
+  overflow: hidden;
+  background: #fff;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+/* DESKTOP: short teal connector BETWEEN circles only */
+@media (min-width: 980px) {
+  .photo:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 6px);
+    width: 3px;
+    height: calc(var(--gap) - 12px);
+    background: var(--teal);
+    z-index: 0;
+  }
+}
+
+/* MOBILE: grid of two per row; no connectors */
+@media (max-width: 979px) {
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    justify-items: center;
+    gap: 1.6rem;
+  }
+  .photo { width: 150px; height: 150px; }
+  .photo::before { display: none !important; }
+}
+
+/* Outreach */
+.outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
+.outreach li { margin-bottom: .55rem; }
+.email-line { margin-top: 1.2rem; font-weight: 700; }
+.email-line a { color: #4b4b4b; text-decoration: none; }
+.email-line a:hover { text-decoration: underline; }
+
+/* ===== Footer ======================================================= */
+footer { background: #fff; border-top: 1px solid #e0e0e0; }
+.footer-inner { text-align: center; padding: 3rem 2rem; }
+.footer-links { margin-bottom: 1rem; }
+.footer-links a {
+  margin: 0 .8rem;
+  text-decoration: none;
+  color: var(--teal);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.footer-links a:hover { text-decoration: underline; }
+footer p { font-size: .86rem; color: #888; }
+
+/* ===== Fade-in ====================================================== */
+.fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
+.fade.show { opacity: 1; transform: translateY(0); }
