@@ -139,23 +139,18 @@
   </script>
 
 <script>
-    /* UX/UI UPGRADE: "Living Network" Configuration
-       1. Visibility: Particles are larger (3-5px) for better contrast.
-       2. Feedback: Added "bubble" effect on hover for tactile responsiveness.
-       3. Depth: Randomized opacity and size create a 3D atmosphere.
-    */
     particlesJS('particles-js',
       {
         "particles": {
           "number": {
-            "value": 60, /* Balanced density */
+            "value": 60,
             "density": {
               "enable": true,
               "value_area": 800
             }
           },
           "color": {
-            "value": "#83C5C9" /* Your Brand Teal */
+            "value": "#83C5C9" /* DOTS: Your Brand Teal */
           },
           "shape": {
             "type": "circle",
@@ -165,15 +160,15 @@
             }
           },
           "opacity": {
-            "value": 0.8, /* Higher opacity for better visibility */
-            "random": true, /* UX Feature: Random opacity adds "twinkle" effect */
+            "value": 0.8,
+            "random": true, 
             "anim": {
               "enable": false
             }
           },
           "size": {
-            "value": 4.5, /* MUCH BIGGER (was 2) - Primary Visibility Fix */
-            "random": true, /* UX Feature: Variance creates organic depth */
+            "value": 4.5,
+            "random": true,
             "anim": {
               "enable": false
             }
@@ -181,13 +176,13 @@
           "line_linked": {
             "enable": true,
             "distance": 150,
-            "color": "#83C5C9",
-            "opacity": 0.5, /* Stronger lines for clearer connections */
-            "width": 1.5 /* Slightly thicker lines */
+            "color": "#a1a1a1", /* LINES: Soft Neutral Grey */
+            "opacity": 0.4,     /* Lower opacity makes them subtle */
+            "width": 1.2
           },
           "move": {
             "enable": true,
-            "speed": 1.6, /* A tiny bit faster to look "alive" */
+            "speed": 1.6,
             "direction": "none",
             "random": false,
             "straight": false,
@@ -201,14 +196,11 @@
           }
         },
         "interactivity": {
-          "detect_on": "window", /* Keep window detection */
+          "detect_on": "window",
           "events": {
             "onhover": {
               "enable": true,
-              /* FANCY FEATURE: Dual Mode. 
-                 It will 'grab' (connect lines) AND 'bubble' (grow larger) 
-                 simultaneously. */
-              "mode": ["grab", "bubble"] 
+              "mode": ["grab", "bubble"]
             },
             "onclick": {
               "enable": true,
@@ -218,14 +210,14 @@
           },
           "modes": {
             "grab": {
-              "distance": 200, /* Larger reach for easier interaction */
+              "distance": 200,
               "line_linked": {
-                "opacity": 1 /* Solid connection when hovering */
+                "opacity": 0.6 /* Lines get darker when you grab them */
               }
             },
             "bubble": {
               "distance": 200,
-              "size": 8, /* Particles grow to 8px when you touch them */
+              "size": 8,
               "duration": 2,
               "opacity": 8,
               "speed": 3
