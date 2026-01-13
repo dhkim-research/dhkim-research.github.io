@@ -5,25 +5,22 @@
   <title>Dong Hyun Kim, PhD | Lighting & Building Scientist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
+  
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+  
   <link rel="stylesheet" href="main.css" />
 </head>
 
 <body>
 
-  <!-- ===== Hero ==================================================== -->
   <header class="hero">
+    
+    <div id="particles-js"></div>
+
     <div class="wrap hero-wrap">
-      <!-- Particle brain canvas (top-right, above the name) -->
       <div class="hero-brain">
-        <canvas
-          id="scene"
-          onmouseover="mouseStatus(true);"
-          onmouseout="mouseStatus(false);"
-          aria-label="Animated brain made of particles">
-        </canvas>
-      </div>
+        </div>
 
       <div class="hero-copy">
         <h2>Dong Hyun Kim</h2>
@@ -39,7 +36,6 @@
     </div>
   </header>
 
-  <!-- ===== About =================================================== -->
   <section id="about" class="fade">
     <div class="wrap grid">
       <div class="col-text">
@@ -51,8 +47,6 @@
           TU Delft’s Indoor Environment Group.
         </p>
       </div>
-
-      <!-- Two photos with connector only between them -->
       <aside class="col-aside">
         <div class="timeline">
           <figure class="photo"><img src="profile.png" alt="Portrait of Dong Hyun Kim"></figure>
@@ -62,12 +56,9 @@
     </div>
   </section>
 
-  <!-- ===== Current Projects ======================================= -->
   <section id="current-projects" class="fade">
     <div class="wrap">
       <h2>Current Projects</h2>
-
-      <!-- Solskin AI project (2 photos) -->
       <div class="grid project">
         <div class="col-text">
           <h3>Solskin AI project – ETH Zürich</h3>
@@ -83,12 +74,9 @@
     </div>
   </section>
 
-  <!-- ===== Past Projects ========================================== -->
   <section id="past-projects" class="projects past fade">
     <div class="wrap">
       <h2>Past Projects</h2>
-
-      <!-- HiDyn (1 photo) -->
       <div class="grid project">
         <div class="col-text">
           <h3>HiDyn project – EPFL</h3>
@@ -100,53 +88,12 @@
           </div>
         </aside>
       </div>
-
-      <!-- Project B -->
-      <div class="grid project">
-        <div class="col-text">
-          <h3>Project B</h3>
-          <p>to be added</p>
-        </div>
-        <aside class="col-aside">
-          <div class="timeline">
-            <figure class="photo"><img src="profile.png" alt=""></figure>
-          </div>
-        </aside>
-      </div>
-
-      <!-- Project C -->
-      <div class="grid project">
-        <div class="col-text">
-          <h3>Project C</h3>
-          <p>to be added</p>
-        </div>
-        <aside class="col-aside">
-          <div class="timeline">
-            <figure class="photo"><img src="profile.png" alt=""></figure>
-          </div>
-        </aside>
-      </div>
-
-      <!-- Project D -->
-      <div class="grid project">
-        <div class="col-text">
-          <h3>Project D</h3>
-          <p>to be added</p>
-        </div>
-        <aside class="col-aside">
-          <div class="timeline">
-            <figure class="photo"><img src="profile.png" alt=""></figure>
-          </div>
-        </aside>
-      </div>
     </div>
   </section>
 
-  <!-- ===== Presentations & Outreach ================================ -->
   <section id="outreach" class="fade">
     <div class="wrap">
       <h2>Presentations and Outreach</h2>
-
       <div class="grid">
         <div class="col-text outreach">
           <h3>Talks / Media</h3>
@@ -155,13 +102,10 @@
             <li>to be added</li>
             <li>to be added</li>
           </ul>
-
           <p class="email-line">
             <i class="far fa-envelope"></i> <a href="mailto:kim@arch.ethz.ch">kim@arch.ethz.ch</a>
           </p>
         </div>
-
-        <!-- 2x2 image grid (no connectors) -->
         <aside class="col-aside">
           <div class="timeline" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.6rem;">
             <figure class="photo"><img src="profile.png" alt=""></figure>
@@ -185,69 +129,113 @@
     </div>
   </footer>
 
-  <!-- Particle animation -->
-  <script src="scripts/particleEffect.js"></script>
+  <script src="scripts/particles.min.js"></script>
+
   <script>
-    // === Responsive canvas sizing + init ===================================
-    const B64 = "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
-
-    function sizeCanvas() {
-      const c = document.getElementById('scene');
-      const box = c.parentElement.getBoundingClientRect();
-
-      // Keep a pleasant aspect ratio; scale with container
-      const w = Math.max(260, Math.min(box.width, 520));
-      const h = Math.round(w * 0.72);
-
-      // IMPORTANT: set the element ATTRIBUTES, not only CSS, so the
-      // particle engine draws at the right resolution.
-      c.width  = w;
-      c.height = h;
-
-      // Also ensure CSS matches (prevents layout jumps)
-      c.style.width  = w + 'px';
-      c.style.height = h + 'px';
-    }
-
-    function initParticles() {
-      sizeCanvas();
-      window.initScene(B64); // from the provided library
-
-      // match Edoardo's color family
-      window.updateConfig({
-        particleColor: [131,197,201], // #83C5C9
-        colorNoise: 60,
-        particleFriction: 0.18,
-        particleFrictionNoise: 0.05,
-        mouseAvoidanceStrength: 2,
-        mouseAvoidanceStrengthNoise: 2,
-        mouseAvoidanceDistance: 50,
-        mouseAvoidanceDistanceNoise: 50
-      });
-    }
-
-    // Debounced resize → keep animation responsive without reload
-    let resizeTid = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTid);
-      resizeTid = setTimeout(() => {
-        // If the library exposes a destroy/reset, call it; otherwise re-init.
-        const canvas = document.getElementById('scene');
-        const ctx = canvas.getContext('2d');
-        ctx && ctx.clearRect(0, 0, canvas.width, canvas.height);
-        initParticles();
-      }, 120);
-    });
-
-    // kick off
-    initParticles();
-
-    // Fade-in on scroll
     const els = document.querySelectorAll('.fade');
     const obs = new IntersectionObserver((entries)=> {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
     }, { threshold: 0.12 });
     els.forEach(el => obs.observe(el));
+  </script>
+
+  <script>
+    /* This config creates a "connected intelligence" feel.
+       It uses the window for detection, so particles react 
+       even when you hover over the text.
+    */
+    particlesJS('particles-js',
+      {
+        "particles": {
+          "number": {
+            "value": 50,  /* Minimal density: Cleaner look */
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#83C5C9" /* Brand Teal */
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            }
+          },
+          "opacity": {
+            "value": 0.6, /* Slight transparency for depth */
+            "random": false
+          },
+          "size": {
+            "value": 2, /* Small, elegant dots */
+            "random": true
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150, /* Long connections */
+            "color": "#83C5C9", /* Teal lines */
+            "opacity": 0.3, /* Subtle lines */
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 1.2, /* Slow movement = Premium feel */
+            "direction": "none",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "window", /* CRITICAL: Allows interaction through text */
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "grab" /* Connects lines to cursor instead of pushing away */
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 180,
+              "line_linked": {
+                "opacity": 0.8
+              }
+            },
+            "bubble": {
+              "distance": 400,
+              "size": 40,
+              "duration": 2,
+              "opacity": 8,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 200,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true /* Crisp on MacBooks/High-Res screens */
+      }
+    );
   </script>
 </body>
 </html>
