@@ -19,9 +19,6 @@
     <div id="particles-js"></div>
 
     <div class="wrap hero-wrap">
-      <div class="hero-brain">
-        </div>
-
       <div class="hero-copy">
         <h2>Dong Hyun Kim</h2>
         <h1>Building scientist<br>and lighting researcher</h1>
@@ -33,6 +30,8 @@
           <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
         </div>
       </div>
+      
+      <div class="hero-brain"></div>
     </div>
   </header>
 
@@ -140,22 +139,24 @@
   </script>
 
   <script>
-    /* This config creates a "connected intelligence" feel.
-       It uses the window for detection, so particles react 
-       even when you hover over the text.
+    /* Configuration: 
+       - Minimal density for a clean look
+       - Slow speed for a calming effect
+       - 'Grab' interaction on hover for a "connected" feel
+       - detect_on: 'window' allows interaction through the text 
     */
     particlesJS('particles-js',
       {
         "particles": {
           "number": {
-            "value": 50,  /* Minimal density: Cleaner look */
+            "value": 50,
             "density": {
               "enable": true,
               "value_area": 800
             }
           },
           "color": {
-            "value": "#83C5C9" /* Brand Teal */
+            "value": "#83C5C9" /* Your Brand Teal */
           },
           "shape": {
             "type": "circle",
@@ -165,23 +166,23 @@
             }
           },
           "opacity": {
-            "value": 0.6, /* Slight transparency for depth */
+            "value": 0.6,
             "random": false
           },
           "size": {
-            "value": 2, /* Small, elegant dots */
+            "value": 2,
             "random": true
           },
           "line_linked": {
             "enable": true,
-            "distance": 150, /* Long connections */
-            "color": "#83C5C9", /* Teal lines */
-            "opacity": 0.3, /* Subtle lines */
+            "distance": 150,
+            "color": "#83C5C9",
+            "opacity": 0.3,
             "width": 1
           },
           "move": {
             "enable": true,
-            "speed": 1.2, /* Slow movement = Premium feel */
+            "speed": 1.2, /* Slow speed */
             "direction": "none",
             "random": false,
             "straight": false,
@@ -195,11 +196,11 @@
           }
         },
         "interactivity": {
-          "detect_on": "window", /* CRITICAL: Allows interaction through text */
+          "detect_on": "window", /* Critical: Detects mouse even over text */
           "events": {
             "onhover": {
               "enable": true,
-              "mode": "grab" /* Connects lines to cursor instead of pushing away */
+              "mode": "grab" /* Connects lines to cursor */
             },
             "onclick": {
               "enable": true,
@@ -233,7 +234,7 @@
             }
           }
         },
-        "retina_detect": true /* Crisp on MacBooks/High-Res screens */
+        "retina_detect": true
       }
     );
   </script>
