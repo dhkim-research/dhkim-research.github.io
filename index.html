@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
   
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&family=Montserrat:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   
   <link rel="stylesheet" href="main.css" />
@@ -55,72 +55,68 @@
     </div>
   </section>
 
-  <section id="connected-grid" class="fade">
+  <section id="bento-projects" class="fade">
     <div class="wrap">
-      <h2>Connected Research</h2>
+      <h2>Selected Research</h2>
       
-      <svg id="connections-layer" style="overflow: visible;"></svg>
-
-      <div class="network-grid">
+      <div class="bento-grid">
         
-        <div class="network-item">
-          <div class="net-photo">
+        <a href="#" class="bento-card featured">
+          <div class="bento-content">
+            <div class="bento-tags">
+              <span>[ 2025 ]</span>
+              <span>ETH Zürich</span>
+            </div>
+            <h3>Solskin AI</h3>
+            <p>Adaptive façade systems using machine learning for real-time climate responsiveness and energy optimization.</p>
+          </div>
+          <div class="bento-visual">
             <img src="profile.png" alt="Solskin AI">
           </div>
-          <div class="net-text">
-            <h3>Solskin AI</h3>
-            <p>Adaptive Systems</p>
-          </div>
-        </div>
+        </a>
 
-        <div class="network-item">
-          <div class="net-photo">
+        <a href="#" class="bento-card">
+          <div class="bento-visual small">
             <img src="profile.png" alt="HiDyn">
           </div>
-          <div class="net-text">
+          <div class="bento-content">
+            <div class="bento-tags">
+              <span>[ EPFL ]</span>
+              <span>H-D-R</span>
+            </div>
             <h3>HiDyn Project</h3>
-            <p>Human Perception</p>
+            <p>High dynamic range imaging for visual comfort analysis in complex lighting.</p>
           </div>
-        </div>
+        </a>
 
-        <div class="network-item">
-          <div class="net-photo">
+        <a href="#" class="bento-card">
+          <div class="bento-visual small">
             <img src="profile.png" alt="Visual Comfort">
           </div>
-          <div class="net-text">
+          <div class="bento-content">
+            <div class="bento-tags">
+              <span>[ TU Delft ]</span>
+              <span>Human-Centric</span>
+            </div>
             <h3>Visual Comfort</h3>
-            <p>Glare Analysis</p>
+            <p>Developing new metrics for glare perception in daylit office environments.</p>
           </div>
-        </div>
+        </a>
 
-        <div class="network-item">
-          <div class="net-photo">
+        <a href="#" class="bento-card featured">
+          <div class="bento-content">
+            <div class="bento-tags">
+              <span>[ Publication ]</span>
+              <span>Building & Environment</span>
+            </div>
+            <h3>Spectral Rendering</h3>
+            <p>Simulating daylight spectral properties for precise circadian health assessments in architecture.</p>
+          </div>
+          <div class="bento-visual">
             <img src="profile.png" alt="Daylight Simulation">
           </div>
-          <div class="net-text">
-            <h3>Daylight Sim</h3>
-            <p>Spectral Rendering</p>
-          </div>
-        </div>
+        </a>
 
-      </div>
-    </div>
-  </section>
-
-  " line end   -->
-  <section id="past-projects" class="projects past fade">
-    <div class="wrap">
-      <h2>Past Projects</h2>
-      <div class="grid project">
-        <div class="col-text">
-          <h3>HiDyn project – EPFL</h3>
-          <p>to be added</p>
-        </div>
-        <aside class="col-aside">
-          <div class="timeline">
-            <figure class="photo"><img src="profile.png" alt=""></figure>
-          </div>
-        </aside>
       </div>
     </div>
   </section>
@@ -132,9 +128,9 @@
         <div class="col-text outreach">
           <h3>Talks / Media</h3>
           <ul>
-            <li>to be added</li>
-            <li>to be added</li>
-            <li>to be added</li>
+            <li>Invited Talk at Daylighting Symposium 2024</li>
+            <li>Guest Lecture on Adaptive Façades</li>
+            <li>Workshop on HDR Imaging Techniques</li>
           </ul>
           <p class="email-line">
             <i class="far fa-envelope"></i> <a href="mailto:kim@arch.ethz.ch">kim@arch.ethz.ch</a>
@@ -174,93 +170,32 @@
   </script>
 
   <script>
-    function drawConnections() {
-      const svg = document.getElementById('connections-layer');
-      const items = document.querySelectorAll('.net-photo');
-      const container = document.querySelector('.network-grid').getBoundingClientRect();
-      
-      // Clear old lines
-      svg.innerHTML = '';
-
-      // We need at least 2 items to connect
-      if(items.length < 2) return;
-
-      // Loop through items and connect them sequentially (1->2, 2->3, etc.)
-      for (let i = 0; i < items.length - 1; i++) {
-        const itemA = items[i].getBoundingClientRect();
-        const itemB = items[i + 1].getBoundingClientRect();
-
-        // Calculate centers relative to the grid container
-        const x1 = (itemA.left + itemA.width / 2) - container.left;
-        const y1 = (itemA.top + itemA.height / 2) - container.top;
-        const x2 = (itemB.left + itemB.width / 2) - container.left;
-        const y2 = (itemB.top + itemB.height / 2) - container.top;
-
-        // Create the SVG line
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', x1);
-        line.setAttribute('y1', y1);
-        line.setAttribute('x2', x2);
-        line.setAttribute('y2', y2);
-        
-        // Style: Soft Premium Grey
-        line.setAttribute('stroke', '#d1d1d1'); 
-        line.setAttribute('stroke-width', '2');
-        
-        svg.appendChild(line);
-      }
-    }
-
-    // Run on load and whenever the window resizes
-    window.addEventListener('load', drawConnections);
-    window.addEventListener('resize', () => {
-      clearTimeout(window.resizeTimer);
-      window.resizeTimer = setTimeout(drawConnections, 100);
-    });
-    
-    // Run once after a short delay to ensure images shifted layout
-    setTimeout(drawConnections, 500);
-  </script>
-
-  <script>
     particlesJS('particles-js',
       {
         "particles": {
           "number": {
             "value": 60,
-            "density": {
-              "enable": true,
-              "value_area": 800
-            }
+            "density": { "enable": true, "value_area": 800 }
           },
-          "color": {
-            "value": "#83C5C9" /* DOTS: Your Brand Teal */
-          },
+          "color": { "value": "#83C5C9" }, /* DOTS: Teal */
           "shape": {
             "type": "circle",
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            }
+            "stroke": { "width": 0, "color": "#000000" }
           },
           "opacity": {
             "value": 0.8,
-            "random": true, 
-            "anim": {
-              "enable": false
-            }
+            "random": true,
+            "anim": { "enable": false }
           },
           "size": {
-            "value": 4.5, /* LARGE DOTS for visibility */
+            "value": 4.5, /* Large visibility */
             "random": true,
-            "anim": {
-              "enable": false
-            }
+            "anim": { "enable": false }
           },
           "line_linked": {
             "enable": true,
             "distance": 150,
-            "color": "#a1a1a1", /* LINES: Soft Neutral Grey */
+            "color": "#a1a1a1", /* LINES: Soft Grey */
             "opacity": 0.4,
             "width": 1.2
           },
@@ -272,50 +207,22 @@
             "straight": false,
             "out_mode": "out",
             "bounce": false,
-            "attract": {
-              "enable": false,
-              "rotateX": 600,
-              "rotateY": 1200
-            }
+            "attract": { "enable": false }
           }
         },
         "interactivity": {
           "detect_on": "window",
           "events": {
-            "onhover": {
-              "enable": true,
-              "mode": ["grab", "bubble"] /* CONNECT & GROW */
-            },
-            "onclick": {
-              "enable": true,
-              "mode": "push"
-            },
+            "onhover": { "enable": true, "mode": ["grab", "bubble"] },
+            "onclick": { "enable": true, "mode": "push" },
             "resize": true
           },
           "modes": {
-            "grab": {
-              "distance": 200,
-              "line_linked": {
-                "opacity": 0.6
-              }
-            },
-            "bubble": {
-              "distance": 200,
-              "size": 8,
-              "duration": 2,
-              "opacity": 8,
-              "speed": 3
-            },
-            "repulse": {
-              "distance": 200,
-              "duration": 0.4
-            },
-            "push": {
-              "particles_nb": 4
-            },
-            "remove": {
-              "particles_nb": 2
-            }
+            "grab": { "distance": 200, "line_linked": { "opacity": 0.6 } },
+            "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
+            "repulse": { "distance": 200, "duration": 0.4 },
+            "push": { "particles_nb": 4 },
+            "remove": { "particles_nb": 2 }
           }
         },
         "retina_detect": true
