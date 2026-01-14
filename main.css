@@ -19,36 +19,45 @@ body {
 
 /* Updated Hero for Particles */
 .hero { 
-  position: relative; /* Acts as the anchor for the absolute particles */
+  position: relative; /* Anchor for absolute particles */
   background: var(--bg-hero);
-  overflow: hidden;   /* Prevents scrollbars if particles fly out */
-  z-index: 1;         /* Establishes stacking context */
+  overflow: hidden;
+  /* Ensure the hero has height even if content loads slow */
+  min-height: 80vh; 
+  z-index: 1;
 }
 
-/* This is the container for the particle canvas */
+/* The Particle Container */
 #particles-js {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 0; /* Behind content */
+  /* FORCE it to be visible above the background */
+  z-index: 1; 
+}
+
+/* Ensure canvas is block to remove scrollbars */
+#particles-js canvas {
+  display: block;
 }
 
 .hero .wrap { 
   padding-top: 6rem; 
   padding-bottom: 6rem;
   position: relative;
-  z-index: 2; /* Content sits on top of particles */
-  pointer-events: none; /* Allows mouse to pass through text to the particles */
+  /* Text must be higher than particles (z-index 1) */
+  z-index: 10; 
+  pointer-events: none; /* Let mouse pass through text to particles */
 }
 
-/* Re-enable pointer events on interactive elements */
+/* Re-enable pointer events on links/buttons */
 .hero-wrap a, .hero-wrap button, .hero-wrap input {
   pointer-events: auto;
 }
 
-/* Place the brain/particles above the title on desktop, stacked on mobile */
+/* Hero Layout */
 .hero-wrap {
   display: grid;
   grid-template-columns: 1fr;
@@ -58,8 +67,6 @@ body {
 .hero-brain {
   justify-self: end;
   order: 0;
-  /* Optional: If you want to hide the old brain canvas entirely to let particles dominate */
-  /* display: none; */ 
 }
 
 .hero-copy {
@@ -71,7 +78,7 @@ body {
   .hero-copy {
     grid-column: 1; 
     grid-row: 1;
-    max-width: 640px; /* MATCH col-text width */
+    max-width: 640px; 
   }
   .hero-copy > * {
     max-width: 640px;
@@ -227,3 +234,92 @@ footer p { font-size: .86rem; color: #888; }
 /* ===== Fade-in ====================================================== */
 .fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
 .fade.show { opacity: 1; transform: translateY(0); }
+
+/* =============================================================================
+   New Connected Network Grid (Apple Style)
+   ========================================================================== */
+
+#connected-grid {
+  position: relative; /* Anchor for the absolute SVG */
+}
+
+/* The SVG Layer (The Lines) */
+#connections-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Behind the photos */
+  pointer-events: none; /* Let clicks pass through to photos */
+}
+
+/* The Grid Container */
+.network-grid {
+  display: grid;
+  position: relative;
+  z-index: 1; /* Above the lines */
+  gap: 4rem; /* Space between items */
+  grid-template-columns: 1fr; /* Mobile: 1 Column */
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Tablet & Desktop: 2 Columns Staggered */
+@media (min-width: 768px) {
+  .network-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8rem; /* Wide gap for lines to cross */
+    row-gap: 4rem;
+  }
+  
+  /* STAGGER EFFECT: Push every even item down to create the diagonal zigzag */
+  .network-item:nth-child(even) {
+    transform: translateY(80px);
+  }
+}
+
+/* The Cards */
+.network-item {
+  background: transparent;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.network-item:hover .net-photo {
+  transform: scale(1.05); /* Subtle zoom on hover */
+  box-shadow: 0 10px 25px rgba(131, 197, 201, 0.3);
+}
+
+.net-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1.2rem auto;
+  border: 4px solid var(--teal); 
+  background: #fff;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.net-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.net-text h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 0.3rem;
+}
+.net-text p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #888;
+}
