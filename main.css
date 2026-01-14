@@ -6,6 +6,7 @@ body {
   color: #222;
   line-height: 1.7;
   background: #fff;
+  -webkit-font-smoothing: antialiased; /* Apple Crisp Text */
 }
 
 /* Shared wrapper */
@@ -19,74 +20,50 @@ body {
 
 /* Updated Hero for Particles */
 .hero { 
-  position: relative; /* Anchor for absolute particles */
+  position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
-  /* Ensure the hero has height even if content loads slow */
-  min-height: 80vh; 
+  min-height: 85vh; /* Slightly taller for grandeur */
   z-index: 1;
 }
 
-/* The Particle Container */
+/* Particle Container */
 #particles-js {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  /* FORCE it to be visible above the background */
-  z-index: 1; 
+  z-index: 1; /* Visible layer */
 }
-
-/* Ensure canvas is block to remove scrollbars */
-#particles-js canvas {
-  display: block;
-}
+#particles-js canvas { display: block; }
 
 .hero .wrap { 
   padding-top: 6rem; 
   padding-bottom: 6rem;
   position: relative;
-  /* Text must be higher than particles (z-index 1) */
   z-index: 10; 
-  pointer-events: none; /* Let mouse pass through text to particles */
+  pointer-events: none; 
 }
 
-/* Re-enable pointer events on links/buttons */
-.hero-wrap a, .hero-wrap button, .hero-wrap input {
-  pointer-events: auto;
-}
+.hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
 
 /* Hero Layout */
 .hero-wrap {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
+  height: 100%;
+  align-content: center;
 }
 
-.hero-brain {
-  justify-self: end;
-  order: 0;
-}
+.hero-brain { justify-self: end; order: 0; }
+.hero-copy { order: 1; }
 
-.hero-copy {
-  order: 1;
-}
-
-/* Desktop: keep hero text the same width as the content columns */
 @media (min-width: 980px) {
-  .hero-copy {
-    grid-column: 1; 
-    grid-row: 1;
-    max-width: 640px; 
-  }
-  .hero-copy > * {
-    max-width: 640px;
-  }
-  .hero-wrap {
-    grid-template-columns: 58% 42%;
-    align-items: center;
-  }
+  .hero-copy { grid-column: 1; grid-row: 1; max-width: 640px; }
+  .hero-copy > * { max-width: 640px; }
+  .hero-wrap { grid-template-columns: 58% 42%; align-items: center; }
   .hero-brain { grid-column: 2; grid-row: 1; }
   .hero-copy { grid-column: 1; grid-row: 1; }
 }
@@ -140,7 +117,7 @@ section h2 {
   color: var(--teal);
   font-weight: 900;
   letter-spacing: .2px;
-  margin-bottom: 1.1rem;
+  margin-bottom: 2rem;
   font-size: 2.1rem;
 }
 @media (min-width: 980px) {
@@ -236,90 +213,130 @@ footer p { font-size: .86rem; color: #888; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================================================
-   New Connected Network Grid (Apple Style)
+   OPTION 3: BENTO GRID (Apple Engineer / Academic Style)
    ========================================================================== */
 
-#connected-grid {
-  position: relative; /* Anchor for the absolute SVG */
-}
-
-/* The SVG Layer (The Lines) */
-#connections-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0; /* Behind the photos */
-  pointer-events: none; /* Let clicks pass through to photos */
-}
-
 /* The Grid Container */
-.network-grid {
+.bento-grid {
   display: grid;
-  position: relative;
-  z-index: 1; /* Above the lines */
-  gap: 4rem; /* Space between items */
-  grid-template-columns: 1fr; /* Mobile: 1 Column */
-  max-width: 800px;
-  margin: 0 auto;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
-/* Tablet & Desktop: 2 Columns Staggered */
+/* Tablet & Desktop: 2 Column Layout */
 @media (min-width: 768px) {
-  .network-grid {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 8rem; /* Wide gap for lines to cross */
-    row-gap: 4rem;
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
   
-  /* STAGGER EFFECT: Push every even item down to create the diagonal zigzag */
-  .network-item:nth-child(even) {
-    transform: translateY(80px);
+  /* Feature cards span full width for visual variety */
+  .bento-card.featured {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
   }
 }
 
-/* The Cards */
-.network-item {
-  background: transparent;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.network-item:hover .net-photo {
-  transform: scale(1.05); /* Subtle zoom on hover */
-  box-shadow: 0 10px 25px rgba(131, 197, 201, 0.3);
-}
-
-.net-photo {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
+/* The Card Itself */
+.bento-card {
+  background: #ffffff;
+  border-radius: 24px; /* Apple-style large radius */
   overflow: hidden;
-  margin: 0 auto 1.2rem auto;
-  border: 4px solid var(--teal); 
-  background: #fff;
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(0,0,0,0.04); /* Very subtle border */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* Soft, diffuse shadow */
+  
+  /* The "Apple" Hover Animation Curve */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease;
+  
+  display: flex;
+  flex-direction: column;
 }
 
-.net-photo img {
+/* Hover State: Lift and Deepen */
+.bento-card:hover {
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.15); /* Tinted with your Teal */
+  border-color: rgba(131, 197, 201, 0.4);
+}
+
+/* Internal Layouts */
+.bento-content {
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Typography */
+.bento-card h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-bottom: 0.6rem;
+  color: #111;
+  letter-spacing: -0.02em;
+}
+
+.bento-card p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* The "Engineer" Tags */
+.bento-tags {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.bento-tags span {
+  font-family: 'JetBrains Mono', monospace; /* Tech/Code font */
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--teal);
+  background: rgba(131, 197, 201, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Image Areas */
+.bento-visual {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background: #f8f8f8;
+  position: relative;
+}
+
+/* On featured cards (desktop), make image take full height of the side */
+@media (min-width: 768px) {
+  .bento-card.featured .bento-visual {
+    height: 100%;
+    order: 2; /* Image on right */
+    min-height: 320px;
+  }
+}
+
+.bento-visual img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.net-text h3 {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: #222;
-  margin-bottom: 0.3rem;
-}
-.net-text p {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #888;
+/* Subtle zoom of image on card hover */
+.bento-card:hover .bento-visual img {
+  transform: scale(1.05);
 }
