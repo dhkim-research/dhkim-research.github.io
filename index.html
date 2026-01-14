@@ -41,7 +41,7 @@
         <h2>About me</h2>
         <h3>Building Scientist (PhD) and Lighting Researcher (MSc)</h3>
         <p>
-          I am a postdoctoral researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work
+          I am a researcher at ETH Zürich working on daylight, visual comfort, and adaptive building systems. My work
           bridges building physics, human perception and data-driven design. Previously, I was part of EPFL’s LIPID Lab and
           TU Delft’s Indoor Environment Group.
         </p>
@@ -55,24 +55,59 @@
     </div>
   </section>
 
-  <section id="current-projects" class="fade">
+  <section id="connected-grid" class="fade">
     <div class="wrap">
-      <h2>Current Projects</h2>
-      <div class="grid project">
-        <div class="col-text">
-          <h3>Solskin AI project – ETH Zürich</h3>
-          <p>to be added</p>
-        </div>
-        <aside class="col-aside">
-          <div class="timeline">
-            <figure class="photo"><img src="profile.png" alt=""></figure>
-            <figure class="photo"><img src="profile.png" alt=""></figure>
+      <h2>Connected Research</h2>
+      
+      <svg id="connections-layer" style="overflow: visible;"></svg>
+
+      <div class="network-grid">
+        
+        <div class="network-item">
+          <div class="net-photo">
+            <img src="profile.png" alt="Solskin AI">
           </div>
-        </aside>
+          <div class="net-text">
+            <h3>Solskin AI</h3>
+            <p>Adaptive Systems</p>
+          </div>
+        </div>
+
+        <div class="network-item">
+          <div class="net-photo">
+            <img src="profile.png" alt="HiDyn">
+          </div>
+          <div class="net-text">
+            <h3>HiDyn Project</h3>
+            <p>Human Perception</p>
+          </div>
+        </div>
+
+        <div class="network-item">
+          <div class="net-photo">
+            <img src="profile.png" alt="Visual Comfort">
+          </div>
+          <div class="net-text">
+            <h3>Visual Comfort</h3>
+            <p>Glare Analysis</p>
+          </div>
+        </div>
+
+        <div class="network-item">
+          <div class="net-photo">
+            <img src="profile.png" alt="Daylight Simulation">
+          </div>
+          <div class="net-text">
+            <h3>Daylight Sim</h3>
+            <p>Spectral Rendering</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
+  " line end   -->
   <section id="past-projects" class="projects past fade">
     <div class="wrap">
       <h2>Past Projects</h2>
@@ -138,7 +173,56 @@
     els.forEach(el => obs.observe(el));
   </script>
 
-<script>
+  <script>
+    function drawConnections() {
+      const svg = document.getElementById('connections-layer');
+      const items = document.querySelectorAll('.net-photo');
+      const container = document.querySelector('.network-grid').getBoundingClientRect();
+      
+      // Clear old lines
+      svg.innerHTML = '';
+
+      // We need at least 2 items to connect
+      if(items.length < 2) return;
+
+      // Loop through items and connect them sequentially (1->2, 2->3, etc.)
+      for (let i = 0; i < items.length - 1; i++) {
+        const itemA = items[i].getBoundingClientRect();
+        const itemB = items[i + 1].getBoundingClientRect();
+
+        // Calculate centers relative to the grid container
+        const x1 = (itemA.left + itemA.width / 2) - container.left;
+        const y1 = (itemA.top + itemA.height / 2) - container.top;
+        const x2 = (itemB.left + itemB.width / 2) - container.left;
+        const y2 = (itemB.top + itemB.height / 2) - container.top;
+
+        // Create the SVG line
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        
+        // Style: Soft Premium Grey
+        line.setAttribute('stroke', '#d1d1d1'); 
+        line.setAttribute('stroke-width', '2');
+        
+        svg.appendChild(line);
+      }
+    }
+
+    // Run on load and whenever the window resizes
+    window.addEventListener('load', drawConnections);
+    window.addEventListener('resize', () => {
+      clearTimeout(window.resizeTimer);
+      window.resizeTimer = setTimeout(drawConnections, 100);
+    });
+    
+    // Run once after a short delay to ensure images shifted layout
+    setTimeout(drawConnections, 500);
+  </script>
+
+  <script>
     particlesJS('particles-js',
       {
         "particles": {
@@ -167,7 +251,7 @@
             }
           },
           "size": {
-            "value": 4.5,
+            "value": 4.5, /* LARGE DOTS for visibility */
             "random": true,
             "anim": {
               "enable": false
@@ -177,7 +261,7 @@
             "enable": true,
             "distance": 150,
             "color": "#a1a1a1", /* LINES: Soft Neutral Grey */
-            "opacity": 0.4,     /* Lower opacity makes them subtle */
+            "opacity": 0.4,
             "width": 1.2
           },
           "move": {
@@ -200,7 +284,7 @@
           "events": {
             "onhover": {
               "enable": true,
-              "mode": ["grab", "bubble"]
+              "mode": ["grab", "bubble"] /* CONNECT & GROW */
             },
             "onclick": {
               "enable": true,
@@ -212,7 +296,7 @@
             "grab": {
               "distance": 200,
               "line_linked": {
-                "opacity": 0.6 /* Lines get darker when you grab them */
+                "opacity": 0.6
               }
             },
             "bubble": {
