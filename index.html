@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
   
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800&family=Montserrat:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   
   <link rel="stylesheet" href="main.css" />
@@ -15,7 +15,6 @@
 <body>
 
   <header class="hero">
-    
     <div id="particles-js"></div>
 
     <div class="wrap hero-wrap">
@@ -30,9 +29,9 @@
         
         <p>
           However, rapid developments in environmental sensing now allow for high-accuracy, 
-          <strong>spatially and temporally resolved</strong> physical comfort measurements. My research 
+          spatially and temporally resolved physical comfort measurements. My research 
           combines these technologies with machine learning to engineer adaptive environments that 
-          move beyond current standards to prioritize individual needs—<strong>toward smarter, healthier buildings.</strong>
+          move beyond current standards to prioritize individual needs—toward smarter, healthier buildings.
         </p>
         
         <div class="hero-links">
@@ -40,7 +39,6 @@
           <a href="#"><i class="fas fa-newspaper"></i> Research Blog</a>
         </div>
       </div>
-      
       <div class="hero-brain"></div>
     </div>
   </header>
@@ -54,29 +52,29 @@
         <p>
           I am a scientist and engineer trained at University College London (UCL), where my path 
           evolved from architectural design to the physics of the built environment. My expertise is built on a 
-          <strong>PhD in Building Physics (2018)</strong> and an <strong>MSc in Light and Lighting (2012)</strong>, 
-          yet fundamentally grounded in the <strong>architectural mindset</strong> developed during my 
-          <strong>BSc (2011)</strong>.
+          PhD in Building Physics (2018) and an MSc in Light and Lighting (2012), 
+          yet fundamentally grounded in the architectural mindset developed during my 
+          BSc (2011).
         </p>
 
         <p>
           My research lies at the interface of technology and human perception, 
           with a dedicated emphasis on how daylight shapes the occupant experience. Focused on fundamental 
           questions of visual comfort and health, I explore the dynamic interplay between 
-          <strong>space, light, and time</strong>—aiming to bridge architectural design with building physics.
+          space, light, and time—aiming to bridge architectural design with building physics.
         </p>
         
         <p>
           I approach these challenges with a reverse-engineering mindset, using engineering as the language 
-          to translate complex human needs into <strong>quantifiable, responsive systems</strong>. My technical focus 
-          <strong>enhances architectural design intuition with physics and technologies</strong>—leveraging 
+          to translate complex human needs into quantifiable, responsive systems. My technical focus 
+          enhances architectural design intuition with physics and technologies—leveraging 
           sensor technologies, machine learning, and predictive modeling to create responsive environments.
         </p>
         
         <p>
-          Currently, I am a Postdoctoral Researcher at ETH Zürich advancing the <strong>Solskin project</strong>—an 
+          Currently, I am a Postdoctoral Researcher at ETH Zürich advancing the Solskin project—an 
           adaptive façade system composed of orientable photovoltaic modules. I develop control frameworks that 
-          <strong>synthesize machine learning with real-time physical measurements</strong>, dynamically adjusting 
+          synthesize machine learning with real-time physical measurements, dynamically adjusting 
           the shading to balance on-site energy generation with human comfort. Previously, I held postdoctoral 
           positions at EPFL’s LIPID Lab (2021–2024) and TU Delft’s Indoor Environment Group (2018–2020).
         </p>
@@ -88,11 +86,11 @@
             <img src="profile1.jpg" alt="Dong Hyun Kim Portrait">
           </div>
           
-          <div class="gallery-item sub-shot">
+          <div class="gallery-item sub-shot-left">
             <img src="profile2.jpg" alt="Research Context">
           </div>
           
-          <div class="gallery-item sub-shot">
+          <div class="gallery-item sub-shot-right">
             <img src="profile3.jpg" alt="ETH Zurich Context">
           </div>
         </div>
@@ -105,7 +103,6 @@
       <h2>Selected Research</h2>
       
       <div class="bento-grid">
-        
         <a href="#" class="bento-card featured">
           <div class="bento-content">
             <div class="bento-tags">
@@ -161,7 +158,6 @@
             <img src="profile.png" alt="Daylight Simulation">
           </div>
         </a>
-
       </div>
     </div>
   </section>
@@ -208,7 +204,6 @@
   <script src="scripts/particles.min.js"></script>
 
   <script>
-    // 1. Fade In Animation on Scroll
     const els = document.querySelectorAll('.fade');
     const obs = new IntersectionObserver((entries)=> {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
@@ -217,46 +212,16 @@
   </script>
 
   <script>
-    // 2. Particle Configuration (Living Network Style)
     particlesJS('particles-js',
       {
         "particles": {
-          "number": {
-            "value": 60,
-            "density": { "enable": true, "value_area": 800 }
-          },
-          "color": { "value": "#83C5C9" }, /* DOTS: Teal */
-          "shape": {
-            "type": "circle",
-            "stroke": { "width": 0, "color": "#000000" }
-          },
-          "opacity": {
-            "value": 0.8,
-            "random": true,
-            "anim": { "enable": false }
-          },
-          "size": {
-            "value": 4.5, /* Large visibility */
-            "random": true,
-            "anim": { "enable": false }
-          },
-          "line_linked": {
-            "enable": true,
-            "distance": 150,
-            "color": "#a1a1a1", /* LINES: Soft Grey */
-            "opacity": 0.4,
-            "width": 1.2
-          },
-          "move": {
-            "enable": true,
-            "speed": 1.6,
-            "direction": "none",
-            "random": false,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false,
-            "attract": { "enable": false }
-          }
+          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#83C5C9" },
+          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+          "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
+          "size": { "value": 4.5, "random": true, "anim": { "enable": false } },
+          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.2 },
+          "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
         },
         "interactivity": {
           "detect_on": "window",
