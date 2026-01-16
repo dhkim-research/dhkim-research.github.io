@@ -95,14 +95,29 @@ body {
 }
 .hero-links a:hover { text-decoration: underline; }
 
-/* ===== Layout Utilities ============================================ */
-.grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
-.col-text { max-width: 640px; }
+/* ===== Layout Utilities (UPDATED FOR ALIGNMENT) ===================== */
+.grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 2rem; /* Reduced from 3rem to match Bento spacing */
+}
+.col-text { max-width: 100%; /* Allow text to fill its column */ }
 .col-aside { display: flex; justify-content: center; position: relative; }
 
+/* Desktop Grid Logic - TIGHTER & CLEANER */
 @media (min-width: 980px) {
-  .grid { grid-template-columns: 58% 42%; align-items: flex-start; }
-  .col-aside { justify-content: center; }
+  .grid { 
+    /* Old: 58% / 42% (Too much gap)
+       New: 2.5fr / 1fr (approx 72% / 28%) 
+       This pushes text closer to photos and tightens the layout.
+    */
+    grid-template-columns: 2.5fr 1fr; 
+    align-items: flex-start; 
+    gap: 2rem; /* Consistent 2rem gap everywhere */
+  }
+  .col-aside { 
+    justify-content: center; /* Center photos in their new narrower lane */
+  }
 }
 
 /* ===== Section Typography ========================================== */
@@ -135,7 +150,7 @@ section p {
   font-weight: 400; 
 }
 
-/* ===== Timeline & Photos (REVERTED & UPDATED SIZE) ================= */
+/* ===== Timeline & Photos =========================================== */
 .timeline {
   --gap: 2.6rem;
   position: relative;
@@ -144,9 +159,9 @@ section p {
   align-items: center;
   gap: var(--gap);
   z-index: 0;
+  width: 100%; /* Ensure it takes full width of the aside column */
 }
 
-/* THE SIZE UPDATE: 200px */
 .photo {
   width: 200px; height: 200px;
   border-radius: 50%;
@@ -156,21 +171,20 @@ section p {
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  /* Added smoother shadow for Apple feel */
   box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-/* Desktop: Connector lines between photos */
+/* Desktop: Connector lines */
 @media (min-width: 980px) {
   .timeline .photo:not(:last-child)::before {
     content: "";
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(100% + 5px); /* Start just below border */
+    top: calc(100% + 5px);
     width: 3px;
-    height: calc(var(--gap) - 10px); /* Fill the gap */
+    height: calc(var(--gap) - 10px);
     background: var(--teal);
     z-index: 0;
   }
@@ -184,8 +198,6 @@ section p {
     justify-items: center;
     gap: 1.6rem;
   }
-  /* On mobile, shrink slightly if needed, but 200px might fit. 
-     Let's allow them to shrink if screen is tiny */
   .photo { width: 160px; height: 160px; }
   .photo::before { display: none !important; }
 }
@@ -214,14 +226,11 @@ footer p { font-size: .86rem; color: #888; }
 .fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
-/* =============================================================================
-   PROJECTS: BENTO GRID (Apple Engineer Style)
-   ========================================================================== */
-
+/* ===== PROJECTS: BENTO GRID (Apple Engineer Style) ================ */
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem; /* Matched to the main grid gap */
 }
 
 @media (min-width: 768px) {
