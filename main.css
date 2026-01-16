@@ -6,7 +6,7 @@ body {
   color: #222;
   line-height: 1.7;
   background: #fff;
-  -webkit-font-smoothing: antialiased; /* Apple Crisp Text */
+  -webkit-font-smoothing: antialiased; 
 }
 
 /* Shared wrapper */
@@ -18,12 +18,11 @@ body {
   --bg-hero: #f0f0f0;
 }
 
-/* Container for particles */
 .hero { 
   position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
-  min-height: 85vh; /* Taller for grandeur */
+  min-height: 85vh; 
   z-index: 1;
 }
 
@@ -45,10 +44,8 @@ body {
   pointer-events: none; 
 }
 
-/* Re-enable clicks on links */
 .hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
 
-/* Hero Layout */
 .hero-wrap {
   display: grid;
   grid-template-columns: 1fr;
@@ -104,8 +101,8 @@ body {
 .col-aside { display: flex; justify-content: center; position: relative; }
 
 @media (min-width: 980px) {
-  .grid { grid-template-columns: 58% 42%; align-items: center; }
-  .col-aside { justify-content: center; }
+  .grid { grid-template-columns: 58% 42%; align-items: flex-start; } /* Top align text and photos */
+  .col-aside { justify-content: flex-end; } /* Push photos to right */
 }
 
 /* ===== Section Typography ========================================== */
@@ -124,19 +121,21 @@ section h2 {
   section h2 { font-size: 2.8rem; }
 }
 section h3 {
+  font-family: 'Raleway', sans-serif;
   font-weight: 800;
   color: #111;
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
 section p {
-  color: #222;
+  color: #444; /* Slightly softer than black */
   line-height: 1.85;
   margin-bottom: 1.5rem;
   font-size: 1.05rem;
+  font-weight: 400; /* Standard weight, no bold */
 }
 
-/* ===== Outreach Timeline (Old Style) =============================== */
+/* ===== Outreach (Timeline) ========================================= */
 .timeline {
   --gap: 2.6rem;
   position: relative;
@@ -158,7 +157,6 @@ section p {
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-/* Desktop: Connector lines for timeline only */
 @media (min-width: 980px) {
   .timeline .photo:not(:last-child)::before {
     content: "";
@@ -173,7 +171,6 @@ section p {
   }
 }
 
-/* Mobile: Grid for timeline only */
 @media (max-width: 979px) {
   .timeline {
     display: grid;
@@ -185,7 +182,6 @@ section p {
   .photo::before { display: none !important; }
 }
 
-/* Outreach Specifics */
 .outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
 .outreach li { margin-bottom: .55rem; }
 .email-line { margin-top: 1.2rem; font-weight: 700; }
@@ -206,47 +202,48 @@ footer { background: #fff; border-top: 1px solid #e0e0e0; }
 .footer-links a:hover { text-decoration: underline; }
 footer p { font-size: .86rem; color: #888; }
 
-/* ===== Fade-in Animation ============================================ */
+/* ===== Fade-in ====================================================== */
 .fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================================================
-   ABOUT SECTION: CREATIVE MOSAIC GALLERY (Apple Style)
+   ABOUT SECTION: DOSSIER STYLE GALLERY (Fixed)
    ========================================================================== */
 
-/* 1. The Container */
+/* 1. Wrapper */
 .about-visuals {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center on mobile */
   align-items: flex-start;
   width: 100%;
 }
 
-/* 2. The Grid System (Desktop Default) */
+/* 2. The Dossier Grid (Desktop) */
 .about-gallery {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns */
+  /* Top Row (Main) | Bottom Row (2 Split) */
+  grid-template-columns: 1fr 1fr; 
   grid-template-rows: auto auto;
-  gap: 1.2rem;
+  gap: 12px; /* Precise gap */
+  
   width: 100%;
-  max-width: 500px;
+  max-width: 360px; /* STRICT LIMIT: Keeps it elegant and not blocking text */
 }
 
-/* 3. The Images (Common Styles) */
+/* 3. The Images */
 .gallery-item {
   position: relative;
   overflow: hidden;
-  border-radius: 20px; /* Apple-style soft corners */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Premium soft shadow */
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-              box-shadow 0.4s ease;
-  background: #f0f0f0;
+  border-radius: 12px; /* Tight, modern radius */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); /* Minimal shadow */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.05); /* Subtle bezel definition */
 }
 
-/* Hover Effect: Physics-based lift */
 .gallery-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.2);
+  transform: scale(1.02); /* Slight breathe effect */
+  z-index: 2;
 }
 
 .gallery-item img {
@@ -256,83 +253,94 @@ footer p { font-size: .86rem; color: #888; }
   display: block;
 }
 
-/* 4. Sizing Logic (The Mosaic) */
-/* Desktop Default: Main shot vertical, subs stacked */
+/* 4. Placement Logic */
+
+/* Top Photo (Main Profile) - Full Width */
 .main-shot {
-  grid-column: 1;
-  grid-row: 1 / -1; /* Spans full height on the left */
-  aspect-ratio: 3 / 4; /* Portrait ratio */
+  grid-column: 1 / -1; /* Spans both columns */
+  grid-row: 1;
+  aspect-ratio: 4 / 3; /* Standard Landscape/Portrait ratio */
 }
 
-.sub-shot {
-  grid-column: 2;
+/* Bottom Left Photo */
+.sub-shot-left {
+  grid-column: 1;
+  grid-row: 2;
   aspect-ratio: 1 / 1; /* Square */
 }
 
-/* RESPONSIVE LOGIC */
-
-/* Large Screens (Desktop): Layout defined above */
-@media (min-width: 980px) {
-  .about-gallery {
-    grid-template-columns: 1.3fr 1fr;
-    height: 400px; /* Consistent height block */
-  }
-  .main-shot { height: 100%; }
+/* Bottom Right Photo */
+.sub-shot-right {
+  grid-column: 2;
+  grid-row: 2;
+  aspect-ratio: 1 / 1; /* Square */
 }
 
-/* Small Screens (Mobile/Tablet): Horizontal Swipe Reel */
+
+/* -----------------------------------------------------------------------------
+   RESPONSIVE: Desktop Alignment
+   -------------------------------------------------------------------------- */
+@media (min-width: 980px) {
+  /* Push the gallery to the right side of the text */
+  .about-visuals {
+    justify-content: flex-end;
+    padding-left: 2rem;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   RESPONSIVE: Mobile Swipe Reel (App Store Style)
+   -------------------------------------------------------------------------- */
 @media (max-width: 979px) {
   .about-visuals {
-    display: block; /* Break flexbox centering */
-    width: 100vw;   /* Full viewport width */
-    margin-left: -2rem; /* Pull out of the wrapper padding to touch edges */
-    padding-left: 2rem; /* Add padding back for the first item */
+    display: block;
+    width: 100vw;
+    margin-left: -2rem;
+    padding-left: 2rem;
     margin-bottom: 2rem;
+    margin-top: 2rem;
   }
 
   .about-gallery {
-    display: flex; /* Switch from Grid to Flex */
-    gap: 1rem;
-    overflow-x: auto; /* Enable horizontal scroll */
-    scroll-snap-type: x mandatory; /* Snap effect */
-    padding-bottom: 20px; /* Space for shadow */
-    padding-right: 2rem; /* Space at the end */
-    max-width: none; /* Remove width limit */
-    
-    /* Hide Scrollbar (Chrome/Safari) */
-    -webkit-overflow-scrolling: touch; 
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 20px;
+    padding-right: 2rem;
+    max-width: none; /* remove desktop constraint */
   }
   
   .about-gallery::-webkit-scrollbar { display: none; }
 
   .gallery-item {
-    flex: 0 0 260px; /* Fixed width cards */
-    height: 320px;   /* Tall portrait cards */
-    scroll-snap-align: start;
+    flex: 0 0 280px; /* Fixed width cards */
+    height: 300px;
+    scroll-snap-align: center;
     border-radius: 16px;
-    aspect-ratio: auto !important; /* Override mosaic ratios */
+    
+    /* Reset Grid Props for Flex */
+    grid-column: auto;
+    grid-row: auto;
+    aspect-ratio: auto;
   }
 }
 
 /* =============================================================================
-   PROJECTS: BENTO GRID (Apple Engineer Style)
+   PROJECTS: BENTO GRID (Unchanged)
    ========================================================================== */
 
-/* The Grid Container */
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
-/* Tablet & Desktop: 2 Column Layout */
 @media (min-width: 768px) {
   .bento-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
-  
-  /* Feature cards span full width */
   .bento-card.featured {
     grid-column: span 2;
     display: grid;
@@ -341,7 +349,6 @@ footer p { font-size: .86rem; color: #888; }
   }
 }
 
-/* The Card Itself */
 .bento-card {
   background: #ffffff;
   border-radius: 24px;
@@ -350,24 +357,19 @@ footer p { font-size: .86rem; color: #888; }
   color: inherit;
   border: 1px solid rgba(0,0,0,0.04);
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  
-  /* The "Apple" Hover Animation Curve */
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.4s ease;
-  
   display: flex;
   flex-direction: column;
 }
 
-/* Hover State */
 .bento-card:hover {
   transform: translateY(-4px) scale(1.005);
   box-shadow: 0 20px 40px rgba(131, 197, 201, 0.15);
   border-color: rgba(131, 197, 201, 0.4);
 }
 
-/* Internal Layouts */
 .bento-content {
   padding: 2.2rem;
   display: flex;
@@ -375,7 +377,6 @@ footer p { font-size: .86rem; color: #888; }
   justify-content: center;
 }
 
-/* Typography */
 .bento-card h3 {
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
@@ -394,7 +395,6 @@ footer p { font-size: .86rem; color: #888; }
   margin-bottom: 0;
 }
 
-/* The "Engineer" Tags */
 .bento-tags {
   margin-bottom: 1rem;
   display: flex;
@@ -402,7 +402,7 @@ footer p { font-size: .86rem; color: #888; }
 }
 
 .bento-tags span {
-  font-family: 'JetBrains Mono', monospace; /* Tech/Code font */
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--teal);
@@ -413,7 +413,6 @@ footer p { font-size: .86rem; color: #888; }
   letter-spacing: 0.5px;
 }
 
-/* Image Areas */
 .bento-visual {
   width: 100%;
   height: 250px;
@@ -422,11 +421,10 @@ footer p { font-size: .86rem; color: #888; }
   position: relative;
 }
 
-/* On featured cards (desktop), make image take full height */
 @media (min-width: 768px) {
   .bento-card.featured .bento-visual {
     height: 100%;
-    order: 2; /* Image on right */
+    order: 2; 
     min-height: 320px;
   }
 }
