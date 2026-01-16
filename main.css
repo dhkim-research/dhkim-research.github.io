@@ -1,4 +1,4 @@
-/* ===== Base & wrapper =============================================== */
+/* ===== Base & Wrapper =============================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -12,29 +12,28 @@ body {
 /* Shared wrapper */
 .wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
 
-/* ===== Hero ========================================================= */
+/* ===== Hero Section ================================================= */
 :root {
   --teal: #83C5C9;
   --bg-hero: #f0f0f0;
 }
 
-/* Updated Hero for Particles */
+/* Container for particles */
 .hero { 
   position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
-  min-height: 85vh; /* Slightly taller for grandeur */
+  min-height: 85vh; /* Taller for grandeur */
   z-index: 1;
 }
 
-/* Particle Container */
 #particles-js {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 1; /* Visible layer */
+  z-index: 1; 
 }
 #particles-js canvas { display: block; }
 
@@ -46,6 +45,7 @@ body {
   pointer-events: none; 
 }
 
+/* Re-enable clicks on links */
 .hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
 
 /* Hero Layout */
@@ -68,7 +68,7 @@ body {
   .hero-copy { grid-column: 1; grid-row: 1; }
 }
 
-/* Headings & text */
+/* Headings & Text */
 .hero h2 {
   font-family: 'Raleway', sans-serif;
   color: var(--teal);
@@ -98,7 +98,7 @@ body {
 }
 .hero-links a:hover { text-decoration: underline; }
 
-/* ===== Layout utilities ============================================ */
+/* ===== Layout Utilities ============================================ */
 .grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
 .col-text { max-width: 640px; }
 .col-aside { display: flex; justify-content: center; position: relative; }
@@ -108,7 +108,7 @@ body {
   .col-aside { justify-content: center; }
 }
 
-/* ===== Section typography ========================================== */
+/* ===== Section Typography ========================================== */
 section { padding: 0; }
 section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
 
@@ -136,9 +136,7 @@ section p {
   font-size: 1.05rem;
 }
 
-.projects.past { background: #f7f7f7; }
-
-/* ===== Timeline & photos =========================================== */
+/* ===== Outreach Timeline (Old Style) =============================== */
 .timeline {
   --gap: 2.6rem;
   position: relative;
@@ -160,9 +158,9 @@ section p {
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-/* DESKTOP: short teal connector BETWEEN circles only */
+/* Desktop: Connector lines for timeline only */
 @media (min-width: 980px) {
-  .photo:not(:last-child)::before {
+  .timeline .photo:not(:last-child)::before {
     content: "";
     position: absolute;
     left: 50%;
@@ -175,7 +173,7 @@ section p {
   }
 }
 
-/* MOBILE: grid of two per row; no connectors */
+/* Mobile: Grid for timeline only */
 @media (max-width: 979px) {
   .timeline {
     display: grid;
@@ -187,7 +185,7 @@ section p {
   .photo::before { display: none !important; }
 }
 
-/* Outreach */
+/* Outreach Specifics */
 .outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
 .outreach li { margin-bottom: .55rem; }
 .email-line { margin-top: 1.2rem; font-weight: 700; }
@@ -208,12 +206,116 @@ footer { background: #fff; border-top: 1px solid #e0e0e0; }
 .footer-links a:hover { text-decoration: underline; }
 footer p { font-size: .86rem; color: #888; }
 
-/* ===== Fade-in ====================================================== */
+/* ===== Fade-in Animation ============================================ */
 .fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================================================
-   OPTION 3: BENTO GRID (Apple Engineer / Academic Style)
+   ABOUT SECTION: CREATIVE MOSAIC GALLERY (Apple Style)
+   ========================================================================== */
+
+/* 1. The Container */
+.about-visuals {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* 2. The Grid System (Desktop Default) */
+.about-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  grid-template-rows: auto auto;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* 3. The Images (Common Styles) */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px; /* Apple-style soft corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Premium soft shadow */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s ease;
+  background: #f0f0f0;
+}
+
+/* Hover Effect: Physics-based lift */
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.2);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 4. Sizing Logic (The Mosaic) */
+/* Desktop Default: Main shot vertical, subs stacked */
+.main-shot {
+  grid-column: 1;
+  grid-row: 1 / -1; /* Spans full height on the left */
+  aspect-ratio: 3 / 4; /* Portrait ratio */
+}
+
+.sub-shot {
+  grid-column: 2;
+  aspect-ratio: 1 / 1; /* Square */
+}
+
+/* RESPONSIVE LOGIC */
+
+/* Large Screens (Desktop): Layout defined above */
+@media (min-width: 980px) {
+  .about-gallery {
+    grid-template-columns: 1.3fr 1fr;
+    height: 400px; /* Consistent height block */
+  }
+  .main-shot { height: 100%; }
+}
+
+/* Small Screens (Mobile/Tablet): Horizontal Swipe Reel */
+@media (max-width: 979px) {
+  .about-visuals {
+    display: block; /* Break flexbox centering */
+    width: 100vw;   /* Full viewport width */
+    margin-left: -2rem; /* Pull out of the wrapper padding to touch edges */
+    padding-left: 2rem; /* Add padding back for the first item */
+    margin-bottom: 2rem;
+  }
+
+  .about-gallery {
+    display: flex; /* Switch from Grid to Flex */
+    gap: 1rem;
+    overflow-x: auto; /* Enable horizontal scroll */
+    scroll-snap-type: x mandatory; /* Snap effect */
+    padding-bottom: 20px; /* Space for shadow */
+    padding-right: 2rem; /* Space at the end */
+    max-width: none; /* Remove width limit */
+    
+    /* Hide Scrollbar (Chrome/Safari) */
+    -webkit-overflow-scrolling: touch; 
+  }
+  
+  .about-gallery::-webkit-scrollbar { display: none; }
+
+  .gallery-item {
+    flex: 0 0 260px; /* Fixed width cards */
+    height: 320px;   /* Tall portrait cards */
+    scroll-snap-align: start;
+    border-radius: 16px;
+    aspect-ratio: auto !important; /* Override mosaic ratios */
+  }
+}
+
+/* =============================================================================
+   PROJECTS: BENTO GRID (Apple Engineer Style)
    ========================================================================== */
 
 /* The Grid Container */
@@ -230,7 +332,7 @@ footer p { font-size: .86rem; color: #888; }
     gap: 2rem;
   }
   
-  /* Feature cards span full width for visual variety */
+  /* Feature cards span full width */
   .bento-card.featured {
     grid-column: span 2;
     display: grid;
@@ -242,12 +344,12 @@ footer p { font-size: .86rem; color: #888; }
 /* The Card Itself */
 .bento-card {
   background: #ffffff;
-  border-radius: 24px; /* Apple-style large radius */
+  border-radius: 24px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  border: 1px solid rgba(0,0,0,0.04); /* Very subtle border */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* Soft, diffuse shadow */
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   
   /* The "Apple" Hover Animation Curve */
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -258,10 +360,10 @@ footer p { font-size: .86rem; color: #888; }
   flex-direction: column;
 }
 
-/* Hover State: Lift and Deepen */
+/* Hover State */
 .bento-card:hover {
   transform: translateY(-4px) scale(1.005);
-  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.15); /* Tinted with your Teal */
+  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.15);
   border-color: rgba(131, 197, 201, 0.4);
 }
 
@@ -320,7 +422,7 @@ footer p { font-size: .86rem; color: #888; }
   position: relative;
 }
 
-/* On featured cards (desktop), make image take full height of the side */
+/* On featured cards (desktop), make image take full height */
 @media (min-width: 768px) {
   .bento-card.featured .bento-visual {
     height: 100%;
@@ -336,7 +438,6 @@ footer p { font-size: .86rem; color: #888; }
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Subtle zoom of image on card hover */
 .bento-card:hover .bento-visual img {
   transform: scale(1.05);
 }
