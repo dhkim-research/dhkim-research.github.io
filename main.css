@@ -101,8 +101,8 @@ body {
 .col-aside { display: flex; justify-content: center; position: relative; }
 
 @media (min-width: 980px) {
-  .grid { grid-template-columns: 58% 42%; align-items: flex-start; } /* Top align text and photos */
-  .col-aside { justify-content: flex-end; } /* Push photos to right */
+  .grid { grid-template-columns: 58% 42%; align-items: flex-start; }
+  .col-aside { justify-content: center; }
 }
 
 /* ===== Section Typography ========================================== */
@@ -128,14 +128,14 @@ section h3 {
   margin-bottom: 1rem;
 }
 section p {
-  color: #444; /* Slightly softer than black */
+  color: #444; 
   line-height: 1.85;
   margin-bottom: 1.5rem;
   font-size: 1.05rem;
-  font-weight: 400; /* Standard weight, no bold */
+  font-weight: 400; 
 }
 
-/* ===== Outreach (Timeline) ========================================= */
+/* ===== Timeline & Photos (REVERTED & UPDATED SIZE) ================= */
 .timeline {
   --gap: 2.6rem;
   position: relative;
@@ -145,8 +145,10 @@ section p {
   gap: var(--gap);
   z-index: 0;
 }
+
+/* THE SIZE UPDATE: 200px */
 .photo {
-  width: 180px; height: 180px;
+  width: 200px; height: 200px;
   border-radius: 50%;
   border: 5px solid var(--teal);
   overflow: hidden;
@@ -154,23 +156,27 @@ section p {
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  /* Added smoother shadow for Apple feel */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
+/* Desktop: Connector lines between photos */
 @media (min-width: 980px) {
   .timeline .photo:not(:last-child)::before {
     content: "";
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(100% + 6px);
+    top: calc(100% + 5px); /* Start just below border */
     width: 3px;
-    height: calc(var(--gap) - 12px);
+    height: calc(var(--gap) - 10px); /* Fill the gap */
     background: var(--teal);
     z-index: 0;
   }
 }
 
+/* Mobile: Grid of 2 per row */
 @media (max-width: 979px) {
   .timeline {
     display: grid;
@@ -178,7 +184,9 @@ section p {
     justify-items: center;
     gap: 1.6rem;
   }
-  .photo { width: 150px; height: 150px; }
+  /* On mobile, shrink slightly if needed, but 200px might fit. 
+     Let's allow them to shrink if screen is tiny */
+  .photo { width: 160px; height: 160px; }
   .photo::before { display: none !important; }
 }
 
@@ -207,127 +215,7 @@ footer p { font-size: .86rem; color: #888; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================================================
-   ABOUT SECTION: DOSSIER STYLE GALLERY (Fixed)
-   ========================================================================== */
-
-/* 1. Wrapper */
-.about-visuals {
-  display: flex;
-  justify-content: center; /* Center on mobile */
-  align-items: flex-start;
-  width: 100%;
-}
-
-/* 2. The Dossier Grid (Desktop) */
-.about-gallery {
-  display: grid;
-  /* Top Row (Main) | Bottom Row (2 Split) */
-  grid-template-columns: 1fr 1fr; 
-  grid-template-rows: auto auto;
-  gap: 12px; /* Precise gap */
-  
-  width: 100%;
-  max-width: 360px; /* STRICT LIMIT: Keeps it elegant and not blocking text */
-}
-
-/* 3. The Images */
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px; /* Tight, modern radius */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); /* Minimal shadow */
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.05); /* Subtle bezel definition */
-}
-
-.gallery-item:hover {
-  transform: scale(1.02); /* Slight breathe effect */
-  z-index: 2;
-}
-
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* 4. Placement Logic */
-
-/* Top Photo (Main Profile) - Full Width */
-.main-shot {
-  grid-column: 1 / -1; /* Spans both columns */
-  grid-row: 1;
-  aspect-ratio: 4 / 3; /* Standard Landscape/Portrait ratio */
-}
-
-/* Bottom Left Photo */
-.sub-shot-left {
-  grid-column: 1;
-  grid-row: 2;
-  aspect-ratio: 1 / 1; /* Square */
-}
-
-/* Bottom Right Photo */
-.sub-shot-right {
-  grid-column: 2;
-  grid-row: 2;
-  aspect-ratio: 1 / 1; /* Square */
-}
-
-
-/* -----------------------------------------------------------------------------
-   RESPONSIVE: Desktop Alignment
-   -------------------------------------------------------------------------- */
-@media (min-width: 980px) {
-  /* Push the gallery to the right side of the text */
-  .about-visuals {
-    justify-content: flex-end;
-    padding-left: 2rem;
-  }
-}
-
-/* -----------------------------------------------------------------------------
-   RESPONSIVE: Mobile Swipe Reel (App Store Style)
-   -------------------------------------------------------------------------- */
-@media (max-width: 979px) {
-  .about-visuals {
-    display: block;
-    width: 100vw;
-    margin-left: -2rem;
-    padding-left: 2rem;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-  }
-
-  .about-gallery {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 20px;
-    padding-right: 2rem;
-    max-width: none; /* remove desktop constraint */
-  }
-  
-  .about-gallery::-webkit-scrollbar { display: none; }
-
-  .gallery-item {
-    flex: 0 0 280px; /* Fixed width cards */
-    height: 300px;
-    scroll-snap-align: center;
-    border-radius: 16px;
-    
-    /* Reset Grid Props for Flex */
-    grid-column: auto;
-    grid-row: auto;
-    aspect-ratio: auto;
-  }
-}
-
-/* =============================================================================
-   PROJECTS: BENTO GRID (Unchanged)
+   PROJECTS: BENTO GRID (Apple Engineer Style)
    ========================================================================== */
 
 .bento-grid {
