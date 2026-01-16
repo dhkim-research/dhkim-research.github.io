@@ -95,28 +95,24 @@ body {
 }
 .hero-links a:hover { text-decoration: underline; }
 
-/* ===== Layout Utilities (UPDATED FOR ALIGNMENT) ===================== */
+/* ===== Layout Utilities ============================================ */
 .grid { 
   display: grid; 
   grid-template-columns: 1fr; 
-  gap: 2rem; /* Reduced from 3rem to match Bento spacing */
+  gap: 2rem; 
 }
-.col-text { max-width: 100%; /* Allow text to fill its column */ }
+.col-text { max-width: 100%; }
 .col-aside { display: flex; justify-content: center; position: relative; }
 
-/* Desktop Grid Logic - TIGHTER & CLEANER */
+/* Desktop Grid Logic */
 @media (min-width: 980px) {
   .grid { 
-    /* Old: 58% / 42% (Too much gap)
-       New: 2.5fr / 1fr (approx 72% / 28%) 
-       This pushes text closer to photos and tightens the layout.
-    */
     grid-template-columns: 2.5fr 1fr; 
     align-items: flex-start; 
-    gap: 2rem; /* Consistent 2rem gap everywhere */
+    gap: 2rem; 
   }
   .col-aside { 
-    justify-content: center; /* Center photos in their new narrower lane */
+    justify-content: center; 
   }
 }
 
@@ -150,16 +146,11 @@ section p {
   font-weight: 400; 
 }
 
-/* ===== Timeline & Photos =========================================== */
+/* ===== Timeline & Photos (Adjusted Alignment) ====================== */
 .timeline {
-  --gap: 2.6rem;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--gap);
   z-index: 0;
-  width: 100%; /* Ensure it takes full width of the aside column */
+  width: 100%;
 }
 
 .photo {
@@ -175,8 +166,21 @@ section p {
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-/* Desktop: Connector lines */
+/* --- 1. DESKTOP: Vertical Column, Pushed Down --- */
 @media (min-width: 980px) {
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.6rem; /* Standard vertical gap */
+    
+    /* PUSH DOWN to align with paragraph text 
+       Roughly: H2 (2.8rem + 2rem) + H3 (1.2rem + 1rem) ≈ 7-8rem 
+    */
+    margin-top: 8.5rem; 
+  }
+
+  /* Connector Lines */
   .timeline .photo:not(:last-child)::before {
     content: "";
     position: absolute;
@@ -184,23 +188,47 @@ section p {
     transform: translateX(-50%);
     top: calc(100% + 5px);
     width: 3px;
-    height: calc(var(--gap) - 10px);
+    height: calc(2.6rem - 10px);
     background: var(--teal);
     z-index: 0;
   }
 }
 
-/* Mobile: Grid of 2 per row */
-@media (max-width: 979px) {
+/* --- 2. TABLET / NARROW DESKTOP (600px - 979px) --- */
+/* User Request: One Row, Less Spacing */
+@media (max-width: 979px) and (min-width: 600px) {
+  .timeline {
+    display: flex;          /* Force one row */
+    flex-direction: row;    /* Horizontal */
+    justify-content: center; 
+    flex-wrap: nowrap;      /* Don't wrap */
+    gap: 1rem;              /* Tight spacing */
+    margin-top: 0;          /* Reset top margin */
+  }
+  
+  .photo {
+    /* Slightly smaller to fit 3 in a row comfortably */
+    width: 160px; height: 160px; 
+  }
+  
+  .photo::before { display: none !important; } /* Hide connectors */
+}
+
+/* --- 3. MOBILE (< 600px) --- */
+/* User Request: 2 Rows */
+@media (max-width: 599px) {
   .timeline {
     display: grid;
     grid-template-columns: repeat(2, minmax(120px, 1fr));
     justify-items: center;
-    gap: 1.6rem;
+    gap: 1rem;
+    margin-top: 0;
   }
-  .photo { width: 160px; height: 160px; }
+  
+  .photo { width: 150px; height: 150px; }
   .photo::before { display: none !important; }
 }
+
 
 .outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
 .outreach li { margin-bottom: .55rem; }
@@ -230,7 +258,7 @@ footer p { font-size: .86rem; color: #888; }
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem; /* Matched to the main grid gap */
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
