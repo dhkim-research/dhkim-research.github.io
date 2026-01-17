@@ -364,3 +364,17 @@ footer p { font-size: .86rem; color: #888; }
 .bento-card:hover .bento-visual img {
   transform: scale(1.05);
 }
+
+/* Styling for links inside the About Text */
+.col-text a {
+  color: var(--teal);     /* Uses your brand teal */
+  text-decoration: none;
+  font-weight: 600;       /* Slight bold to make them pop */
+  transition: opacity 0.2s ease;
+  border-bottom: 1px solid transparent; /* Prepare for hover underline */
+}
+
+.col-text a:hover {
+  opacity: 0.8;
+  border-bottom: 1px solid var(--teal); /* Elegant thin underline on hover */
+}
