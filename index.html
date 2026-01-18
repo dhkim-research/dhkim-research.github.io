@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
   
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800&family=Montserrat:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   
   <link rel="stylesheet" href="main.css" />
@@ -45,7 +48,7 @@
 
   <section id="about" class="fade">
     <div class="wrap grid">
-<div class="col-text">
+      <div class="col-text">
         <h2>About me</h2>
         <h3>Scientist & Engineer | Building Physics & Illumination</h3>
         
@@ -171,7 +174,7 @@
         </div>
         
         <aside class="col-aside">
-          <div class="timeline" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.6rem;">
+          <div class="timeline" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.6rem; margin-top:0;">
             <figure class="photo"><img src="profile.png" alt=""></figure>
             <figure class="photo"><img src="profile.png" alt=""></figure>
             <figure class="photo"><img src="profile.png" alt=""></figure>
@@ -196,6 +199,7 @@
   <script src="scripts/particles.min.js"></script>
 
   <script>
+    // 1. Scroll Animation
     const els = document.querySelectorAll('.fade');
     const obs = new IntersectionObserver((entries)=> {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
@@ -204,10 +208,13 @@
   </script>
 
   <script>
+    // 2. Particle Config (Mobile Optimized)
+    // 'detect_on': 'window' ensures touch works everywhere
+    // 'grab': distance increased to 250 for better finger sensitivity
     particlesJS('particles-js',
       {
         "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
           "color": { "value": "#83C5C9" },
           "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
           "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
@@ -216,14 +223,14 @@
           "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
         },
         "interactivity": {
-          "detect_on": "window",
+          "detect_on": "window", 
           "events": {
             "onhover": { "enable": true, "mode": ["grab", "bubble"] },
             "onclick": { "enable": true, "mode": "push" },
             "resize": true
           },
           "modes": {
-            "grab": { "distance": 200, "line_linked": { "opacity": 0.6 } },
+            "grab": { "distance": 250, "line_linked": { "opacity": 0.6 } },
             "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
             "repulse": { "distance": 200, "duration": 0.4 },
             "push": { "particles_nb": 4 },
