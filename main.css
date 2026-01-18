@@ -2,7 +2,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  /* BODY: System Font (San Francisco) - Clean, Apple Native */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #222;
   line-height: 1.7;
   background: #fff;
@@ -11,6 +12,20 @@ body {
 
 /* Shared wrapper */
 .wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
+
+/* ===== Typography: The "Technical Academic" Look ==================== */
+/* Besley (Slab Serif) gives the 'Typewriter/Manual' feel to headings */
+h1, h2 {
+  font-family: 'Besley', serif;
+  font-weight: 700; 
+  letter-spacing: -0.02em; 
+}
+
+h3, h4 {
+  font-family: 'Besley', serif;
+  font-weight: 400; /* Normal weight looks elegant in Slab */
+  letter-spacing: 0;
+}
 
 /* ===== Hero Section ================================================= */
 :root {
@@ -65,37 +80,34 @@ body {
   .hero-copy { grid-column: 1; grid-row: 1; }
 }
 
-/* Headings & Text */
+/* Hero Typography */
 .hero h2 {
-  font-family: 'Raleway', sans-serif;
   color: var(--teal);
-  font-weight: 900;
-  letter-spacing: .2px;
   font-size: 1.75rem;
   margin-bottom: .6rem;
 }
 .hero h1 {
-  font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.1;
   font-size: 2.85rem;
   margin-bottom: 1.4rem;
 }
 @media (min-width: 980px) {
   .hero h1 { font-size: 3.25rem; }
 }
-.hero p { font-size: 1.08rem; color: #333; margin-bottom: 1.4rem; }
+.hero p { font-size: 1.1rem; color: #333; margin-bottom: 1.4rem; font-weight: 400; }
 
 .hero-links a {
+  font-family: inherit; /* Keep system font for links */
   display: inline-block;
   margin-right: 1.1rem;
-  font-weight: 800;
+  font-weight: 600;
   text-decoration: none;
   color: var(--teal);
   font-size: 1.02rem;
 }
 .hero-links a:hover { text-decoration: underline; }
 
-/* ===== Layout Utilities ============================================ */
+/* ===== Layout Utilities (Tight Alignment) ========================== */
 .grid { 
   display: grid; 
   grid-template-columns: 1fr; 
@@ -104,7 +116,7 @@ body {
 .col-text { max-width: 100%; }
 .col-aside { display: flex; justify-content: center; position: relative; }
 
-/* Desktop Grid Logic */
+/* Desktop Grid: 2.5fr (Text) | 1fr (Photos) */
 @media (min-width: 980px) {
   .grid { 
     grid-template-columns: 2.5fr 1fr; 
@@ -121,10 +133,7 @@ section { padding: 0; }
 section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
 
 section h2 {
-  font-family: 'Raleway', sans-serif;
   color: var(--teal);
-  font-weight: 900;
-  letter-spacing: .2px;
   margin-bottom: 2rem;
   font-size: 2.1rem;
 }
@@ -132,21 +141,33 @@ section h2 {
   section h2 { font-size: 2.8rem; }
 }
 section h3 {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 800;
   color: #111;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 section p {
   color: #444; 
-  line-height: 1.85;
+  line-height: 1.8;
   margin-bottom: 1.5rem;
   font-size: 1.05rem;
   font-weight: 400; 
 }
 
-/* ===== Timeline & Photos (Adjusted Alignment) ====================== */
+/* Links in Bio Text */
+.col-text a {
+  font-family: inherit;
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+  border-bottom: 1px solid transparent; 
+}
+.col-text a:hover {
+  opacity: 0.8;
+  border-bottom: 1px solid var(--teal); 
+}
+
+/* ===== Timeline & Photos (Smart Responsive) ======================== */
 .timeline {
   position: relative;
   z-index: 0;
@@ -166,21 +187,16 @@ section p {
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-/* --- 1. DESKTOP: Vertical Column, Pushed Down --- */
+/* 1. DESKTOP: Vertical Stack, Pushed Down */
 @media (min-width: 980px) {
   .timeline {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.6rem; /* Standard vertical gap */
-    
-    /* PUSH DOWN to align with paragraph text 
-       Roughly: H2 (2.8rem + 2rem) + H3 (1.2rem + 1rem) ≈ 7-8rem 
-    */
+    gap: 2.6rem; 
+    /* This pushes photos down to align with paragraph text */
     margin-top: 8.5rem; 
   }
-
-  /* Connector Lines */
   .timeline .photo:not(:last-child)::before {
     content: "";
     position: absolute;
@@ -194,28 +210,21 @@ section p {
   }
 }
 
-/* --- 2. TABLET / NARROW DESKTOP (600px - 979px) --- */
-/* User Request: One Row, Less Spacing */
+/* 2. TABLET: One Row (Horizontal) */
 @media (max-width: 979px) and (min-width: 600px) {
   .timeline {
-    display: flex;          /* Force one row */
-    flex-direction: row;    /* Horizontal */
+    display: flex;          
+    flex-direction: row;    
     justify-content: center; 
-    flex-wrap: nowrap;      /* Don't wrap */
-    gap: 1rem;              /* Tight spacing */
-    margin-top: 0;          /* Reset top margin */
+    flex-wrap: nowrap;      
+    gap: 1rem;              
+    margin-top: 0;          
   }
-  
-  .photo {
-    /* Slightly smaller to fit 3 in a row comfortably */
-    width: 160px; height: 160px; 
-  }
-  
-  .photo::before { display: none !important; } /* Hide connectors */
+  .photo { width: 160px; height: 160px; }
+  .photo::before { display: none !important; } 
 }
 
-/* --- 3. MOBILE (< 600px) --- */
-/* User Request: 2 Rows */
+/* 3. MOBILE: Two Column Grid */
 @media (max-width: 599px) {
   .timeline {
     display: grid;
@@ -224,16 +233,15 @@ section p {
     gap: 1rem;
     margin-top: 0;
   }
-  
   .photo { width: 150px; height: 150px; }
   .photo::before { display: none !important; }
 }
 
-
+/* Outreach Specifics */
 .outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
 .outreach li { margin-bottom: .55rem; }
 .email-line { margin-top: 1.2rem; font-weight: 700; }
-.email-line a { color: #4b4b4b; text-decoration: none; }
+.email-line a { color: #4b4b4b; text-decoration: none; font-family: inherit; }
 .email-line a:hover { text-decoration: underline; }
 
 /* ===== Footer ======================================================= */
@@ -241,16 +249,17 @@ footer { background: #fff; border-top: 1px solid #e0e0e0; }
 .footer-inner { text-align: center; padding: 3rem 2rem; }
 .footer-links { margin-bottom: 1rem; }
 .footer-links a {
+  font-family: inherit;
   margin: 0 .8rem;
   text-decoration: none;
   color: var(--teal);
-  font-weight: 800;
+  font-weight: 600;
   font-size: 1rem;
 }
 .footer-links a:hover { text-decoration: underline; }
 footer p { font-size: .86rem; color: #888; }
 
-/* ===== Fade-in ====================================================== */
+/* ===== Fade-in Animation ============================================ */
 .fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
 .fade.show { opacity: 1; transform: translateY(0); }
 
@@ -303,8 +312,8 @@ footer p { font-size: .86rem; color: #888; }
 }
 
 .bento-card h3 {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 800;
+  font-family: 'Besley', serif; /* Consistent Academic header */
+  font-weight: 700;
   font-size: 1.5rem;
   margin-bottom: 0.6rem;
   color: #111;
@@ -312,7 +321,7 @@ footer p { font-size: .86rem; color: #888; }
 }
 
 .bento-card p {
-  font-family: 'Montserrat', sans-serif;
+  font-family: inherit; /* System font for readability */
   font-size: 0.95rem;
   font-weight: 500;
   color: #666;
@@ -327,7 +336,7 @@ footer p { font-size: .86rem; color: #888; }
 }
 
 .bento-tags span {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', monospace; /* The "Code" Feeling */
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--teal);
@@ -363,18 +372,4 @@ footer p { font-size: .86rem; color: #888; }
 
 .bento-card:hover .bento-visual img {
   transform: scale(1.05);
-}
-
-/* Styling for links inside the About Text */
-.col-text a {
-  color: var(--teal);     /* Uses your brand teal */
-  text-decoration: none;
-  font-weight: 600;       /* Slight bold to make them pop */
-  transition: opacity 0.2s ease;
-  border-bottom: 1px solid transparent; /* Prepare for hover underline */
-}
-
-.col-text a:hover {
-  opacity: 0.8;
-  border-bottom: 1px solid var(--teal); /* Elegant thin underline on hover */
 }
