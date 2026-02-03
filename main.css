@@ -1,409 +1,302 @@
-/* ===== Base & Wrapper =============================================== */
+/* ===== 1. RESET & VARIABLES (The "Clean" Foundation) ===== */
+:root {
+  /* COLORS: "Modern Laboratory" */
+  --bg: #F9F9F9;           /* Very light grey (easier on eyes than pure white) */
+  --surface: #FFFFFF;      /* Pure white for cards */
+  --text-main: #1D1D1F;    /* Apple/Nintendo Soft Black */
+  --text-mute: #86868B;    /* Technical Grey */
+  --accent: #009688;       /* Teal: Represents Science/Glass/Light */
+  
+  /* SHADOWS: Soft, diffused elevation (Not hard retro) */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+  
+  /* SHAPE: The "Squircle" */
+  --radius: 24px;          /* Large, friendly rounding */
+  
+  /* FONTS */
+  /* System font stack for maximum clarity */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Monospace for the "Geek" element */
+  --font-mono: 'JetBrains Mono', monospace; 
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  /* BODY: System Font (San Francisco) - Clean, Apple Native */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #222;
-  line-height: 1.7;
-  background: #fff;
-  -webkit-font-smoothing: antialiased; 
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Shared wrapper */
-.wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
+a { text-decoration: none; color: inherit; transition: opacity 0.2s; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
 
-/* ===== Typography: The "Technical Academic" Look ==================== */
-/* Besley (Slab Serif) gives the 'Typewriter/Manual' feel to headings */
-h1, h2 {
-  font-family: 'Besley', serif;
-  font-weight: 700; 
-  letter-spacing: -0.02em; 
-}
-
-h3, h4 {
-  font-family: 'Besley', serif;
-  font-weight: 400; /* Normal weight looks elegant in Slab */
-  letter-spacing: 0;
-}
-
-/* ===== Hero Section ================================================= */
-:root {
-  --teal: #83C5C9;
-  --bg-hero: #f0f0f0;
-
-  /* Pixel accent font (used sparingly) */
-  --pixel: "Press Start 2P", ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-.hero { 
-  position: relative; 
-  background: var(--bg-hero);
-  overflow: hidden;
-  min-height: 85vh; 
-  z-index: 1;
-}
-
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1; 
-}
-#particles-js canvas { display: block; }
-
-.hero .wrap { 
-  padding-top: 6rem; 
-  padding-bottom: 6rem;
-  position: relative;
-  z-index: 10; 
-  pointer-events: none; 
-}
-
-.hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
-
-.hero-wrap {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  height: 100%;
-  align-content: center;
-}
-
-.hero-brain { justify-self: end; order: 0; }
-.hero-copy { order: 1; }
-
-@media (min-width: 980px) {
-  .hero-copy { grid-column: 1; grid-row: 1; max-width: 640px; }
-  .hero-copy > * { max-width: 640px; }
-  .hero-wrap { grid-template-columns: 58% 42%; align-items: center; }
-  .hero-brain { grid-column: 2; grid-row: 1; }
-  .hero-copy { grid-column: 1; grid-row: 1; }
-}
-
-/* Hero Typography */
-.hero h2 {
-  color: var(--teal);
-  font-size: 1.75rem;
-  margin-bottom: .6rem;
-}
-.hero h1 {
-  line-height: 1.1;
-  font-size: 2.85rem;
-  margin-bottom: 1.4rem;
-}
-@media (min-width: 980px) {
-  .hero h1 { font-size: 3.25rem; }
-}
-.hero p { font-size: 1.1rem; color: #333; margin-bottom: 1.4rem; font-weight: 400; }
-
-/* ===== Hero Links (UPDATED: pill "UI buttons") ======================= */
-.hero-links a {
-  font-family: inherit;
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-  margin-right: 1.0rem;
+/* ===== 2. TYPOGRAPHY (Hierarchy) ===== */
+h1 {
   font-weight: 700;
-  text-decoration: none;
-  color: var(--teal);
-  font-size: 1.02rem;
-
-  /* pill UI look */
-  padding: .55rem .9rem;
-  border-radius: 999px;
-  background: rgba(131, 197, 201, 0.10);
-  border: 1px solid rgba(131, 197, 201, 0.25);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-}
-.hero-links a:hover { 
-  transform: translateY(-1px);
-  box-shadow: 0 16px 30px rgba(0,0,0,0.08);
-  background: rgba(131, 197, 201, 0.14);
+  font-size: 3.5rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
 }
 
-/* ===== Layout Utilities (Tight Alignment) ========================== */
-.grid { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 2rem; 
-}
-.col-text { max-width: 100%; }
-.col-aside { display: flex; justify-content: center; position: relative; }
-
-/* Desktop Grid: 2.5fr (Text) | 1fr (Photos) */
-@media (min-width: 980px) {
-  .grid { 
-    grid-template-columns: 2.5fr 1fr; 
-    align-items: flex-start; 
-    gap: 2rem; 
-  }
-  .col-aside { 
-    justify-content: center; 
-  }
-}
-
-/* ===== Section Typography ========================================== */
-section { padding: 0; }
-section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
-
-section h2 {
-  color: var(--teal);
-  margin-bottom: 2rem;
-  font-size: 2.1rem;
-}
-@media (min-width: 980px) {
-  section h2 { font-size: 2.8rem; }
-}
-section h3 {
-  color: #111;
-  font-size: 1.25rem;
+h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
   margin-bottom: 1rem;
+  letter-spacing: -0.01em;
 }
-section p {
-  color: #444; 
-  line-height: 1.8;
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: var(--text-main);
   margin-bottom: 1.5rem;
   font-size: 1.05rem;
-  font-weight: 400; 
 }
 
-/* Links in Bio Text */
-.col-text a {
-  font-family: inherit;
-  color: var(--teal);
-  text-decoration: none;
-  font-weight: 600;
-  transition: opacity 0.2s ease;
-  border-bottom: 1px solid transparent; 
-}
-.col-text a:hover {
-  opacity: 0.8;
-  border-bottom: 1px solid var(--teal); 
+/* THE GEEK FACTOR: Monospace Labels */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.8rem;
 }
 
-/* ===== Timeline & Photos (Smart Responsive) ======================== */
-.timeline {
+/* ===== 3. HERO SECTION (Minimalist) ===== */
+.hero {
   position: relative;
-  z-index: 0;
-  width: 100%;
-}
-
-.photo {
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  border: 5px solid var(--teal);
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
   overflow: hidden;
-  background: #fff;
-  flex-shrink: 0;
+}
+
+.hero-wrap {
   position: relative;
-  z-index: 1;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-}
-.photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
-/* 1. DESKTOP: Vertical Stack, Pushed Down */
-@media (min-width: 980px) {
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2.6rem; 
-    /* This pushes photos down to align with paragraph text */
-    margin-top: 8.5rem; 
-  }
-  .timeline .photo:not(:last-child)::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(100% + 5px);
-    width: 3px;
-    height: calc(2.6rem - 10px);
-    background: var(--teal);
-    z-index: 0;
-  }
+  z-index: 10;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-/* 2. TABLET: One Row (Horizontal) */
-@media (max-width: 979px) and (min-width: 600px) {
-  .timeline {
-    display: flex;          
-    flex-direction: row;    
-    justify-content: center; 
-    flex-wrap: nowrap;      
-    gap: 1rem;              
-    margin-top: 0;          
-  }
-  .photo { width: 160px; height: 160px; }
-  .photo::before { display: none !important; } 
+.description {
+  max-width: 520px;
+  color: var(--text-mute);
+  font-size: 1.15rem;
+  line-height: 1.7;
 }
 
-/* 3. MOBILE: Two Column Grid */
-@media (max-width: 599px) {
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
-    justify-items: center;
-    gap: 1rem;
-    margin-top: 0;
-  }
-  .photo { width: 150px; height: 150px; }
-  .photo::before { display: none !important; }
+.lead-role {
+  font-size: 1.5rem;
+  color: var(--text-mute);
+  margin-bottom: 2rem;
+  font-weight: 400;
 }
 
-/* Outreach Specifics */
-.outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
-.outreach li { margin-bottom: .55rem; }
-.email-line { margin-top: 1.2rem; font-weight: 700; }
-.email-line a { color: #4b4b4b; text-decoration: none; font-family: inherit; }
-.email-line a:hover { text-decoration: underline; }
-
-/* ===== Footer ======================================================= */
-footer { background: #fff; border-top: 1px solid #e0e0e0; }
-.footer-inner { text-align: center; padding: 3rem 2rem; }
-.footer-links { margin-bottom: 1rem; }
-.footer-links a {
-  font-family: inherit;
-  margin: 0 .8rem;
-  text-decoration: none;
-  color: var(--teal);
-  font-weight: 600;
-  font-size: 1rem;
+@media (min-width: 900px) {
+  .hero-wrap { grid-template-columns: 60% 40%; }
 }
-.footer-links a:hover { text-decoration: underline; }
-footer p { font-size: .86rem; color: #888; }
 
-/* ===== Fade-in Animation ============================================ */
-.fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
-.fade.show { opacity: 1; transform: translateY(0); }
+/* UI BUTTONS: Friendly "Pills" */
+.hero-links { display: flex; gap: 1rem; margin-top: 2rem; }
 
-/* ===== PROJECTS: BENTO GRID (Apple Engineer Style) ================== */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.8rem;
+  background: var(--text-main);
+  color: #fff;
+  border-radius: 100px; /* Fully rounded */
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-pill:hover {
+  transform: translateY(-2px);
+  background: var(--accent); /* Turn Teal on interaction */
+}
+
+.btn-pill.secondary {
+  background: #fff;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* ===== 4. CONTENT SECTIONS ===== */
+section { padding: 6rem 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 900px) {
+  .grid { grid-template-columns: 1.5fr 1fr; }
+}
+
+/* The Photo Stack (Playful but clean) */
+.timeline-stack {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin-top: 2rem;
+}
+
+.photo-card {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 4px solid #fff;
+  transition: transform 0.4s ease;
+}
+
+.photo-card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Subtle stack effect */
+.offset-1 { transform: rotate(4deg) translate(10px, 10px); }
+.offset-2 { transform: rotate(-3deg) translate(-10px, 10px); }
+
+/* Hovering explodes the stack slightly (Playful interaction) */
+.timeline-stack:hover .offset-1 { transform: rotate(12deg) translate(40px, 10px); }
+.timeline-stack:hover .offset-2 { transform: rotate(-12deg) translate(-40px, 10px); }
+
+
+/* ===== 5. BENTO GRID (The Database) ===== */
+.section-header { margin-bottom: 3rem; }
+
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-  .bento-card.featured {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-  }
+  .bento-grid { grid-template-columns: 1fr 1fr; }
+  .featured { grid-column: span 2; display: flex; align-items: center; }
+  .featured .card-image { width: 50%; height: 100%; order: 2; }
+  .featured .card-text { width: 50%; }
 }
 
 .bento-card {
-  background: #ffffff;
-  border-radius: 24px;
+  background: var(--surface);
+  border-radius: var(--radius);
   overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  border: 1px solid rgba(0,0,0,0.04);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.4s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   display: flex;
   flex-direction: column;
-  position: relative; /* needed for cartridge border */
+  border: 1px solid rgba(0,0,0,0.03); /* Extremely subtle border */
 }
 
-/* Cartridge-like inner border (NEW) */
-.bento-card::before{
-  content:"";
-  position:absolute;
-  inset: 10px;
-  border-radius: 18px;
-  border: 1px dashed rgba(0,0,0,0.08);
-  pointer-events:none;
-}
-
+/* Lift on Hover (Nintendo OS feel) */
 .bento-card:hover {
-  transform: translateY(-4px) scale(1.005);
-  box-shadow: 0 20px 40px rgba(131, 197, 201, 0.15);
-  border-color: rgba(131, 197, 201, 0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-hover);
 }
 
-.bento-content {
-  padding: 2.2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+.card-text { padding: 2rem; }
 
-.bento-card h3 {
-  font-family: 'Besley', serif; /* Consistent Academic header */
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin-bottom: 0.6rem;
-  color: #111;
-  letter-spacing: -0.02em;
-}
-
-.bento-card p {
-  font-family: inherit; /* System font for readability */
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-.bento-tags {
-  margin-bottom: 1rem;
+.meta-tags {
   display: flex;
   gap: 0.6rem;
-  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
 }
 
-/* Tags now have a tiny pixel feel (NEW) */
-.bento-tags span {
-  font-family: var(--pixel);
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #1f6f74;
-  background: rgba(131, 197, 201, 0.12);
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(131,197,201,0.35);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.12);
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  background: #F0F2F5;
+  color: var(--text-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
-.bento-visual {
-  width: 100%;
-  height: 250px;
+.card-image {
+  height: 220px;
+  background: #eee;
   overflow: hidden;
-  background: #f8f8f8;
-  position: relative;
+}
+.card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s;
+}
+.bento-card:hover img { transform: scale(1.05); }
+
+
+/* ===== 6. CONNECT & FOOTER ===== */
+.clean-list { list-style: none; margin-bottom: 2rem; }
+.clean-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+  color: var(--text-main);
 }
 
-@media (min-width: 768px) {
-  .bento-card.featured .bento-visual {
-    height: 100%;
-    order: 2; 
-    min-height: 320px;
-  }
+.contact-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 1.2rem;
+  background: #fff;
+  border-radius: 100px;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
 }
 
-.bento-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.status-dot {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
 }
 
-.bento-card:hover .bento-visual img {
-  transform: scale(1.05);
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 150, 136, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0); }
 }
+
+footer {
+  padding: 4rem 0 2rem;
+  border-top: 1px solid #eee;
+  margin-top: 4rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-links a {
+  margin-right: 1.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.social-links a:hover { color: var(--accent); }
+
+/* Animation Utility */
+.fade { opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
+.fade.show { opacity: 1; transform: translateY(0); }
