@@ -1,442 +1,351 @@
+/* ===== PALETTE: Game Boy Light & Scientific Interface ================ */
+:root {
+  /* COLORS */
+  --gb-teal:    #009688; /* The primary "Game Boy" Teal */
+  --gb-dark:    #00695C; /* Darker shade for shadows */
+  --gb-accent:  #D64541; /* "A Button" Red */
+  
+  --ink:        #2D3436; /* Softer Black for text */
+  --ink-light:  #636e72; /* Grey text */
+  
+  --bg-page:    #FFFFFF;
+  --bg-hero:    #f1f2f6; /* Very light grey console chassis color */
+  
+  --radius:     8px;     /* Not too round, not too sharp */
+  --border:     2px solid var(--ink); /* The universal border */
+  
+  /* SHADOWS: The key to the style */
+  --shadow-card: 5px 5px 0px var(--ink);
+  --shadow-btn:  4px 4px 0px rgba(0,0,0,0.2);
+}
+
 /* ===== Base & Wrapper =============================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  /* BODY: System Font - Clean, but we add hard contrast later */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #111; /* Darker black for higher contrast */
+  /* IBM Plex Sans: Designed for Man & Machine. Perfect for engineering. */
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  color: var(--ink);
   line-height: 1.7;
-  background: #fff;
+  background: var(--bg-page);
   -webkit-font-smoothing: antialiased; 
 }
 
-/* Shared wrapper */
 .wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
 
-/* ===== Typography: The "Academic Retro" Look ==================== */
-/* Besley (Slab Serif) gives the 'Manual/Journal' feel */
-h1, h2 {
-  font-family: 'Besley', serif;
-  font-weight: 700; 
-  letter-spacing: -0.02em; 
-  color: #000;
+/* ===== Typography: The "Lab HUD" Look ==================== */
+
+/* Space Grotesk: Geometric, Retro-SciFi, Readable */
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.03em;
 }
 
-h3, h4 {
-  font-family: 'Besley', serif;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: #000;
+h1 { font-weight: 700; line-height: 1.1; }
+h2 { font-weight: 700; }
+h3 { font-weight: 600; }
+
+/* The "Pixel" Badge appearing above sections */
+.section-badge {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  color: var(--gb-teal);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* ===== Hero Section ================================================= */
-:root {
-  --teal: #83C5C9;
-  --bg-hero: #f8f9fa; /* Slightly cooler grey */
-  --hard-shadow: 4px 4px 0px #000; /* Reusable variable for the retro shadow */
-}
-
 .hero { 
   position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
   min-height: 85vh; 
   z-index: 1;
-  border-bottom: 3px solid #000; /* Solid divider */
+  /* A "chassis" border at the bottom */
+  border-bottom: 3px solid var(--ink); 
 }
 
 #particles-js {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1; 
+  width: 100%; height: 100%; top: 0; left: 0; z-index: 1; 
 }
-#particles-js canvas { display: block; }
 
 .hero .wrap { 
-  padding-top: 6rem; 
-  padding-bottom: 6rem;
-  position: relative;
-  z-index: 10; 
-  pointer-events: none; 
+  padding-top: 6rem; padding-bottom: 6rem;
+  position: relative; z-index: 10; pointer-events: none; 
 }
 
-.hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
+.hero-wrap a, .hero-wrap button { pointer-events: auto; }
 
 .hero-wrap {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  height: 100%;
-  align-content: center;
+  display: grid; grid-template-columns: 1fr; gap: 2rem;
+  height: 100%; align-content: center;
 }
 
-.hero-brain { justify-self: end; order: 0; }
-.hero-copy { order: 1; }
-
-@media (min-width: 980px) {
-  .hero-copy { grid-column: 1; grid-row: 1; max-width: 640px; }
-  .hero-copy > * { max-width: 640px; }
-  .hero-wrap { grid-template-columns: 58% 42%; align-items: center; }
-  .hero-brain { grid-column: 2; grid-row: 1; }
-  .hero-copy { grid-column: 1; grid-row: 1; }
-}
-
-/* Hero Typography */
-.hero h2 {
-  color: #000;
-  font-family: 'JetBrains Mono', monospace; /* Tech feel for name */
-  font-size: 1.5rem;
-  margin-bottom: .6rem;
-  text-transform: uppercase;
-  letter-spacing: -0.05em;
-}
-.hero h2::before {
-  content: "> "; /* Terminal style prefix */
-  color: var(--teal);
+/* Hero Text Styling */
+.console-text {
+  font-family: 'Press Start 2P', cursive; /* Name in Pixel font */
+  font-size: 0.9rem; /* Keep it small so it's readable */
+  color: var(--gb-teal);
+  margin-bottom: 1rem;
+  line-height: 1.6;
 }
 
 .hero h1 {
-  line-height: 1.1;
-  font-size: 2.85rem;
+  font-size: 3rem;
   margin-bottom: 1.4rem;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+  color: var(--ink);
 }
+.hero h1 span { color: var(--gb-teal); } /* The "&" symbol */
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--ink-light);
+  margin-bottom: 1.4rem;
+  max-width: 600px;
+}
+
 @media (min-width: 980px) {
-  .hero h1 { font-size: 3.25rem; }
+  .hero-wrap { grid-template-columns: 60% 40%; align-items: center; }
+  .hero h1 { font-size: 3.8rem; }
 }
-.hero p { font-size: 1.1rem; color: #333; margin-bottom: 1.4rem; font-weight: 400; }
 
-/* HERO BUTTONS: The "Game Cartridge" Look */
-.hero-links a {
-  font-family: 'JetBrains Mono', monospace;
-  display: inline-block;
-  margin-right: 1.1rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+/* ===== HERO BUTTONS: The "Soft Nintendo" Buttons =================== */
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-retro {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
   text-decoration: none;
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 1.6rem;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
   
-  /* The Physical Button Look */
-  color: #000;
+  /* OPTION A: Solid Teal Button (Game Boy Cartridge) */
+  background: var(--gb-teal);
+  color: #fff;
+  
+  /* Colored shadow matches the button tone but darker */
+  box-shadow: 4px 4px 0px var(--gb-dark); 
+  
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-retro:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--gb-dark);
+}
+
+/* Secondary Button: White with Teal Shadow */
+.btn-retro.alt {
   background: #fff;
-  border: 2px solid #000;
-  padding: 0.8rem 1.2rem;
-  border-radius: 8px; /* Slightly squared */
-  box-shadow: var(--hard-shadow);
-  transition: all 0.1s ease;
+  color: var(--ink);
+  box-shadow: 4px 4px 0px var(--gb-teal);
+}
+.btn-retro.alt:hover {
+  box-shadow: 2px 2px 0px var(--gb-teal);
 }
 
-.hero-links a:hover { 
-  transform: translate(2px, 2px); /* Presses down */
-  box-shadow: 2px 2px 0px #000;   /* Shadow shrinks */
-  background: var(--teal);
-}
+.btn-retro i { margin-right: 8px; font-size: 1rem; }
 
-.hero-links i { margin-right: 8px; }
 
 /* ===== Layout Utilities ========================== */
-.grid { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 2rem; 
-}
+.grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
 .col-text { max-width: 100%; }
 .col-aside { display: flex; justify-content: center; position: relative; }
 
 @media (min-width: 980px) {
-  .grid { 
-    grid-template-columns: 2.5fr 1fr; 
-    align-items: flex-start; 
-    gap: 2rem; 
-  }
-  .col-aside { 
-    justify-content: center; 
-  }
+  .grid { grid-template-columns: 2.2fr 1fr; align-items: flex-start; }
 }
 
 /* ===== Section Typography ========================================== */
-section { padding: 0; }
 section .wrap { padding-top: 6rem; padding-bottom: 6rem; }
 
 section h2 {
-  color: #000;
+  font-size: 2.5rem;
   margin-bottom: 2rem;
-  font-size: 2.1rem;
-  border-bottom: 4px solid var(--teal); /* Chunky underline */
+  position: relative;
   display: inline-block;
-  line-height: 1.3;
+  z-index: 1;
 }
-@media (min-width: 980px) {
-  section h2 { font-size: 2.8rem; }
-}
-section h3 {
-  color: #000;
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-}
-section p {
-  color: #222; 
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-  font-size: 1.05rem;
-  font-weight: 400; 
+/* A Highlighter effect behind the H2 */
+section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 5px; left: -5px; right: -5px;
+  height: 12px;
+  background: rgba(0, 150, 136, 0.2); /* Transparent Teal */
+  z-index: -1;
+  transform: skewX(-10deg);
 }
 
-/* Links in Bio Text - Highlighting */
+.role-title {
+  font-family: 'IBM Plex Sans', sans-serif; /* Technical look */
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px dashed #ccc; /* Perforation line */
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+.divider { color: var(--gb-teal); margin: 0 0.5rem; font-weight: 700; }
+
+section p { font-size: 1.05rem; margin-bottom: 1.5rem; color: #444; }
+
 .col-text a {
-  font-family: inherit;
-  color: #000;
+  color: var(--gb-teal);
   text-decoration: none;
   font-weight: 600;
-  background-color: rgba(131, 197, 201, 0.3); /* Highlighter effect */
-  padding: 0 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  border-bottom: 2px solid rgba(0, 150, 136, 0.3);
+  transition: background 0.2s;
 }
 .col-text a:hover {
-  background-color: var(--teal);
+  background: rgba(0, 150, 136, 0.1);
+  border-bottom-color: var(--gb-teal);
 }
 
-/* ===== Timeline & Photos (Retro Style) ======================== */
-.timeline {
-  position: relative;
-  z-index: 0;
-  width: 100%;
-}
+/* ===== Timeline & Photos ======================================== */
+.timeline { position: relative; width: 100%; }
 
-/* The Photo "Sticker" Look */
 .photo {
-  width: 200px; height: 200px;
-  border-radius: 50%; /* Keep round for portraits */
-  border: 3px solid #000; /* Thick solid border */
+  width: 190px; height: 190px;
+  /* Round photo, but square border logic */
+  border-radius: 50%; 
+  border: 3px solid var(--ink);
   overflow: hidden;
   background: #fff;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  /* Hard shadow instead of soft */
-  box-shadow: 6px 6px 0px #000;
+  /* Colored Shadow = Less harsh */
+  box-shadow: 6px 6px 0px var(--gb-teal);
   transition: transform 0.2s ease;
 }
-.photo:hover {
-  transform: scale(1.02);
-}
-
+.photo:hover { transform: scale(1.02); }
 .photo img { width: 100%; height: 100%; object-fit: cover; }
 
-/* 1. DESKTOP: Vertical Stack */
 @media (min-width: 980px) {
   .timeline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2.6rem; 
-    margin-top: 8.5rem; 
+    display: flex; flex-direction: column; align-items: center; gap: 2.5rem; margin-top: 6rem; 
   }
-  /* Connector Line */
+  /* Connecting line is now Teal */
   .timeline .photo:not(:last-child)::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(100% + 3px);
-    width: 4px; /* Thicker line */
-    height: calc(2.6rem - 6px);
-    background: #000; /* Black line */
-    z-index: 0;
+    content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+    top: 100%; width: 4px; height: 2.5rem; background: var(--gb-teal);
   }
 }
-
-/* 2. TABLET */
-@media (max-width: 979px) and (min-width: 600px) {
-  .timeline {
-    display: flex;         
-    flex-direction: row;    
-    justify-content: center; 
-    flex-wrap: nowrap;      
-    gap: 1rem;            
-    margin-top: 0;          
-  }
-  .photo { width: 160px; height: 160px; }
-  .photo::before { display: none !important; } 
+@media (max-width: 979px) {
+  .timeline { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .photo { width: 140px; height: 140px; }
+  .photo::before { display: none; }
 }
 
-/* 3. MOBILE */
-@media (max-width: 599px) {
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
-    justify-items: center;
-    gap: 1rem;
-    margin-top: 0;
-  }
-  .photo { width: 150px; height: 150px; }
-  .photo::before { display: none !important; }
-}
-
-/* Outreach Specifics */
-.outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
-.outreach li { margin-bottom: .55rem; list-style-type: square; } /* Square bullets */
-.email-line { margin-top: 1.2rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-.email-line a { background: none; color: var(--teal); }
-.email-line a:hover { background: none; text-decoration: underline; }
-
-/* ===== Footer ======================================================= */
-footer { background: #fff; border-top: 3px solid #000; }
-.footer-inner { text-align: center; padding: 3rem 2rem; }
-.footer-links { margin-bottom: 1rem; }
-.footer-links a {
-  font-family: 'JetBrains Mono', monospace;
-  margin: 0 .8rem;
-  text-decoration: none;
-  color: #000;
-  font-weight: 600;
-  font-size: 0.9rem;
-  border-bottom: 2px solid transparent;
-}
-.footer-links a:hover { border-bottom: 2px solid var(--teal); }
-footer p { font-size: .86rem; color: #666; font-family: 'JetBrains Mono', monospace; }
-
-/* ===== Fade-in Animation ============================================ */
-.fade { opacity: 0; transform: translateY(40px); transition: opacity .9s ease-out, transform .9s ease-out; }
-.fade.show { opacity: 1; transform: translateY(0); }
-
-/* ===== PROJECTS: RETRO BENTO GRID ================ */
+/* ===== Bento Grid (Cartridges) ================================== */
 .bento-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  display: grid; grid-template-columns: 1fr; gap: 2rem;
 }
-
 @media (min-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-  .bento-card.featured {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-  }
+  .bento-grid { grid-template-columns: 1fr 1fr; }
+  .bento-card.featured { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; }
 }
 
-/* THE CARD: The Main Geeky Element */
 .bento-card {
-  background: #ffffff;
-  /* Boxier corners */
+  background: #fff;
   border-radius: 12px;
-  /* Thick borders and hard shadows */
-  border: 3px solid #000;
-  box-shadow: 6px 6px 0px #000;
+  /* The Border is Dark Grey, not Black */
+  border: 2px solid var(--ink);
+  /* The Shadow is Dark Grey */
+  box-shadow: var(--shadow-card);
   
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
-              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease;
+  display: flex; flex-direction: column;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* PRESSING THE BUTTON EFFECT */
 .bento-card:hover {
-  transform: translate(3px, 3px); /* Move down-right */
-  box-shadow: 3px 3px 0px #000;   /* Shadow gets smaller */
-  border-color: #000;
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0px var(--ink);
+  border-color: var(--gb-teal); /* Border turns Teal on hover */
 }
 
-.bento-content {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+.bento-content { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
 
 .bento-card h3 {
-  font-family: 'Besley', serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin-bottom: 0.6rem;
-  color: #000;
-  letter-spacing: -0.02em;
+  font-size: 1.4rem; margin-bottom: 0.6rem; margin-top: 0.5rem;
 }
 
-.bento-card p {
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #444;
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-.bento-tags {
-  margin-bottom: 1rem;
-  display: flex;
-  gap: 0.6rem;
-}
-
-/* PIXEL FONT TAGS */
+.bento-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 .bento-tags span {
-  font-family: 'Press Start 2P', cursive; /* The Nintendo Font */
-  font-size: 0.55rem; /* Pixel fonts must be small */
-  line-height: 1.4;
-  font-weight: 400;
-  
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  background: var(--ink);
   color: #fff;
-  background: #000; /* High Contrast */
-  
-  padding: 6px 8px 4px 8px; /* Adjustment for pixel font baseline */
+  padding: 6px 8px;
   border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0px;
-  
-  /* Little tag shadow */
-  box-shadow: 2px 2px 0 var(--teal); 
+}
+/* Alternate color for second tag */
+.bento-tags .tag-color {
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  padding: 4px 6px; /* Adjust for border */
 }
 
 .bento-visual {
-  width: 100%;
-  height: 250px;
+  background: #f1f2f6; 
+  height: 240px; 
+  border-top: 2px solid var(--ink); /* Separator */
   overflow: hidden;
-  background: #f0f0f0;
-  position: relative;
-  border-bottom: 3px solid #000; /* Separator line inside card */
 }
-
-/* Adjust borders based on layout */
 .bento-card.featured .bento-visual {
-  border-bottom: none;
-  border-left: 3px solid #000;
+  height: 100%; border-top: none; border-left: 2px solid var(--ink); order: 2;
 }
+/* Mobile fix for featured card borders */
 @media (max-width: 767px) {
-  .bento-visual { border-bottom: 3px solid #000; }
-  .bento-card.featured .bento-visual { border-left: none; border-top: 3px solid #000; order: -1;}
-}
-
-@media (min-width: 768px) {
-  .bento-card.featured .bento-visual {
-    height: 100%;
-    order: 2; 
-    min-height: 320px;
-  }
+  .bento-card.featured .bento-visual { border-left: none; border-top: 2px solid var(--ink); order: -1; }
+  .bento-visual { border-bottom: 2px solid var(--ink); border-top: none; }
 }
 
 .bento-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: grayscale(20%); /* Slight retro desaturation */
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(100%); /* Scientific Black & White */
+  transition: filter 0.3s;
+}
+.bento-card:hover .bento-visual img { filter: grayscale(0%); }
+
+/* ===== Outreach List ============================================ */
+.retro-list { list-style: none; padding-left: 0; }
+.retro-list li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+  font-weight: 500;
+}
+.retro-list li::before {
+  content: "►"; /* Retro arrow */
+  position: absolute; left: 0; color: var(--gb-teal); font-size: 0.8rem; top: 3px;
 }
 
-.bento-card:hover .bento-visual img {
-  transform: scale(1.05);
-  filter: grayscale(0%);
+/* ===== Footer =================================================== */
+footer { background: #fff; border-top: 2px solid var(--ink); margin-top: 4rem; }
+.footer-inner { text-align: center; padding: 3rem 2rem; }
+.footer-links a {
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0 1rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
 }
+.footer-links a:hover { color: var(--gb-teal); text-decoration: underline; }
+footer p { font-size: 0.85rem; color: var(--ink-light); margin-top: 1rem; font-family: 'Press Start 2P', cursive; font-size: 0.55rem; }
