@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
   
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   
@@ -101,7 +101,7 @@
         <a href="#" class="bento-card featured">
           <div class="bento-content">
             <div class="bento-tags">
-              <span>[ 2025 ]</span>
+              <span>2025</span>
               <span>ETH Zürich</span>
             </div>
             <h3>Solskin AI</h3>
@@ -118,7 +118,7 @@
           </div>
           <div class="bento-content">
             <div class="bento-tags">
-              <span>[ EPFL ]</span>
+              <span>EPFL</span>
               <span>H-D-R</span>
             </div>
             <h3>HiDyn Project</h3>
@@ -132,7 +132,7 @@
           </div>
           <div class="bento-content">
             <div class="bento-tags">
-              <span>[ TU Delft ]</span>
+              <span>TU Delft</span>
               <span>Human-Centric</span>
             </div>
             <h3>Visual Comfort</h3>
@@ -143,8 +143,8 @@
         <a href="#" class="bento-card featured">
           <div class="bento-content">
             <div class="bento-tags">
-              <span>[ Publication ]</span>
-              <span>Building & Environment</span>
+              <span>Publication</span>
+              <span>B&E Journal</span>
             </div>
             <h3>Spectral Rendering</h3>
             <p>Simulating daylight spectral properties for precise circadian health assessments in architecture.</p>
@@ -208,18 +208,20 @@
   </script>
 
   <script>
-    // 2. Particle Config (Mobile Optimized)
-    // 'detect_on': 'window' ensures touch works everywhere
-    // 'grab': distance increased to 250 for better finger sensitivity
+    // 2. Particle Config (Geeky/Retro Mode)
+    // Changed shape to 'edge' (square) to look like pixels/data
     particlesJS('particles-js',
       {
         "particles": {
-          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+          "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
           "color": { "value": "#83C5C9" },
-          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+          "shape": { 
+            "type": "edge", /* 'edge' = square/pixel */ 
+            "stroke": { "width": 0, "color": "#000000" } 
+          },
           "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
-          "size": { "value": 4.5, "random": true, "anim": { "enable": false } },
-          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.2 },
+          "size": { "value": 8, "random": true, "anim": { "enable": false } }, /* Bigger pixels */
+          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.5 },
           "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
         },
         "interactivity": {
@@ -231,7 +233,7 @@
           },
           "modes": {
             "grab": { "distance": 250, "line_linked": { "opacity": 0.6 } },
-            "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
+            "bubble": { "distance": 200, "size": 12, "duration": 2, "opacity": 8, "speed": 3 },
             "repulse": { "distance": 200, "duration": 0.4 },
             "push": { "particles_nb": 4 },
             "remove": { "particles_nb": 2 }
