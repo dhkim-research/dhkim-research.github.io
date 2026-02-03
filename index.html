@@ -17,6 +17,52 @@
 
 <body>
 
+  <nav class="navbar">
+    <div class="nav-wrap">
+      <a href="#" class="logo-container">
+        <img src="skypixel.png" alt="Logo" class="logo-img">
+      </a>
+
+      <div class="nav-desktop">
+        <ol>
+          <li><a href="#about"><span class="mono-num">01.</span> About</a></li>
+          <li><a href="#jobs"><span class="mono-num">02.</span> Experience</a></li>
+          <li><a href="#bento-projects"><span class="mono-num">03.</span> Work</a></li>
+          <li><a href="#contact"><span class="mono-num">04.</span> Contact</a></li>
+        </ol>
+        <a href="#" class="resume-btn">Resume</a>
+      </div>
+
+      <div class="hamburger" id="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu-overlay" id="mobile-menu">
+    <div class="mobile-nav-links">
+      <a href="#about" class="mobile-link" onclick="toggleMenu()">
+        <span class="mono-num">01.</span>
+        <span class="link-text">About</span>
+      </a>
+      <a href="#jobs" class="mobile-link" onclick="toggleMenu()">
+        <span class="mono-num">02.</span>
+        <span class="link-text">Experience</span>
+      </a>
+      <a href="#bento-projects" class="mobile-link" onclick="toggleMenu()">
+        <span class="mono-num">03.</span>
+        <span class="link-text">Work</span>
+      </a>
+      <a href="#contact" class="mobile-link" onclick="toggleMenu()">
+        <span class="mono-num">04.</span>
+        <span class="link-text">Contact</span>
+      </a>
+      <a href="#" class="resume-btn mobile-resume">Resume</a>
+    </div>
+  </div>
+
   <header class="hero">
     <div id="particles-js"></div>
 
@@ -235,7 +281,6 @@
     const highlight = document.querySelector('.job-highlight');
 
     function moveHighlight(activeTab) {
-      // Calculate height and top position for the sliding bar
       const height = activeTab.offsetHeight;
       const top = activeTab.offsetTop;
       highlight.style.top = `${top}px`;
@@ -244,51 +289,84 @@
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Remove active class from all
         tabs.forEach(t => t.classList.remove('active'));
         panels.forEach(p => p.classList.remove('active'));
 
-        // Add active to current
         tab.classList.add('active');
         const targetId = tab.getAttribute('data-id');
         document.getElementById(targetId).classList.add('active');
         
-        // Move the bar
         moveHighlight(tab);
       });
     });
 
-    // Initialize highlight position
     window.addEventListener('load', () => moveHighlight(document.querySelector('.job-tab.active')));
     window.addEventListener('resize', () => moveHighlight(document.querySelector('.job-tab.active')));
   </script>
 
   <script>
-    // 3. NES PIXEL PARTICLES
+    // 3. MENU TOGGLE LOGIC
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const body = document.body;
+
+    function toggleMenu() {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      // Prevent scrolling when menu is open
+      if(mobileMenu.classList.contains('active')) {
+        body.style.overflow = 'hidden';
+      } else {
+        body.style.overflow = 'auto';
+      }
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+  </script>
+
+  <script>
+    // 4. RAYTRAVERSE / UNIVERSE PARTICLES
     particlesJS('particles-js',
       {
         "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": ["#7C7C7C", "#0000FC", "#0000BC", "#4428BC", "#940084", "#A80020", "#A81000", "#881400", "#503000", "#007800", "#006800", "#005800", "#004058", "#000000", "#F83800", "#F0D0B0", "#E40058", "#58F898", "#00B800", "#3CBCFC"] },
-          "shape": { "type": "edge", "stroke": { "width": 0, "color": "#000000" } },
-          "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
-          "size": { "value": 8, "random": true, "anim": { "enable": false } },
-          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.2 },
-          "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
+          "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
+          
+          /* Colors: White/Grey/Teal mix for "Space" */
+          "color": { "value": ["#ffffff", "#83C5C9", "#a1a1a1"] },
+          
+          /* Shape: Circle (Stars/Photons) */
+          "shape": { "type": "circle" },
+          
+          /* Size: Small and random */
+          "size": { "value": 2.5, "random": true, "anim": { "enable": true, "speed": 3, "size_min": 0.1, "sync": false } },
+          
+          /* Opacity: Twinkling effect */
+          "opacity": { "value": 0.8, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
+          
+          /* NO CONNECTING LINES - Creates the "Open Universe" look */
+          "line_linked": { "enable": false },
+          
+          /* MOVEMENT: High speed, straight lines = RAYS */
+          "move": { 
+            "enable": true, 
+            "speed": 6, /* Fast like light rays */
+            "direction": "top-right", /* Rays travelling */
+            "random": false, 
+            "straight": true, /* Crucial for Raytraverse look */
+            "out_mode": "out", 
+            "bounce": false 
+          }
         },
         "interactivity": {
           "detect_on": "window", 
           "events": {
-            "onhover": { "enable": true, "mode": ["grab", "bubble"] },
+            "onhover": { "enable": true, "mode": "bubble" },
             "onclick": { "enable": true, "mode": "push" },
             "resize": true
           },
           "modes": {
-            "grab": { "distance": 250, "line_linked": { "opacity": 0.6 } },
-            "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 200, "duration": 0.4 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
+            "bubble": { "distance": 150, "size": 6, "duration": 0.3, "opacity": 1, "speed": 3 },
+            "push": { "particles_nb": 4 }
           }
         },
         "retina_detect": true
