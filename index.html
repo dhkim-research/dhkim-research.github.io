@@ -19,7 +19,7 @@
 
   <nav class="navbar">
     <div class="nav-wrap">
-      <a href="#" class="logo-container">
+      <a href="https://daylightlab.cloud" class="logo-container">
         <img src="skypixel.png" alt="Logo" class="logo-img">
       </a>
 
@@ -33,7 +33,7 @@
         <a href="#" class="resume-btn">Resume</a>
       </div>
 
-      <div class="hamburger" id="hamburger">
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
         <div class="line"></div>
         <div class="line"></div>
         <div class="line"></div>
@@ -42,6 +42,10 @@
   </nav>
 
   <div class="mobile-menu-overlay" id="mobile-menu">
+    <button class="menu-close-btn" onclick="toggleMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+
     <div class="mobile-nav-links">
       <a href="#about" class="mobile-link" onclick="toggleMenu()">
         <span class="mono-num">01.</span>
@@ -127,7 +131,6 @@
         </div>
 
         <div class="jobs-content">
-          
           <div id="job-eth" class="job-panel active" role="tabpanel">
             <h3>Postdoctoral Researcher <span class="at-symbol">@</span> <a href="#" target="_blank">ETH Zürich</a></h3>
             <p class="job-range">2025 – Present</p>
@@ -167,7 +170,6 @@
               <li>Focused on how temporal dynamics in modern architectural lighting environments influence occupants’ perception, emotion, and comfort.</li>
             </ul>
           </div>
-
         </div>
       </div>
     </div>
@@ -275,7 +277,7 @@
   </script>
 
   <script>
-    // 2. TABS LOGIC for Academic Employment
+    // 2. TABS LOGIC
     const tabs = document.querySelectorAll('.job-tab');
     const panels = document.querySelectorAll('.job-panel');
     const highlight = document.querySelector('.job-highlight');
@@ -291,11 +293,9 @@
       tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
         panels.forEach(p => p.classList.remove('active'));
-
         tab.classList.add('active');
         const targetId = tab.getAttribute('data-id');
         document.getElementById(targetId).classList.add('active');
-        
         moveHighlight(tab);
       });
     });
@@ -305,68 +305,58 @@
   </script>
 
   <script>
-    // 3. MENU TOGGLE LOGIC
+    // 3. MENU TOGGLE (Mobile)
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
     const body = document.body;
 
     function toggleMenu() {
-      hamburger.classList.toggle('active');
+      // Toggle active class
       mobileMenu.classList.toggle('active');
-      // Prevent scrolling when menu is open
+      
+      // Stop scroll when menu is open
       if(mobileMenu.classList.contains('active')) {
         body.style.overflow = 'hidden';
       } else {
         body.style.overflow = 'auto';
       }
     }
-
-    hamburger.addEventListener('click', toggleMenu);
   </script>
 
   <script>
-    // 4. RAYTRAVERSE / UNIVERSE PARTICLES
+    // 4. PARTICLES (Restored to Connecting Dots + Circles)
     particlesJS('particles-js',
       {
         "particles": {
-          "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
+          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
           
-          /* Colors: White/Grey/Teal mix for "Space" */
-          "color": { "value": ["#ffffff", "#83C5C9", "#a1a1a1"] },
+          /* Colors from your previous code */
+          "color": { "value": ["#7C7C7C", "#0000FC", "#0000BC", "#4428BC", "#940084", "#A80020", "#A81000", "#881400", "#503000", "#007800", "#006800", "#005800", "#004058", "#000000", "#F83800", "#F0D0B0", "#E40058", "#58F898", "#00B800", "#3CBCFC"] },
           
-          /* Shape: Circle (Stars/Photons) */
-          "shape": { "type": "circle" },
+          /* Shape: Circle (as requested) */
+          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+          "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
+          "size": { "value": 4.5, "random": true, "anim": { "enable": false } },
           
-          /* Size: Small and random */
-          "size": { "value": 2.5, "random": true, "anim": { "enable": true, "speed": 3, "size_min": 0.1, "sync": false } },
+          /* CONNECTING LINES RESTORED (Raytraverse logic removed) */
+          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.2 },
           
-          /* Opacity: Twinkling effect */
-          "opacity": { "value": 0.8, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
-          
-          /* NO CONNECTING LINES - Creates the "Open Universe" look */
-          "line_linked": { "enable": false },
-          
-          /* MOVEMENT: High speed, straight lines = RAYS */
-          "move": { 
-            "enable": true, 
-            "speed": 6, /* Fast like light rays */
-            "direction": "top-right", /* Rays travelling */
-            "random": false, 
-            "straight": true, /* Crucial for Raytraverse look */
-            "out_mode": "out", 
-            "bounce": false 
-          }
+          /* Standard Movement */
+          "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
         },
         "interactivity": {
           "detect_on": "window", 
           "events": {
-            "onhover": { "enable": true, "mode": "bubble" },
+            "onhover": { "enable": true, "mode": ["grab", "bubble"] },
             "onclick": { "enable": true, "mode": "push" },
             "resize": true
           },
           "modes": {
-            "bubble": { "distance": 150, "size": 6, "duration": 0.3, "opacity": 1, "speed": 3 },
-            "push": { "particles_nb": 4 }
+            "grab": { "distance": 250, "line_linked": { "opacity": 0.6 } },
+            "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
+            "repulse": { "distance": 200, "duration": 0.4 },
+            "push": { "particles_nb": 4 },
+            "remove": { "particles_nb": 2 }
           }
         },
         "retina_detect": true
