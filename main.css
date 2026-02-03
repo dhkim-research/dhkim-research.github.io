@@ -1,16 +1,16 @@
 /* ===== Base & Wrapper =============================================== */
 :root {
   /* THE 3-COLOR PALETTE */
-  --teal:       #83C5C9; /* Accent */
-  --text-main:  #2D3436; /* Headings (Soft Charcoal) */
-  --text-body:  #636E72; /* Body Text (Slate Grey) */
+  --teal:       #83C5C9;
+  --text-main:  #2D3436;
+  --text-body:  #636E72;
   
-  --bg-hero:    #f0f0f0;
+  --bg-hero:    #f0f0f0; /* Matches the intro background */
   --bg-page:    #ffffff;
   
   /* Layout Vars */
   --tab-width: 120px;
-  --nav-height: 80px; /* New variable for navbar height */
+  --nav-height: 90px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,29 +24,28 @@ body {
   -webkit-font-smoothing: antialiased; 
 }
 
-/* Shared wrapper */
 .wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
 
-/* ===== NAVIGATION BAR (NEW) ========================================= */
+/* ===== NAVIGATION BAR ========================================= */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.95); /* Slight transparency */
-  backdrop-filter: blur(10px); /* Glass effect */
+  background: var(--bg-hero); /* Matches Hero Background (Seamless) */
   z-index: 1000;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  /* Removed strong shadow to blend better */
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
 }
 
 .nav-wrap {
   width: 100%;
-  max-width: 1300px; /* Slightly wider than content wrap */
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -77,7 +76,7 @@ body {
 
 .nav-desktop ol {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -94,7 +93,7 @@ body {
 
 .nav-desktop .mono-num {
   color: var(--teal);
-  margin-right: 4px;
+  margin-right: 5px;
 }
 
 /* Resume Button */
@@ -102,8 +101,10 @@ body {
   font-family: 'JetBrains Mono', monospace;
   color: var(--teal) !important;
   border: 1px solid var(--teal);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.85rem;
   transition: all 0.2s;
 }
 .resume-btn:hover {
@@ -115,10 +116,10 @@ body {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 20px;
+  width: 32px;
+  height: 22px;
   cursor: pointer;
-  z-index: 2000; /* Above overlay */
+  z-index: 2000;
 }
 @media (max-width: 768px) {
   .hamburger { display: flex; }
@@ -129,13 +130,8 @@ body {
   height: 2px;
   background-color: var(--teal);
   transition: all 0.3s ease;
+  border-radius: 2px;
 }
-
-/* Hamburger Animation */
-.hamburger.active .line:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-.hamburger.active .line:nth-child(2) { opacity: 0; }
-.hamburger.active .line:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
-
 
 /* MOBILE MENU OVERLAY */
 .mobile-menu-overlay {
@@ -143,28 +139,41 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 75vw; /* Sidebar style */
-  max-width: 400px;
-  background: #ffffff;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff; /* Keeping overlay white for contrast */
   z-index: 1500;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: translateX(100%); /* Hidden by default */
+  transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
 }
 .mobile-menu-overlay.active { transform: translateX(0); }
+
+/* CLOSE BUTTON (X) */
+.menu-close-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--teal);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.menu-close-btn:hover { transform: rotate(90deg); }
 
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
   text-align: center;
 }
 
-/* The specific "01. / About" centered style */
+/* Centered Mobile Link Style */
 .mobile-link {
   display: flex;
   flex-direction: column;
@@ -175,18 +184,18 @@ body {
 .mobile-link .mono-num {
   color: var(--teal);
   font-size: 1rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   display: block;
 }
 .mobile-link .link-text {
   color: var(--text-main);
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
-.mobile-resume { margin-top: 2rem; }
+.mobile-resume { margin-top: 1rem; font-size: 1.1rem; padding: 1rem 2rem;}
 
 
-/* ===== Typography: Numbered Sections ==================== */
+/* ===== Typography ==================== */
 h1, h2 {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 700; 
@@ -194,7 +203,6 @@ h1, h2 {
   color: var(--text-main);
 }
 
-/* The "01." Numbering Style */
 .numbered-title {
   display: flex;
   align-items: center;
@@ -207,7 +215,7 @@ h1, h2 {
   content: "";
   display: block;
   position: relative;
-  width: 200px; /* The horizontal line */
+  width: 200px;
   height: 1px;
   background-color: #e0e0e0;
   margin-left: 20px;
@@ -218,9 +226,9 @@ h1, h2 {
 
 .mono-num {
   font-family: 'JetBrains Mono', monospace;
-  font-weight: 400; /* Not bold */
+  font-weight: 400;
   color: var(--teal);
-  font-size: 1.5rem; /* Smaller than the heading */
+  font-size: 1.5rem;
   margin-right: 10px;
 }
 
@@ -244,23 +252,33 @@ h3, h4 {
   position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
-  min-height: 100vh; /* Changed to 100vh for full screen feel */
+  min-height: 100vh; /* Full viewport height */
   z-index: 1;
 }
 
 #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
 #particles-js canvas { display: block; }
 
+/* Vertically Centering the Hero Content */
 .hero .wrap { 
-  /* Pushed down to accommodate fixed navbar and "Lower position" request */
-  padding-top: calc(var(--nav-height) + 4rem); 
-  padding-bottom: 6rem;
-  position: relative; z-index: 10; pointer-events: none; 
+  /* Using Flex to center completely */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  /* Removed top padding adjustment to let flexbox center it */
+  padding-top: 0; 
+  padding-bottom: 0;
+  position: relative; 
+  z-index: 10; 
+  pointer-events: none; 
 }
 .hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
 
 .hero-wrap {
-  display: grid; grid-template-columns: 1fr; gap: 2rem; height: 100%; align-content: center;
+  display: grid; grid-template-columns: 1fr; gap: 2rem; 
+  /* Center horizontally if needed, but grid handles layout */
+  align-content: center;
 }
 
 .hero-brain { justify-self: end; order: 0; }
@@ -307,10 +325,7 @@ h3, h4 {
   border-bottom: 1px solid transparent;
   transition: opacity 0.2s ease;
 }
-.hero-desc a:hover {
-  opacity: 0.8;
-  border-bottom: 1px solid var(--teal);
-}
+.hero-desc a:hover { opacity: 0.8; border-bottom: 1px solid var(--teal); }
 
 .hero-links a {
   font-family: inherit; display: inline-block; margin-right: 1.1rem;
@@ -318,7 +333,7 @@ h3, h4 {
 }
 .hero-links a:hover { text-decoration: underline; }
 
-/* ===== Layout Utilities (Tight Alignment) ========================== */
+/* ===== Layout Utilities ========================== */
 .grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 .col-text { max-width: 100%; }
 .col-aside { display: flex; justify-content: center; position: relative; }
