@@ -129,7 +129,7 @@ h3, h4 {
 
 /* Hero Typography */
 .intro-label {
-  font-size: 1.5rem; /* CHANGED: Increased to match "01." numbering */
+  font-size: 1.5rem; /* Matched to "01." numbering size */
   margin-bottom: 1.2rem;
   color: var(--teal);
 }
@@ -152,8 +152,22 @@ h3, h4 {
   max-width: 520px;
 }
 
+/* LINKS INSIDE HERO DESCRIPTION (Added to fix issue) */
+.hero-desc a {
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: opacity 0.2s ease;
+}
+.hero-desc a:hover {
+  opacity: 0.8;
+  border-bottom: 1px solid var(--teal);
+}
+
+/* Hero Buttons */
 .hero-links a {
-  font-family: inherit; /* Keep system font for links */
+  font-family: inherit;
   display: inline-block;
   margin-right: 1.1rem;
   font-weight: 600;
@@ -224,7 +238,7 @@ section p {
   border-bottom: 1px solid var(--teal); 
 }
 
-/* ===== Timeline & Photos (ORIGINAL RESPONSIVE LOGIC) == */
+/* ===== Timeline & Photos ======================== */
 .timeline {
   position: relative;
   z-index: 0;
