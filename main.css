@@ -17,7 +17,7 @@
 body {
   /* BODY: Atkinson Hyperlegible */
   font-family: 'Atkinson Hyperlegible', sans-serif;
-  color: var(--text-body); /* Updated to Slate Grey */
+  color: var(--text-body);
   line-height: 1.7;
   background: var(--bg-page);
   -webkit-font-smoothing: antialiased; 
@@ -31,7 +31,7 @@ h1, h2 {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 700; 
   letter-spacing: -0.02em; 
-  color: var(--text-main); /* Updated to Soft Charcoal */
+  color: var(--text-main);
 }
 
 /* The "01." Numbering Style */
@@ -127,9 +127,9 @@ h3, h4 {
   .hero-copy { grid-column: 1; grid-row: 1; }
 }
 
-/* Hero Typography (New Style) */
+/* Hero Typography */
 .intro-label {
-  font-size: 1rem;
+  font-size: 1.5rem; /* CHANGED: Increased to match "01." numbering */
   margin-bottom: 1.2rem;
   color: var(--teal);
 }
@@ -224,7 +224,7 @@ section p {
   border-bottom: 1px solid var(--teal); 
 }
 
-/* ===== Timeline & Photos (ORIGINAL RESPONSIVE LOGIC RESTORED) == */
+/* ===== Timeline & Photos (ORIGINAL RESPONSIVE LOGIC) == */
 .timeline {
   position: relative;
   z-index: 0;
@@ -442,7 +442,7 @@ section p {
 }
 
 
-/* Outreach Specifics (KEPT from original just in case you add it back) */
+/* Outreach Specifics */
 .outreach ul { margin-top: .35rem; margin-left: 1.2rem; }
 .outreach li { margin-bottom: .55rem; }
 .email-line { margin-top: 1.2rem; font-weight: 700; }
