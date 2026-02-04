@@ -5,7 +5,7 @@
   --text-main:  #2D3436;
   --text-body:  #636E72;
   
-  --bg-hero:    #f0f0f0; /* Matches the intro background */
+  --bg-hero:    #f0f0f0;
   --bg-page:    #ffffff;
   
   /* Layout Vars */
@@ -16,7 +16,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  /* BODY: Atkinson Hyperlegible */
   font-family: 'Atkinson Hyperlegible', sans-serif;
   color: var(--text-body);
   line-height: 1.7;
@@ -33,11 +32,10 @@ body {
   left: 0;
   width: 100%;
   height: var(--nav-height);
-  background: var(--bg-hero); /* Matches Hero Background (Seamless) */
+  background: var(--bg-hero); /* Matches Intro BG */
   z-index: 1000;
   display: flex;
   align-items: center;
-  /* Removed strong shadow to blend better */
   box-shadow: 0 1px 0 rgba(0,0,0,0.02);
 }
 
@@ -141,7 +139,7 @@ body {
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  background: #ffffff; /* Keeping overlay white for contrast */
+  background: #ffffff;
   z-index: 1500;
   display: flex;
   flex-direction: column;
@@ -173,7 +171,6 @@ body {
   text-align: center;
 }
 
-/* Centered Mobile Link Style */
 .mobile-link {
   display: flex;
   flex-direction: column;
@@ -252,21 +249,19 @@ h3, h4 {
   position: relative; 
   background: var(--bg-hero);
   overflow: hidden;
-  min-height: 100vh; /* Full viewport height */
+  min-height: 100vh; 
   z-index: 1;
 }
 
 #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
 #particles-js canvas { display: block; }
 
-/* Vertically Centering the Hero Content */
 .hero .wrap { 
-  /* Using Flex to center completely */
+  /* Left Alignment and Center Vertical Positioning */
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
-  /* Removed top padding adjustment to let flexbox center it */
   padding-top: 0; 
   padding-bottom: 0;
   position: relative; 
@@ -275,9 +270,11 @@ h3, h4 {
 }
 .hero-wrap a, .hero-wrap button, .hero-wrap input { pointer-events: auto; }
 
+/* Grid adjusted to push content LEFT */
 .hero-wrap {
-  display: grid; grid-template-columns: 1fr; gap: 2rem; 
-  /* Center horizontally if needed, but grid handles layout */
+  display: grid; 
+  grid-template-columns: 1fr; /* Takes full width available */
+  gap: 2rem; 
   align-content: center;
 }
 
@@ -317,7 +314,6 @@ h3, h4 {
   max-width: 520px;
 }
 
-/* LINKS INSIDE HERO DESCRIPTION */
 .hero-desc a {
   color: var(--teal);
   text-decoration: none;
@@ -358,7 +354,7 @@ section p { color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; fo
 }
 .col-text a:hover { opacity: 0.8; border-bottom: 1px solid var(--teal); }
 
-/* ===== Timeline & Photos ======================== */
+/* ===== Timeline & Photos (Adjusted for alignment) ======================== */
 .timeline { position: relative; z-index: 0; width: 100%; }
 .photo {
   width: 200px; height: 200px; border-radius: 50%;
@@ -369,7 +365,10 @@ section p { color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; fo
 .photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
 @media (min-width: 980px) {
-  .timeline { display: flex; flex-direction: column; align-items: center; gap: 2.6rem; margin-top: 8.5rem; }
+  .timeline { display: flex; flex-direction: column; align-items: center; gap: 2.6rem; 
+    /* Changed margin-top to 0 to align with top of text */
+    margin-top: 0; 
+  }
   .timeline .photo:not(:last-child)::before {
     content: ""; position: absolute; left: 50%; transform: translateX(-50%);
     top: calc(100% + 5px); width: 3px; height: calc(2.6rem - 10px);
@@ -436,7 +435,6 @@ section p { color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; fo
 .job-list { list-style: none; padding: 0; margin: 0; }
 .job-list li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 1rem; color: var(--text-body); }
 .job-list li::before { content: "▹"; position: absolute; left: 0; color: var(--teal); font-size: 1.2rem; line-height: 1.2rem; }
-
 
 /* ===== Footer ======================================================= */
 footer { background: #fff; border-top: 1px solid #e0e0e0; }
