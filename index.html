@@ -292,18 +292,18 @@
   <section id="projects">
     <div class="sec" data-scene="room:emotion">
       <div class="panel">
-        <figure class="plate"><img src="img/emotion.jpg" alt="The same room under three lamp moods" loading="lazy" decoding="async"><figcaption data-en="One room, three moods — warm, cool and dim lamp scenes, rendered for this site." data-ja="ひとつの部屋、三つの気分 — 暖かい・涼しい・薄暗い照明シーン（本サイト用のレンダリング）。">One room, three moods — warm, cool and dim lamp scenes, rendered for this site.</figcaption></figure>
+        <figure class="plate"><img src="img/emotion.jpg" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
         <div class="kick">Project 01 · 2013–2018 · UCL</div>
         <h2>Light &amp; Emotion</h2>
-        <p class="lede" data-en="How does light make a room feel? My doctoral work traced a psychological pathway from lighting quality to emotion and well-being — across cultures (UK and Korea), offices, cafés and London’s night streets." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、照明の質から感情とウェルビーイングへ至る心理的経路を、文化（英国と韓国）、オフィス、カフェ、ロンドンの夜道にわたって辿りました。">How does light make a room feel? My doctoral work traced a psychological pathway from lighting quality to emotion and well-being — across cultures (UK and Korea), offices, cafés and London’s night streets.</p>
+        <p class="lede" data-en="How does light make a room feel? My doctoral work at UCL proposed that lighting should be designed for emotional state — affect, on the circumplex of pleasantness and activation — not only for the type of space. With lighting designers, I built lighting scenes in an office-like room and measured how people felt in them." data-ja="光は部屋の感じ方をどう変えるのか。UCLでの博士研究では、空間の種類だけでなく感情状態（快—不快と覚醒—沈静の円環モデル）に基づいて照明を設計することを提案しました。照明デザイナーとともにオフィス空間で照明シーンをつくり、人がどう感じるかを測りました。">How does light make a room feel? My doctoral work at UCL proposed that lighting should be designed for emotional state — affect, on the circumplex of pleasantness and activation — not only for the type of space. With lighting designers, I built lighting scenes in an office-like room and measured how people felt in them.</p>
         <div class="live"><span class="dot"></span><span id="moodv">—</span></div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>UCL Research Fellowship · Korea Engineering Industry Scholarship</dd><dt data-en="Output" data-ja="成果">Output</dt><dd data-en="PhD dissertation ‘Light and emotion’ (2018) and six papers" data-ja="博士論文『Light and emotion』（2018）ほか論文6編">PhD dissertation ‘Light and emotion’ (2018) and six papers</dd></dl>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>UCL Research Fellowship · Korea Engineering Industry Scholarship</dd><dt data-en="Output" data-ja="成果">Output</dt><dd class="lk"><a href="https://discovery.ucl.ac.uk/id/eprint/10042464/" target="_blank" rel="noopener">PhD dissertation, UCL (2018) ↗</a><br>Kim &amp; Mansfield, <i>Building and Environment</i> (2021)<br>Kim &amp; Mansfield, CIE Midterm Meeting (2017)</dd></dl>
         <button class="btn" type="button" data-sky="emotion" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
       </div>
     </div>
     <div class="sec" data-scene="room:hidyn">
       <div class="panel">
-        <figure class="plate"><img src="img/hidyn.jpg" alt="A fisheye HDR capture of the sky: false-colour luminance on the left, the same sky on the right" loading="lazy" decoding="async"><figcaption data-en="A calibrated HDR luminance capture of the sky — measured luminance as false colour (left), the same sky as seen (right)." data-ja="校正済みHDRカメラで撮影した空 — 左は輝度の疑似カラー（測った光）、右は見たままの空（感じた光）。">A calibrated HDR luminance capture of the sky — measured luminance as false colour (left), the same sky as seen (right).</figcaption></figure>
+        <figure class="plate"><img src="img/hidyn.jpg" alt="Two fisheye HDR captures: sun glare in an office, and street lights at night" loading="lazy" decoding="async"><figcaption data-en="Fisheye HDR captures from the HiDyn measurement campaigns — daylight glare in an office and obtrusive light at night." data-ja="HiDyn測定キャンペーンの魚眼HDR画像 — オフィスの昼光グレアと夜間の障害光。">Fisheye HDR captures from the HiDyn measurement campaigns — daylight glare in an office and obtrusive light at night.</figcaption></figure>
         <div class="kick">Project 02 · 2022–2025 · EURAMET</div>
         <h2>HiDyn</h2>
         <p class="lede" data-en="Making luminance cameras agree. A European metrology project supporting the standardisation of HDR luminance-distribution measurements for glare and obtrusive light — under EN 17037, EN 12464-1 and EN 13201-2." data-ja="輝度カメラの測定値をそろえる。グレアと障害光の評価に用いるHDR輝度分布測定の標準化を支える欧州計量プロジェクト（EN 17037、EN 12464-1、EN 13201-2）。">Making luminance cameras agree. A European metrology project supporting the standardisation of HDR luminance-distribution measurements for glare and obtrusive light — under EN 17037, EN 12464-1 and EN 13201-2.</p>
@@ -563,7 +563,7 @@ const pcard = $('pcard');
 let filter = null, skyOn = false;
 const bold = (a) => a.replace(/Kim, D\.H\./g, '<b>Kim, D.H.</b>');
 const scholar = (t) => 'https://scholar.google.com/scholar?q=' + encodeURIComponent('"' + t + '"');
-const href = (p) => p.doi ? 'https://doi.org/' + p.doi : scholar(p.t);
+const href = (p) => p.url || (p.doi ? 'https://doi.org/' + p.doi : scholar(p.t));
 const KIND = { J: ['Journal', '論文誌'], C: ['Conference', '国際会議'], R: ['Report', '報告書'], T: ['Thesis', '学位論文'] };
 const STATUS = { review: ['Under review', '査読中'], prep: ['In preparation', '準備中'] };
 const L = (pair) => pair[lang === 'ja' ? 1 : 0];

@@ -9,7 +9,7 @@ export const THEMES = {
 export const PUBS = [
   // theses
   { y: 2012, k: 'T', role: 'lead', th: 'emotion', t: 'Perceived lighting quality: a critique of the appraisal path', v: 'MSc thesis, University College London', a: 'Kim, D.H.' },
-  { y: 2018, k: 'T', role: 'lead', th: 'emotion', t: 'Light and emotion: exploring human affect in lighting', v: 'PhD dissertation, University College London', a: 'Kim, D.H.' },
+  { y: 2018, k: 'T', role: 'lead', th: 'emotion', t: 'Light and emotion: exploring human affect in lighting', v: 'PhD dissertation, University College London', a: 'Kim, D.H.', url: 'https://discovery.ucl.ac.uk/id/eprint/10042464/' },
   // journals
   { y: 2016, k: 'J', role: 'lead', th: 'emotion', sel: true, t: 'A cross-cultural study on perceived lighting quality and occupants’ well-being between UK and South Korea', v: 'Energy and Buildings 119', a: 'Kim, D.H., Mansfield, K.P.' },
   { y: 2017, k: 'J', role: 'lead', th: 'daylight', t: 'Revisiting prediction tools for daylight adequacy and its potential improvement', v: 'Int. J. Korean Inst. Ecological Architecture and Environment 17', a: 'Kim, D.H.' },
