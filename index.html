@@ -512,7 +512,7 @@ const STATUS = { review: ['Under review', '査読中'], prep: ['In preparation',
 const L = (pair) => pair[lang === 'ja' ? 1 : 0];
 function pubHTML(p) {
   const kind = L(KIND[p.k]) + (p.status ? ' · ' + L(STATUS[p.status]) : '');
-  return `<div class="k">${p.y} · ${kind} · ${L([THEMES[p.th].en, THEMES[p.th].ja])}</div><h4>${p.t}</h4><div class="v">${p.v}</div>${p.a ? `<div class="a">${bold(p.a)}</div>` : ''}${p.status ? '' : `<a href="${scholar(p.t)}" target="_blank" rel="noopener">${lang === 'ja' ? 'Google Scholar で探す ↗' : 'Find on Google Scholar ↗'}</a>`}`;
+  return `<div class="k">${p.y} · ${kind} · ${L([THEMES[p.th].en, THEMES[p.th].ja])}</div><h4>${p.t}</h4><div class="v">${p.v}</div>${p.a ? `<div class="a">${bold(p.a)}</div>` : ''}${p.status ? '' : p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI ${p.doi} ↗</a>` : `<a href="${scholar(p.t)}" target="_blank" rel="noopener">${lang === 'ja' ? 'Google Scholar で探す ↗' : 'Find on Google Scholar ↗'}</a>`}`;
 }
 function onPick(s, x, y, pinned) {
   if (!s) { pcard.style.display = 'none'; return; }
