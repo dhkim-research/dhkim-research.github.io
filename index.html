@@ -76,6 +76,11 @@
   .panel p { margin: 12px 0 0; max-width: 60ch; }
   .panel .lede { font: 300 17px/1.5 "IBM Plex Sans", sans-serif; }
   [lang=ja] .panel .lede { font: 300 17px/1.7 "IBM Plex Sans JP", sans-serif; }
+  .plate { margin: -24px -26px 18px; background: #121416; }
+  .plate img { display: block; width: 100%; height: auto; max-width: 100%; }
+  .plate figcaption { padding: 7px 26px 8px; font: 400 11px/1.45 "IBM Plex Mono", monospace; color: rgba(241,239,234,.78); background: #121416; }
+  #projects .panel { max-width: 560px; }
+  .meta dd.lk a { text-decoration: none; border-bottom: 1px solid var(--rule); }
   .meta { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 14px; font-size: 13px; }
   .meta dt { font: 500 10.5px/1.9 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .meta dd { margin: 0; }
@@ -205,6 +210,8 @@
     .menu { overflow-x: auto; font-size: 10px; } .menu a { padding: 7px 7px; }
     .sec { padding: 150px 12px 40px; justify-content: flex-end; }
     .panel { max-width: none; padding: 18px 18px 20px; }
+    .plate { margin: -18px -18px 14px; } .plate figcaption { padding: 6px 18px 7px; }
+    #projects .panel { max-width: none; }
     .hero { padding: 0 0 0; } .hero .note { margin: 0 12px 10px; }
     .strip { grid-template-columns: auto repeat(6, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom, 0px); }
     .strip .enter { grid-column: 1 / -1; justify-content: center; border-left: 0; border-top: 1px solid var(--rule); }
@@ -285,6 +292,7 @@
   <section id="projects">
     <div class="sec" data-scene="room:emotion">
       <div class="panel">
+        <figure class="plate"><img src="img/emotion.jpg" alt="The same room under three lamp moods" loading="lazy" decoding="async"><figcaption data-en="One room, three moods — warm, cool and dim lamp scenes, rendered for this site." data-ja="ひとつの部屋、三つの気分 — 暖かい・涼しい・薄暗い照明シーン（本サイト用のレンダリング）。">One room, three moods — warm, cool and dim lamp scenes, rendered for this site.</figcaption></figure>
         <div class="kick">Project 01 · 2013–2018 · UCL</div>
         <h2>Light &amp; Emotion</h2>
         <p class="lede" data-en="How does light make a room feel? My doctoral work traced a psychological pathway from lighting quality to emotion and well-being — across cultures (UK and Korea), offices, cafés and London’s night streets." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、照明の質から感情とウェルビーイングへ至る心理的経路を、文化（英国と韓国）、オフィス、カフェ、ロンドンの夜道にわたって辿りました。">How does light make a room feel? My doctoral work traced a psychological pathway from lighting quality to emotion and well-being — across cultures (UK and Korea), offices, cafés and London’s night streets.</p>
@@ -295,6 +303,7 @@
     </div>
     <div class="sec" data-scene="room:hidyn">
       <div class="panel">
+        <figure class="plate"><img src="img/hidyn.jpg" alt="A fisheye HDR capture of the sky: false-colour luminance on the left, the same sky on the right" loading="lazy" decoding="async"><figcaption data-en="A calibrated HDR luminance capture of the sky — measured luminance as false colour (left), the same sky as seen (right)." data-ja="校正済みHDRカメラで撮影した空 — 左は輝度の疑似カラー（測った光）、右は見たままの空（感じた光）。">A calibrated HDR luminance capture of the sky — measured luminance as false colour (left), the same sky as seen (right).</figcaption></figure>
         <div class="kick">Project 02 · 2022–2025 · EURAMET</div>
         <h2>HiDyn</h2>
         <p class="lede" data-en="Making luminance cameras agree. A European metrology project supporting the standardisation of HDR luminance-distribution measurements for glare and obtrusive light — under EN 17037, EN 12464-1 and EN 13201-2." data-ja="輝度カメラの測定値をそろえる。グレアと障害光の評価に用いるHDR輝度分布測定の標準化を支える欧州計量プロジェクト（EN 17037、EN 12464-1、EN 13201-2）。">Making luminance cameras agree. A European metrology project supporting the standardisation of HDR luminance-distribution measurements for glare and obtrusive light — under EN 17037, EN 12464-1 and EN 13201-2.</p>
@@ -305,6 +314,7 @@
     </div>
     <div class="sec" data-scene="room:comfort">
       <div class="panel">
+        <figure class="plate"><img src="img/comfort.jpg" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
         <div class="kick">Project 03 · 2021–2024 · EPFL</div>
         <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
         <p class="lede" data-en="Do beautiful sunlight patterns make glare easier to bear? In a real west-facing room, thirty people worked with the sun in view behind three façade patterns. Glare was forgiven when the scene felt pleasant — not because of the pattern itself — and today’s glare metrics overestimated discomfort in very bright scenes." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。西向きの実験室で30人が三種類のファサード模様越しに太陽を視野に入れて作業しました。まぶしさが許されたのは模様そのものではなく、その場が心地よく感じられた時でした。また現行のグレア指標は非常に明るい場面で不快感を過大に予測していました。">Do beautiful sunlight patterns make glare easier to bear? In a real west-facing room, thirty people worked with the sun in view behind three façade patterns. Glare was forgiven when the scene felt pleasant — not because of the pattern itself — and today’s glare metrics overestimated discomfort in very bright scenes.</p>
@@ -314,14 +324,15 @@
     </div>
     <div class="sec" data-scene="room:solskin">
       <div class="panel">
-        <div class="kick">Project 04 · 2025–2026 · ETH Zürich</div>
-        <h2>Solskin</h2>
-        <p class="lede" data-en="An adaptive solar façade that learns. Dynamic façades are usually steered by room sensors and predicted comfort. Solskin moves toward person-centric sensing and learned, AI-based comfort — closing the gap between predicted and perceived." data-ja="学習するアダプティブ・ソーラーファサード。動的ファサードは通常、室内センサーと「予測された快適性」で制御されます。Solskinは人を中心にしたセンシングとAIによる学習型の快適性へ向かい、予測と知覚のあいだの隙間を埋めます。">An adaptive solar façade that learns. Dynamic façades are usually steered by room sensors and predicted comfort. Solskin moves toward person-centric sensing and learned, AI-based comfort — closing the gap between predicted and perceived.</p>
+        <figure class="plate"><img src="img/solskin.jpg" alt="The Solskin façade of diamond solar panels seen from inside, with measurement instruments" loading="lazy" decoding="async"><figcaption data-en="The Solskin façade in the Zero Carbon Building Systems Lab, ETH Zürich, with the measurement set-up." data-ja="ETHチューリッヒ ZCBSラボのSolskinファサードと測定セットアップ。">The Solskin façade in the Zero Carbon Building Systems Lab, ETH Zürich, with the measurement set-up.</figcaption></figure>
+        <div class="kick">Project 04 · 2025–2026 · ETH Zürich × Solskin</div>
+        <h2>Solskin AI</h2>
+        <p class="lede" data-en="Teaching an adaptive solar façade to learn. Solskin AI brings together ETH Zürich and Zurich Soft Robotics, the makers of the Solskin façade, in an Innosuisse project. Instead of steering by room sensors and predicted comfort, the façade learns from the people inside — person-centric sensing and AI-based comfort, closing the gap between predicted and perceived." data-ja="学習するアダプティブ・ソーラーファサード。Solskin AIは、ETHチューリッヒとSolskinを開発するZurich Soft RoboticsによるInnosuisseプロジェクトです。室内センサーと「予測された快適性」で動かすのではなく、ファサードが室内の人から学びます——人を中心にしたセンシングとAIによる快適性で、予測と知覚の隙間を埋めます。">Teaching an adaptive solar façade to learn. Solskin AI brings together ETH Zürich and Zurich Soft Robotics, the makers of the Solskin façade, in an Innosuisse project. Instead of steering by room sensors and predicted comfort, the façade learns from the people inside — person-centric sensing and AI-based comfort, closing the gap between predicted and perceived.</p>
         <div class="seg" role="group" aria-label="Façade control">
           <button type="button" data-ai="0" aria-pressed="false">Rule-based</button><button type="button" data-ai="1" aria-pressed="false">Learned (AI)</button><button type="button" data-ai="auto" aria-pressed="true">Auto</button>
         </div>
         <div class="flow"><span>sensor</span><i>→</i><span>model</span><i>→</i><span>façade</span><i>·</i><span id="aiv">learned</span></div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The animation is illustrative, not measured data." data-ja="アニメーションは説明用の図示であり、実測データではありません。">The animation is illustrative, not measured data.</dd></dl>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Partners" data-ja="パートナー">Partners</dt><dd class="lk"><a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a> · <a href="https://www.solskin.swiss/en" target="_blank" rel="noopener">Solskin (Zurich Soft Robotics) ↗</a></dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The animation is illustrative, not measured data." data-ja="アニメーションは説明用の図示であり、実測データではありません。">The animation is illustrative, not measured data.</dd></dl>
       </div>
     </div>
     <div class="sec" data-scene="room:about">

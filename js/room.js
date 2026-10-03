@@ -129,18 +129,26 @@ export function createRoom(baseMats) {
 
   /* Solskin: an adaptive solar façade just outside the glass — panels that turn */
   const modules = [], MOD = new THREE.Group();
-  const panelGeo = new THREE.BoxGeometry(0.46, 0.36, 0.012);
-  const pvMat = new THREE.MeshToonMaterial({ color: 0x2a4468, gradientMap: mats.wall.gradientMap });
-  const frameMat = new THREE.MeshToonMaterial({ color: 0xdedad2 });
-  for (let r = 0; r < 6; r++) for (let c = 0; c < 9; c++) {
-    const x = -WX + 0.27 + c * 0.535, y = WY0 + 0.21 + r * 0.4;
+  // diamond panels on a diagonal cable net, as on the real Solskin façade
+  const P0 = 0.34, DX = 0.6, DY = 0.36;
+  const panelGeo = new THREE.BoxGeometry(P0, P0, 0.01);
+  const pvMat = new THREE.MeshToonMaterial({ color: 0xc9ccd0, gradientMap: mats.wall.gradientMap });
+  const backMat = new THREE.MeshToonMaterial({ color: 0x2b2e33, gradientMap: mats.wall.gradientMap });
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 9; c++) {
+    const x = -WX + 0.15 + c * DX + (r % 2 ? DX / 2 : 0), y = WY0 + 0.05 + r * DY;
+    if (x > WX - 0.05) continue;
     const p = new THREE.Group(); p.position.set(x, y, WZ - 0.75);
-    const pv = new THREE.Mesh(panelGeo, pvMat); pv.castShadow = true; p.add(pv);
-    for (const [w, h, x2, y2] of [[0.48, 0.012, 0, 0.184], [0.48, 0.012, 0, -0.184], [0.012, 0.38, 0.234, 0], [0.012, 0.38, -0.234, 0]]) { const e = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.016), frameMat); e.position.set(x2, y2, 0); p.add(e); }
+    const d = new THREE.Group(); d.rotation.z = Math.PI / 4; p.add(d);
+    const pv = new THREE.Mesh(panelGeo, pvMat); pv.castShadow = true; d.add(pv);
+    const act = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.16, 8), backMat); act.rotation.x = Math.PI / 2; act.position.z = 0.08; p.add(act);
     MOD.add(p); modules.push({ p, x, y, a: 0, b: 0 });
   }
-  // the cable net
-  for (let c = 0; c <= 9; c++) { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, WY1 - WY0 + 0.4), mats.dark); m.position.set(-WX + c * 0.535, (WY0 + WY1) / 2, WZ - 0.78); MOD.add(m); }
+  // the diagonal cable net
+  const span = (WY1 - WY0) * 1.6;
+  for (let k = -8; k <= 8; k++) for (const sgn of [1, -1]) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, span), mats.dark);
+    m.position.set(k * DX / 2 * 1.0, (WY0 + WY1) / 2, WZ - 0.78); m.rotation.z = sgn * Math.atan2(DX / 2, DY); MOD.add(m);
+  }
   scene.add(MOD);
 
   /* state & blending */
