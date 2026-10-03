@@ -1,5 +1,5 @@
 // sky.js — Publication Sky: a fisheye luminance map of the sky, with every paper as a light source
-import { PUBS, THEMES } from './pubs.js';
+import { PUBS, THEMES } from './pubs.js?v=d0ccaa0d';
 
 const Y0 = 2011, Y1 = 2026;
 const TAU = Math.PI * 2;

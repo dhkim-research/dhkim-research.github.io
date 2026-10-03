@@ -1,6 +1,6 @@
 // cities.js — six streets, each walked away from the sun so the family's shadows fall ahead
 import * as THREE from 'three';
-import { Bucket, rnd, R, pick, box, cyl, geom, prism, mat4, building, canalHouse, tree, lamp, bike, win, BOX, CYL, CYL6, SPH, SPH2, CONE4, CONE8 } from './kit.js';
+import { Bucket, rnd, R, pick, box, cyl, geom, prism, mat4, building, canalHouse, tree, lamp, bike, win, BOX, CYL, CYL6, SPH, SPH2, CONE4, CONE8 } from './kit.js?v=d1954a06';
 
 const I = new THREE.Matrix4();
 

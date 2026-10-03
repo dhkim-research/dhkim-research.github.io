@@ -1,7 +1,7 @@
 // room.js — one daylit room, five lights: About · Light & Emotion · HiDyn · Visual Comfort · Solskin
 import * as THREE from 'three';
 import { Sky } from 'three/addons/objects/Sky.js';
-import { Bucket, box, cyl, geom, mat4, tree, rnd, R, pick, SPH, SPH2, CONE8, LEAF } from './kit.js';
+import { Bucket, box, cyl, geom, mat4, tree, rnd, R, pick, SPH, SPH2, CONE8, LEAF } from './kit.js?v=d1954a06';
 
 const I = new THREE.Matrix4();
 const WX = 2.4, WY0 = 0.45, WY1 = 2.85, WZ = -4;          // the window opening (wall plane z = -4, outside is -z)
