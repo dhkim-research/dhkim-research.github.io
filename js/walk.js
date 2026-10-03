@@ -8,7 +8,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js?v=d1954a06';
 import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=19e93967';
-import { createRoom, ROOM_STATES } from './room.js?v=ffbe156d';
+import { createRoom, ROOM_STATES } from './room.js?v=3a3811cd';
 
 export { CITIES, ROOM_STATES };
 
@@ -388,7 +388,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
     setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },
-    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, room,
+    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, setWeights(w) { room.setWeights(w); }, room,
     get mode() { return mode; },
     get city() { return cur; }, get sunAlt() { return CITIES[cur].sun.alt; }
   };

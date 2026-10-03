@@ -155,6 +155,7 @@ export function createRoom(baseMats) {
   const P = { alt: 31, az: 24, sunI: 5, hemi: 0.95, expo: 1.5, fov: 50, lamps: 0, tripod: 0, person: 0, modules: 0, bracket: 0, seated: 0 };
   const camPos = new THREE.Vector3(2.25, 1.5, 3.35), camTgt = new THREE.Vector3(-0.35, 1.25, -4);
   let target = ROOM_STATES.about, name = 'about', since = 0, ai = 1, aiAuto = true;
+  const Wt = [0.2, 0.3, 0.5];
   const L = new THREE.Vector3();
   const tmp = new THREE.Vector3(), tc = new THREE.Color();
 
@@ -199,23 +200,25 @@ export function createRoom(baseMats) {
     // HDR bracketing (HiDyn): the felt side steps through exposures
     state.ev = P.bracket > 0.5 ? [-4, -2, 0, 2][Math.floor(since / 0.9) % 4] : 0;
 
-    // Solskin: rule-based vs learned control
-    if (aiAuto && name === 'solskin') ai = Math.floor(since / 6) % 2;   // 0 rule, 1 learned — alternates
+    // Solskin AI: every panel's tilt and turn balances three objectives — electricity, shading, view —
+    // with weights W = [e, s, v] that the page sets (from the visitor's triangle, or a learned occupant model)
     if (name === 'solskin' || P.modules > 0.02) {
-      // where the eye→sun ray pierces the façade plane
-      const s = (WZ - 0.75 - EYE.z) / L.z, hx = EYE.x + L.x * s, hy = EYE.y + L.y * s;
-      const ruleOpen = P.alt > 20 ? 0.3 : 0.75;               // "if sun > X, close" — one angle for every panel
+      const sp = (WZ - 0.75 - EYE.z) / L.z, hx = EYE.x + L.x * sp, hy = EYE.y + L.y * sp;   // eye→sun ray on the façade
+      const altR = Math.asin(Math.max(0, L.y)), azR = Math.atan2(L.x, -L.z);
+      const face = THREE.MathUtils.clamp((Math.PI / 2 - altR) / 1.45, 0, 1);   // openness that turns a panel to face the sun
+      const [we, ws, wv] = Wt;
+      let sumE = 0, sumV = 0, sumS = 0, nS = 0;
       for (const m of modules) {
-        let o, bb;
-        if (!ai) { o = ruleOpen; bb = 0; }
-        else {
-          const d = Math.hypot(m.x - hx, m.y - hy);
-          const shield = 1 - THREE.MathUtils.smoothstep(d, 0.3, 0.9);   // only panels on the eye→sun line close
-          o = THREE.MathUtils.lerp(0.95, 0.04, shield); bb = shield * 0.3 + Math.sin(t * 0.6 + m.x * 2) * 0.03;
-        }
-        m.a += (o - m.a) * Math.min(1, dt * 3); m.b += (bb - m.b) * Math.min(1, dt * 3);
+        const d = Math.hypot(m.x - hx, m.y - hy), onLine = 1 - THREE.MathUtils.smoothstep(d, 0.3, 0.95);
+        const oE = face * 0.35, oS = onLine ? THREE.MathUtils.lerp(face * 0.6, 0.02, onLine) : face * 0.6, oV = 0.95;
+        const o = we * oE + ws * oS + wv * oV;
+        const bb = (we + ws * 0.6) * -azR * 0.8 + Math.sin(t * 0.5 + m.x * 2) * 0.02;
+        m.a += (o - m.a) * Math.min(1, dt * 2.5); m.b += (bb - m.b) * Math.min(1, dt * 2.5);
         m.p.rotation.set(-m.a * 1.45, m.b, 0);
+        sumE += 1 - Math.abs(m.a - face * 0.35) * 1.4; sumV += m.a; if (onLine > 0.5) { sumS += 1 - m.a; nS++; }
       }
+      const n = modules.length;
+      state.score = [THREE.MathUtils.clamp(sumE / n, 0, 1), nS ? THREE.MathUtils.clamp(sumS / nS, 0, 1) : 0, THREE.MathUtils.clamp(sumV / n, 0, 1)];
     }
     state.ai = ai;
 
@@ -227,11 +230,13 @@ export function createRoom(baseMats) {
     sky.position.copy(camera.position);
   }
 
-  const state = { mood: '', ev: 0, ai: 1 };
+  const state = { mood: '', ev: 0, ai: 1, score: [0, 0, 0] };
   return {
     scene, camera, sun, sky, state, update, setState,
     get name() { return name; }, get P() { return P; }, get L() { return L; },
     setAI(v) { aiAuto = v === 'auto'; if (!aiAuto) ai = v ? 1 : 0; since = 0; },
+    setWeights(w) { const z = w[0] + w[1] + w[2] || 1; Wt[0] = w[0] / z; Wt[1] = w[1] / z; Wt[2] = w[2] / z; },
+    get weights() { return Wt.slice(); },
     look() { const S = ROOM_STATES[name]; return { look: S.look, deck: S.deck, expo: P.expo }; },
     resize(aspect) { camera.aspect = aspect; camera.updateProjectionMatrix(); }
   };

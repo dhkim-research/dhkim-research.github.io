@@ -80,6 +80,26 @@
   .plate img { display: block; width: 100%; height: auto; max-width: 100%; }
   .plate figcaption { padding: 7px 26px 8px; font: 400 11px/1.45 "IBM Plex Mono", monospace; color: rgba(241,239,234,.78); background: #121416; }
   #projects .panel { max-width: 560px; }
+  .cmpbox { position: relative; overflow: hidden; line-height: 0; cursor: ew-resize; }
+  .cmpbox img { display: block; width: 100%; height: auto; }
+  .cmpbox img.top { position: absolute; inset: 0; height: 100%; object-fit: cover; clip-path: inset(0 0 0 var(--x)); }
+  .cmpbox .bar { position: absolute; top: 0; bottom: 0; left: var(--x); width: 0; pointer-events: none; }
+  .cmpbox .bar::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: #fff8e8; }
+  .cmpbox .bar i { position: absolute; top: 50%; left: -15px; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); }
+  .cmpbox .cl { position: absolute; top: 10px; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; background: rgba(21,21,21,.6); color: #f1efea; padding: 3px 7px; line-height: 1.4; }
+  .cmpbox .cl.l { left: 10px; } .cmpbox .cl.r { right: 10px; }
+  .cmpbox input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  .decide { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; align-items: center; margin-top: 4px; }
+  #tri { width: 100%; height: auto; touch-action: none; user-select: none; }
+  #tri .dot { cursor: grab; }
+  .dside .seg { margin-top: 0; }
+  .wts { display: grid; grid-template-columns: 86px minmax(0, 1fr) 34px; gap: 5px 8px; align-items: center; margin: 12px 0 0; font-size: 11px; }
+  .wts dt { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .wts dd { margin: 0; height: 6px; background: var(--rule); position: relative; }
+  .wts dd i { position: absolute; inset: 0 auto 0 0; background: var(--c); }
+  .wts span { text-align: right; font-variant-numeric: tabular-nums; }
+  .envr { margin-top: 10px; font-size: 11px; color: var(--muted); }
+  .panel p.small { font-size: 13.5px; color: var(--muted); }
   .meta dd.lk a { text-decoration: none; border-bottom: 1px solid var(--rule); }
   .meta { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 14px; font-size: 13px; }
   .meta dt { font: 500 10.5px/1.9 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -212,6 +232,8 @@
     .panel { max-width: none; padding: 18px 18px 20px; }
     .plate { margin: -18px -18px 14px; } .plate figcaption { padding: 6px 18px 7px; }
     #projects .panel { max-width: none; }
+    .decide { grid-template-columns: minmax(0, 1fr); }
+    #tri { max-width: 240px; }
     .hero { padding: 0 0 0; } .hero .note { margin: 0 12px 10px; }
     .strip { grid-template-columns: auto repeat(6, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom, 0px); }
     .strip .enter { grid-column: 1 / -1; justify-content: center; border-left: 0; border-top: 1px solid var(--rule); }
@@ -324,15 +346,23 @@
     </div>
     <div class="sec" data-scene="room:solskin">
       <div class="panel">
-        <figure class="plate"><img src="img/solskin.jpg?v=28f57c66" alt="The Solskin façade of diamond solar panels seen from inside, with measurement instruments" loading="lazy" decoding="async"><figcaption data-en="The Solskin façade in the Zero Carbon Building Systems Lab, ETH Zürich, with the measurement set-up." data-ja="ETHチューリッヒ ZCBSラボのSolskinファサードと測定セットアップ。">The Solskin façade in the Zero Carbon Building Systems Lab, ETH Zürich, with the measurement set-up.</figcaption></figure>
+        <figure class="plate cmp" id="cmp" style="--x:50%"><div class="cmpbox"><img src="img/solskin_open.jpg?v=6c403aa9" alt="Solskin façade fully open, seen from inside" loading="lazy" decoding="async"><img class="top" src="img/solskin_closed.jpg?v=15ceb0c6" alt="Solskin façade fully closed, seen from inside" loading="lazy" decoding="async"><span class="cl l mono">open</span><span class="cl r mono">closed</span><div class="bar" aria-hidden="true"><i></i></div><input type="range" min="0" max="100" value="50" aria-label="Compare open and closed façade"></div><figcaption data-en="The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure." data-ja="ETHチューリッヒZCBSラボのSolskinファサード — ドラッグして全開（眺望・昼光）と全閉（日射遮蔽・発電）を比較。同一露出のHDR画像。">The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure.</figcaption></figure>
         <div class="kick">Project 04 · 2025–2026 · ETH Zürich × Solskin</div>
         <h2>Solskin AI</h2>
         <p class="lede" data-en="Teaching an adaptive solar façade to learn. Solskin AI brings together ETH Zürich and Zurich Soft Robotics, the makers of the Solskin façade, in an Innosuisse project. Instead of steering by room sensors and predicted comfort, the façade learns from the people inside — person-centric sensing and AI-based comfort, closing the gap between predicted and perceived." data-ja="学習するアダプティブ・ソーラーファサード。Solskin AIは、ETHチューリッヒとSolskinを開発するZurich Soft RoboticsによるInnosuisseプロジェクトです。室内センサーと「予測された快適性」で動かすのではなく、ファサードが室内の人から学びます——人を中心にしたセンシングとAIによる快適性で、予測と知覚の隙間を埋めます。">Teaching an adaptive solar façade to learn. Solskin AI brings together ETH Zürich and Zurich Soft Robotics, the makers of the Solskin façade, in an Innosuisse project. Instead of steering by room sensors and predicted comfort, the façade learns from the people inside — person-centric sensing and AI-based comfort, closing the gap between predicted and perceived.</p>
-        <div class="seg" role="group" aria-label="Façade control">
-          <button type="button" data-ai="0" aria-pressed="false">Rule-based</button><button type="button" data-ai="1" aria-pressed="false">Learned (AI)</button><button type="button" data-ai="auto" aria-pressed="true">Auto</button>
+        <h3 data-en="How the façade decides" data-ja="ファサードの判断">How the façade decides</h3>
+        <div class="decide">
+          <svg id="tri" viewBox="0 0 260 236" role="img" aria-label="Preference triangle between electricity, shading and view"></svg>
+          <div class="dside">
+            <div class="seg" role="group" aria-label="Preference source">
+              <button type="button" data-pm="learned" aria-pressed="true" data-en="Learned" data-ja="学習">Learned</button><button type="button" data-pm="prior" aria-pressed="false" data-en="Prior" data-ja="事前">Prior</button><button type="button" data-pm="drag" aria-pressed="false" data-en="Yours" data-ja="あなた">Yours</button>
+            </div>
+            <dl class="wts mono" id="wts"></dl>
+            <div class="envr mono" id="envr"></div>
+          </div>
         </div>
-        <div class="flow"><span>sensor</span><i>→</i><span>model</span><i>→</i><span>façade</span><i>·</i><span id="aiv">learned</span></div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Partners" data-ja="パートナー">Partners</dt><dd class="lk"><a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a> · <a href="https://www.solskin.swiss/en" target="_blank" rel="noopener">Solskin (Zurich Soft Robotics) ↗</a></dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The animation is illustrative, not measured data." data-ja="アニメーションは説明用の図示であり、実測データではありません。">The animation is illustrative, not measured data.</dd></dl>
+        <p class="small" data-en="Each panel’s roll and pitch come from an optimiser that weighs electricity, shading and view. The weights — a point in the triangle — are predicted for each occupant from irradiance and outdoor temperature: a heuristic prior plus a correction learned from that person’s feedback. Drag the point to set your own; the panels in the room answer." data-ja="各パネルのロールとピッチは、発電・日射遮蔽・眺望を重み付けする最適化で決まります。その重み（三角形の中の一点）は、日射量と外気温から在室者ごとに予測されます——ヒューリスティックな事前分布に、その人のフィードバックから学習した補正を加えたものです。点をドラッグすると、部屋のパネルが応えます。">Each panel’s roll and pitch come from an optimiser that weighs electricity, shading and view. The weights — a point in the triangle — are predicted for each occupant from irradiance and outdoor temperature: a heuristic prior plus a correction learned from that person’s feedback. Drag the point to set your own; the panels in the room answer.</p>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Partners" data-ja="パートナー">Partners</dt><dd class="lk"><a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a> · <a href="https://www.solskin.swiss/en" target="_blank" rel="noopener">Solskin (Zurich Soft Robotics) ↗</a></dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The triangle and the room are an illustration of the method, with an invented occupant — not project data." data-ja="三角形と部屋は手法の図解であり、架空の在室者による説明です（プロジェクトデータではありません）。">The triangle and the room are an illustration of the method, with an invented occupant — not project data.</dd></dl>
       </div>
     </div>
     <div class="sec" data-scene="room:about">
@@ -390,7 +420,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=99bb0399';
+import { createWalk } from './js/walk.js?v=1fb2e504';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -437,7 +467,7 @@ function setLang(l) {
   lang = l; document.documentElement.lang = l;
   document.querySelectorAll('.menu button[data-l]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
   document.querySelectorAll('[data-en]').forEach((el) => { el.textContent = el.dataset[l]; });
-  caption(chapter); buildPubs(); if (sky) sky.setLang(l);
+  caption(chapter); buildPubs(); if (sky) sky.setLang(l); if (W && W.room) setW(W.room.weights);
 }
 document.querySelectorAll('.menu button[data-l]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.l)));
 function caption(i) {
@@ -552,11 +582,59 @@ function checkScene() {
 addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(checkScene); } }, { passive: true });
 addEventListener('resize', () => requestAnimationFrame(checkScene));
 
-/* Solskin control */
-document.querySelectorAll('[data-ai]').forEach((b) => b.addEventListener('click', () => {
-  document.querySelectorAll('[data-ai]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-  const v = b.dataset.ai; W.setAI(v === 'auto' ? 'auto' : Number(v));
-}));
+/* Solskin AI — the preference triangle (electricity · shading · view) */
+const TRI = { E: [130, 22], S: [22, 208], V: [238, 208] };
+const triCol = { E: '#ffd25c', S: '#8fa8ff', V: '#6fe0c0' };
+let pm = 'learned', wUser = [0.25, 0.25, 0.5], dayT = 0.25;
+const clamp01 = (x) => Math.max(0, Math.min(1, x));
+const norm3 = (w) => { const z = w[0] + w[1] + w[2] || 1; return w.map((x) => Math.max(0, x) / z); };
+const envAt = (t) => ({ I: Math.max(0, Math.sin(Math.PI * t)) ** 0.8, T: clamp01(0.3 + 0.38 * Math.sin(Math.PI * (t - 0.12))) });
+function prior({ I, T }) {   // the project's heuristic prior on [electricity, shading, view]
+  if (I < 0.1) return [0, 0, 1];
+  return norm3([Math.min(0.5, clamp01((I - 0.1) / 0.5)) + 0.5, clamp01((T - 0.3) / 0.4), clamp01(1 - (I - 0.6) / 0.5 - (T - 0.3) / 0.4)]);
+}
+function learned(env) {      // prior + a smooth correction learned for one (invented) occupant who values the view
+  const p = prior(env); return norm3([p[0] - 0.1 * env.I, p[1] + 0.08 * env.T, p[2] + 0.22 * (1 - env.T) + 0.05]);
+}
+const toXY = (w) => [w[0] * TRI.E[0] + w[1] * TRI.S[0] + w[2] * TRI.V[0], w[0] * TRI.E[1] + w[1] * TRI.S[1] + w[2] * TRI.V[1]];
+function toW(x, y) {
+  const [x1, y1] = TRI.E, [x2, y2] = TRI.S, [x3, y3] = TRI.V, d = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+  let a = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / d, b = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / d; return norm3([a, b, 1 - a - b].map((v) => Math.max(0, v)));
+}
+const triSvg = $('tri');
+function path(fn) { let d = ''; for (let i = 0; i <= 60; i++) { const [x, y] = toXY(fn(envAt(i / 60))); d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } return d; }
+function drawTri(w) {
+  const lab = (k, en, ja, x, y, anchor) => `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#151515" letter-spacing=".06em">${(lang === 'ja' ? ja : en).toUpperCase()}</text>`;
+  const [x, y] = toXY(w);
+  triSvg.innerHTML = `<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${triCol.E}" stop-opacity=".35"/><stop offset="1" stop-color="${triCol.V}" stop-opacity=".25"/></linearGradient></defs>
+    <path d="M${TRI.E} L${TRI.S} L${TRI.V} Z" fill="url(#tg)" stroke="#151515" stroke-width="1"/>
+    <path d="${path(prior)}" fill="none" stroke="#151515" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+    <path d="${path(learned)}" fill="none" stroke="#8a5200" stroke-width="1.6" opacity=".9"/>
+    ${lab('E', 'Electricity', '発電', TRI.E[0], 12, 'middle')}${lab('S', 'Shading', '遮蔽', TRI.S[0] - 4, 226, 'start')}${lab('V', 'View', '眺望', TRI.V[0] + 4, 226, 'end')}
+    <circle class="dot" cx="${x}" cy="${y}" r="9" fill="#e8a33d" stroke="#151515" stroke-width="1.4"/>`;
+}
+function setW(w) {
+  W.setWeights(w); drawTri(w);
+  const names = [['Electricity', '発電', 'E'], ['Shading', '遮蔽', 'S'], ['View', '眺望', 'V']];
+  $('wts').innerHTML = names.map((n, i) => `<dt>${lang === 'ja' ? n[1] : n[0]}</dt><dd style="--c:${triCol[n[2]]}"><i style="width:${(w[i] * 100).toFixed(0)}%"></i></dd><span>${(w[i] * 100).toFixed(0)}%</span>`).join('');
+}
+let triDrag = false;
+const triPt = (e) => { const r = triSvg.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 260, (e.clientY - r.top) / r.height * 236]; };
+triSvg.addEventListener('pointerdown', (e) => { triDrag = true; triSvg.setPointerCapture(e.pointerId); setPM('drag'); wUser = toW(...triPt(e)); setW(wUser); });
+triSvg.addEventListener('pointermove', (e) => { if (triDrag) { wUser = toW(...triPt(e)); setW(wUser); } });
+triSvg.addEventListener('pointerup', () => { triDrag = false; });
+function setPM(m) { pm = m; document.querySelectorAll('[data-pm]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pm === m))); }
+document.querySelectorAll('[data-pm]').forEach((b) => b.addEventListener('click', () => setPM(b.dataset.pm)));
+function solskinTick(dt) {
+  if (pm === 'drag') { $('envr').textContent = lang === 'ja' ? 'あなたの重み' : 'your weights'; return; }
+  dayT = (dayT + dt / 24) % 1;
+  const env = envAt(dayT), w = pm === 'prior' ? prior(env) : learned(env);
+  setW(w);
+  const hh = 6 + dayT * 14, h = Math.floor(hh), mi = Math.floor((hh - h) * 60);
+  $('envr').textContent = `${String(h).padStart(2, '0')}:${String(mi).padStart(2, '0')} · ${lang === 'ja' ? '日射' : 'irradiance'} ${(env.I * 100).toFixed(0)}% · ${lang === 'ja' ? '外気' : 'outdoor'} ${(8 + env.T * 22).toFixed(0)}°C`;
+}
+// compare slider
+{ const c = $('cmp'), inp = c.querySelector('input'); inp.addEventListener('input', () => c.style.setProperty('--x', inp.value + '%')); }
 
 /* ---------- publications: counts · selected · spectrum · list (and an optional fisheye sky) ---------- */
 const pcard = $('pcard');
@@ -657,6 +735,7 @@ try {
 sky = createSky($('skyc'), { onPick: (s, x, y) => pubCard(s, x, y) });
 window.W = W; window.goTo = goTo;
 W.state.fade = 1; W.fade(1);
+setW(learned(envAt(dayT)));
 document.body.classList.add('in-walk'); placeSeam(); caption(0); setLang('en');
 W.setCity(0); W.render(0.016);
 $('loading').classList.add('done');
@@ -690,7 +769,7 @@ function tick(dt) {
     const rs = W.room.state;
     $('moodv').textContent = rs.mood || '—';
     $('evv').textContent = `HDR bracket · ${rs.ev > 0 ? '+' : ''}${rs.ev} EV`;
-    $('aiv').textContent = rs.ai ? (lang === 'ja' ? '学習型（AI）' : 'learned (AI)') : (lang === 'ja' ? 'ルール型' : 'rule-based');
+    if (scene === 'room:solskin') solskinTick(dt);
   }
   meter();
 }
