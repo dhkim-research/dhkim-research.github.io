@@ -120,7 +120,7 @@
 </head>
 <body>
 
-<noscript><div style="position:fixed;inset:0;display:grid;place-items:center;background:#f1efea;z-index:9;padding:24px;font:15px/1.6 sans-serif"><div style="max-width:520px"><h1 style="font-weight:500">Dong Hyun Kim</h1><p>Architect and lighting researcher — the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science (from July 2026). Previously ETH Zürich (A/S), KTH Lighting Design (visiting postdoc), EPFL LIPID, TU Delft; BSc, MSc and PhD at The Bartlett, UCL.</p><p>donghyun.kim@rs.tus.ac.jp · <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en">Publications</a> · <a href="https://www.linkedin.com/in/donghkim">LinkedIn</a> · <a href="archive/">Previous site</a></p></div></div></noscript>
+<noscript><div style="position:fixed;inset:0;display:grid;place-items:center;background:#f1efea;z-index:9;padding:24px;font:15px/1.6 sans-serif"><div style="max-width:520px"><h1 style="font-weight:500">Dong Hyun Kim</h1><p>Architect and lighting researcher — the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science (from July 2026). Previously ETH Zürich (A/S), KTH Lighting Design (visiting postdoc), EPFL LIPID, TU Delft; BSc, MSc and PhD at The Bartlett, UCL.</p><p>donghyun.kim@rs.tus.ac.jp · <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en">Publications</a> · <a href="https://www.linkedin.com/in/donghkim">LinkedIn</a></p></div></div></noscript>
 
 
 <canvas id="stage" aria-label="A first-person walk through six cities, split into measured and felt light"></canvas>
@@ -129,7 +129,7 @@
   <div>
     <h1 class="name">Dong Hyun Kim</h1>
     <p class="tag">Daylight Lab · <span data-en="measured light, felt light" data-ja="測った光と、感じた光">measured light, felt light</span></p>
-    <nav class="links mono"><a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en" target="_blank" rel="noopener" data-en="Publications ↗" data-ja="論文 ↗">Publications ↗</a><a href="https://www.linkedin.com/in/donghkim" target="_blank" rel="noopener">LinkedIn ↗</a><a href="archive/" data-en="Previous site" data-ja="旧サイト">Previous site</a></nav>
+    <nav class="links mono"><a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en" target="_blank" rel="noopener" data-en="Publications ↗" data-ja="論文 ↗">Publications ↗</a><a href="https://www.linkedin.com/in/donghkim" target="_blank" rel="noopener">LinkedIn ↗</a></nav>
   </div>
   <div class="lang" role="group" aria-label="Language">
     <button type="button" data-l="en" aria-pressed="true">EN</button>
@@ -171,15 +171,15 @@
 import { createWalk } from './js/walk.js';
 
 const CH = [
-  { y: '2007 — 2018', t: 'London', jp: 'ロンドン', k: 'The Bartlett, UCL',
+  { y: '2007–2018', t: 'London', jp: 'ロンドン', k: 'The Bartlett, UCL',
     en: 'BSc Architecture, MSc Light & Lighting, PhD Built Environment. Learning to measure light under a sky that rarely held still.',
     ja: '建築、照明、建築環境を学んだ十一年。めったに晴れない空の下で、光を測ることを覚えた。',
     sub_en: 'Alone, with an umbrella.', sub_ja: 'ひとり、傘をさして。' },
-  { y: '2018 — 2020', t: 'Delft', jp: 'デルフト', k: 'TU Delft · Postdoc',
+  { y: '2018–2020', t: 'Delft', jp: 'デルフト', k: 'TU Delft · Postdoc',
     en: 'Married at the Stadhuis on the Markt — the red-and-white shutters, the big Dutch clouds.',
     ja: 'マルクト広場の市庁舎で結婚した。赤と白の鎧戸、オランダの大きな雲。',
     sub_en: 'Two shadows now.', sub_ja: '影はふたつになった。' },
-  { y: '2021 — 2024', t: 'Lausanne', jp: 'ローザンヌ', k: 'EPFL · LIPID',
+  { y: '2021–2024', t: 'Lausanne', jp: 'ローザンヌ', k: 'EPFL · LIPID',
     en: 'Visual comfort and glare by the lake. Our daughter was born across the water in Morges.',
     ja: '湖のほとりで、視覚的快適性とグレアの研究。娘はモルジュで生まれた。',
     sub_en: 'Two shadows and a pram.', sub_ja: 'ふたつの影と、ベビーカー。' },
@@ -187,11 +187,11 @@ const CH = [
     en: 'Visiting postdoc at KTH Lighting Design — a northern autumn of low sun and long shadows.',
     ja: 'KTH 照明デザイン学科の客員ポスドク。低い太陽と長い影の、北の秋。',
     sub_en: 'Two shadows and a pram, in the gold.', sub_ja: 'ふたつの影とベビーカー、金色の光の中で。' },
-  { y: '2025 — 2026', t: 'Zürich', jp: 'チューリッヒ', k: 'ETH Zürich · A/S',
+  { y: '2025–2026', t: 'Zürich', jp: 'チューリッヒ', k: 'ETH Zürich · A/S',
     en: 'Architecture and Building Systems — façades that answer the sun.',
     ja: '建築と建築設備のチェア。太陽に応える外皮をつくる。',
     sub_en: 'Three of us, walking.', sub_ja: '三人で歩く。' },
-  { y: '2026 —', t: 'Tokyo', jp: '東京', k: 'Tokyo University of Science',
+  { y: '2026–', t: 'Tokyo', jp: '東京', k: 'Tokyo University of Science',
     en: 'Assistant Professor, Department of Architecture. A new beginning under a clear sky.',
     ja: '建築学科 助教。澄んだ空の下での、新しい始まり。',
     sub_en: 'Three of us, and an open window.', sub_ja: '三人と、開いた窓。' }
@@ -208,7 +208,7 @@ let W, playing = true, prog = 0, chapter = 0, split = 0.36, look = { x: 0, y: 0,
 const strip = $('strip');
 CH.forEach((c, i) => {
   const b = document.createElement('button'); b.className = 'ch'; b.type = 'button';
-  b.innerHTML = `<span class="bar"></span><span class="n">${String(i + 1).padStart(2, '0')} · ${c.y.split(' — ')[0]}</span><span class="c">${c.t}</span>`;
+  b.innerHTML = `<span class="bar"></span><span class="n">${String(i + 1).padStart(2, '0')} · ${c.y}</span><span class="c">${c.t}</span>`;
   b.addEventListener('click', () => goTo(i)); strip.appendChild(b);
 });
 const chBtns = [...strip.querySelectorAll('.ch')];
