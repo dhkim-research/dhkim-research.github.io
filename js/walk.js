@@ -8,8 +8,9 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js';
 import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js';
+import { createRoom, ROOM_STATES } from './room.js';
 
-export { CITIES };
+export { CITIES, ROOM_STATES };
 
 const Z0 = 6, Z1 = -96;              // the walk: from z0 to z1 along -z
 const EYE = 1.62;
@@ -22,7 +23,7 @@ const FinalShader = {
     tDiffuse: { value: null }, tDepth: { value: null }, uNear: { value: 0.1 }, uFar: { value: 9000 }, uInkFelt: { value: 0.6 }, uSplit: { value: 0.5 }, uExpo: { value: 1 }, uK: { value: K_LUM }, uGlare: { value: GLARE },
     uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uGrade: { value: new THREE.Vector3(1, 1, 1) },
     uFade: { value: 0 }, uFadeCol: { value: new THREE.Color(0xf4efe6) }, uPaper: { value: new THREE.Color(0xf1ede4) }, uInk: { value: new THREE.Color(0x1d2733) },
-    uMeasured: { value: 1 },
+    uMeasured: { value: 1 }, uFeltEV: { value: 1 },
     uSat: { value: 1.1 }, uCon: { value: 1.0 }, uLift: { value: new THREE.Vector3(0, 0, 0) },
     uSkyTop: { value: new THREE.Color(0x3a74c8) }, uSkyBot: { value: new THREE.Color(0xcfe2f0) }, uSkyMix: { value: 0 }, uOvercast: { value: 0 },
     uInvProj: { value: new THREE.Matrix4() }, uCamWorld: { value: new THREE.Matrix4() }, uSunDir: { value: new THREE.Vector3(0, 1, 0) },
@@ -32,7 +33,7 @@ const FinalShader = {
   fragmentShader: /* glsl */`
     uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured; uniform vec2 uRes;
     float hash(vec2 p){ p = fract(p*vec2(443.897,441.423)); p += dot(p, p.yx+19.19); return fract((p.x+p.y)*p.x); }
-    uniform vec3 uGrade, uFadeCol, uPaper, uInk, uLift, uSkyTop, uSkyBot; uniform float uSat, uCon, uSkyMix, uOvercast, uCloudCov, uCloudScale; uniform mat4 uInvProj, uCamWorld; uniform vec3 uSunDir, uCloudLit, uCloudShade; uniform vec2 uWind; varying vec2 vUv;
+    uniform vec3 uGrade, uFadeCol, uPaper, uInk, uLift, uSkyTop, uSkyBot; uniform float uFeltEV; uniform float uSat, uCon, uSkyMix, uOvercast, uCloudCov, uCloudScale; uniform mat4 uInvProj, uCamWorld; uniform vec3 uSunDir, uCloudLit, uCloudShade; uniform vec2 uWind; varying vec2 vUv;
     float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
     float fbm(vec2 p){ float v=0., a=.5; for(int i=0;i<5;i++){ v+=a*vnoise(p); p*=2.03; a*=.5; } return v; }
     vec3 aces(vec3 x){ const float a=2.51,b=0.03,c=2.43,d=0.59,e=0.14; return clamp((x*(a*x+b))/(x*(c*x+d)+e),0.,1.); }
@@ -52,7 +53,7 @@ const FinalShader = {
       // ---- felt: tone-mapped, graded, a little warm in the highlights
       float dz = texture2D(tDepth, vUv).x;
       float isSky = step(0.99999, dz);
-      vec3 felt = aces(hdr * uGrade * 1.05);
+      vec3 felt = aces(hdr * uGrade * 1.05 * uFeltEV);
       // sky: a painted gradient (keeping the sun's glow) and a perspective cloud deck drawn in two tones
       if (isSky > 0.5) {
         vec4 vv = uInvProj * vec4(vUv*2.0-1.0, 1.0, 1.0); vv /= vv.w;
@@ -134,7 +135,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 9000);
+  const camera = new THREE.PerspectiveCamera(52, 1, 0.25, 7000);
   camera.rotation.order = 'YXZ';
 
   /* light */
@@ -164,7 +165,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   /* post */
   const size = new THREE.Vector2();
   const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, samples: 4 });
-  rt.depthTexture = new THREE.DepthTexture(4, 4); rt.depthTexture.type = THREE.UnsignedIntType;
+  rt.depthTexture = new THREE.DepthTexture(4, 4); rt.depthTexture.type = THREE.FloatType;
   const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.32, 0.55, 0.92);
   const fin = new ShaderPass(FinalShader); fin.renderToScreen = true;
   fin.uniforms.tDiffuse.value = rt.texture; fin.uniforms.tDepth.value = rt.depthTexture;
@@ -256,15 +257,8 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     sun.intensity = 4.4 + 1.4 * warm;
     hemi.intensity = 1.15 + 0.25 * warm; hemi.groundColor.set(0x9a8268);
     scene.fog = new THREE.Fog(C.fog[0], C.fog[1], C.fog[2]);
-    fin.uniforms.uGrade.value.set(...C.grade); fin.uniforms.uExpo.value = C.expo;
-    const lk = C.look || {}; const F = fin.uniforms;
-    F.uSat.value = lk.sat ?? 1.1; F.uCon.value = lk.con ?? 1.0; F.uLift.value.set(...(lk.lift || [0, 0, 0]));
-    F.uSkyTop.value.set(lk.skyTop ?? 0x3a74c8); F.uSkyBot.value.set(lk.skyBot ?? 0xcfe2f0);
-    F.uSkyMix.value = lk.skyMix ?? 0; F.uOvercast.value = lk.overcast ?? 0;
-    const cl = C.cloudDeck || {}; F.uCloudCov.value = cl.cov ?? 0.35; F.uCloudScale.value = cl.scale ?? 1.4;
-    F.uCloudLit.value.set(cl.lit ?? 0xffffff).multiplyScalar(cl.litI ?? 1.0); F.uCloudShade.value.set(cl.shade ?? 0xb9bdd2);
-    F.uWind.value.set(...(cl.wind || [0.012, 0.004])); F.uSunDir.value.copy(L);
-    bloom.strength = lk.bloom ?? 0.32;
+    applyLook(C.look || {}, C.cloudDeck || {}, L, C.grade, C.expo);
+    const lk = C.look || {};
     sun.shadow.radius = lk.shadowSoft ?? 1.4;
     if (lk.sunI !== undefined) { sun.intensity = lk.sunI; hemi.intensity = lk.hemiI; }
     if (lk.sunCol) sun.color.set(lk.sunCol); if (lk.hemiSky) hemi.color.set(lk.hemiSky);
@@ -291,12 +285,29 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     clouds.tint(C);
   }
 
+  function applyLook(lk, cl, L, grade = [1, 1, 1], expo = 1) {
+    const F = fin.uniforms;
+    F.uGrade.value.set(...grade); F.uExpo.value = expo;
+    F.uSat.value = lk.sat ?? 1.1; F.uCon.value = lk.con ?? 1.0; F.uLift.value.set(...(lk.lift || [0, 0, 0]));
+    F.uSkyTop.value.set(lk.skyTop ?? 0x3a74c8); F.uSkyBot.value.set(lk.skyBot ?? 0xcfe2f0);
+    F.uSkyMix.value = lk.skyMix ?? 0; F.uOvercast.value = lk.overcast ?? 0;
+    F.uCloudCov.value = cl.cov ?? 0.35; F.uCloudScale.value = cl.scale ?? 1.4;
+    F.uCloudLit.value.set(cl.lit ?? 0xffffff).multiplyScalar(cl.litI ?? 1.0); F.uCloudShade.value.set(cl.shade ?? 0xb9bdd2);
+    F.uWind.value.set(...(cl.wind || [0.012, 0.004])); F.uSunDir.value.copy(L);
+    bloom.strength = lk.bloom ?? 0.32;
+  }
+
+  /* the room (About · Projects) */
+  const room = createRoom(mats);
+  let mode = 'walk';
+  const look2 = { x: 0, y: 0 };
+
   const state = { progress: 0, split: 0.5, lookX: 0, lookY: 0, camX: 0, L: new THREE.Vector3(), t: 0, probeAt: new THREE.Vector2(0.5, 0.5), probeL: 0, measured: true };
 
   function resize() {
     const w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight;
     renderer.setSize(w, h, false); renderer.getDrawingBufferSize(size); rt.setSize(size.x, size.y); bloom.setSize(size.x, size.y); fin.setSize(size.x, size.y);
-    camera.aspect = w / h; camera.fov = w / h < 0.8 ? 66 : 52; camera.updateProjectionMatrix();
+    camera.aspect = w / h; camera.fov = w / h < 0.8 ? 66 : 52; camera.updateProjectionMatrix(); room.resize(w / h);
     renderer.getDrawingBufferSize(size); fin.uniforms.uRes.value.copy(size);
     bloom.resolution.set(size.x / 2, size.y / 2);
   }
@@ -331,17 +342,26 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   let probeCount = 0;
   function render(dt = 1 / 60) {
     state.t += dt;
-    for (const m of mixers) m.update(dt * state.walkRate);
-    storkMixer.update(dt);
-    place(dt);
+    let S = scene, cam = camera;
+    if (mode === 'room') {
+      room.update(dt, state.t, { x: state.lookX, y: state.lookY });
+      const lk = room.look(); applyLook(lk.look, lk.deck, room.L, [1, 1, 1], lk.expo);
+      fin.uniforms.uFeltEV.value += (Math.pow(2, room.state.ev) - fin.uniforms.uFeltEV.value) * Math.min(1, dt * 8);
+      S = room.scene; cam = room.camera;
+    } else {
+      fin.uniforms.uFeltEV.value = 1;
+      for (const m of mixers) m.update(dt * state.walkRate);
+      storkMixer.update(dt);
+      place(dt);
+    }
     fin.uniforms.uSplit.value = state.split; fin.uniforms.uTime.value = state.t; fin.uniforms.uMeasured.value = state.measured ? 1 : 0;
-    renderer.setRenderTarget(rt); renderer.render(scene, camera);
+    renderer.setRenderTarget(rt); renderer.render(S, cam);
     bloom.render(renderer, null, rt, dt, false);
     fin.uniforms.tDiffuse.value = rt.texture;
-    fin.uniforms.uNear.value = camera.near; fin.uniforms.uFar.value = camera.far;
-    fin.uniforms.uInvProj.value.copy(camera.projectionMatrixInverse); fin.uniforms.uCamWorld.value.copy(camera.matrixWorld);
+    fin.uniforms.uNear.value = cam.near; fin.uniforms.uFar.value = cam.far;
+    fin.uniforms.uInvProj.value.copy(cam.projectionMatrixInverse); fin.uniforms.uCamWorld.value.copy(cam.matrixWorld);
     renderer.setRenderTarget(null); fin.render(renderer, null, rt, dt, false);
-    if (rain.visible) { // weather belongs to the felt side only — the meter does not see it
+    if (rain.visible && mode === 'walk') { // weather belongs to the felt side only — the meter does not see it
       const sx = Math.round(size.x * (state.measured ? state.split : 0));
       renderer.autoClear = false; renderer.clearDepth(); renderer.setScissorTest(true); renderer.setScissor(sx / renderer.getPixelRatio(), 0, (size.x - sx) / renderer.getPixelRatio(), size.y / renderer.getPixelRatio());
       renderer.render(fxScene, camera);
@@ -365,8 +385,11 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     setSplit(v) { state.split = v; }, setLook(x, y) { state.lookX = x; state.lookY = y; },
     setProbe(u, v) { state.probeAt.set(u, v); },
     setMeasured(on) { state.measured = on; },
-    fade(v) { fin.uniforms.uFade.value = v; },
+    fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
+    setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },
+    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, room,
+    get mode() { return mode; },
     get city() { return cur; }, get sunAlt() { return CITIES[cur].sun.alt; }
   };
 }
