@@ -93,6 +93,7 @@
   #tri { width: 100%; height: auto; touch-action: none; user-select: none; }
   #tri .dot { cursor: grab; }
   .dside .seg { margin-top: 0; }
+  .seg.pats { margin: 16px 0 2px; }
   .wts { display: grid; grid-template-columns: 86px minmax(0, 1fr) 34px; gap: 5px 8px; align-items: center; margin: 12px 0 0; font-size: 11px; }
   .wts dt { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
   .wts dd { margin: 0; height: 6px; background: var(--rule); position: relative; }
@@ -340,6 +341,9 @@
         <div class="kick">Project 03 · 2021–2024 · EPFL</div>
         <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
         <p class="lede" data-en="Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。30人が、ストライプ・竹・ボロノイの3つのファサード越しに太陽を視野に入れて作業しました。感じるまぶしさを変えたのは模様ではなく、その場の心地よさでした。">Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did.</p>
+        <div class="seg pats" role="group" aria-label="Façade pattern">
+          <button type="button" data-pat="none" aria-pressed="false" data-en="None" data-ja="なし">None</button><button type="button" data-pat="stripe" aria-pressed="false" data-en="Stripe" data-ja="ストライプ">Stripe</button><button type="button" data-pat="bamboo" aria-pressed="false" data-en="Bamboo" data-ja="竹">Bamboo</button><button type="button" data-pat="voronoi" aria-pressed="true" data-en="Voronoi" data-ja="ボロノイ">Voronoi</button>
+        </div>
         <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Swiss National Science Foundation (SNSF) · Swiss Government Excellence Fellowship</dd><dt data-en="Status" data-ja="状況">Status</dt><dd data-en="Manuscript in preparation" data-ja="論文準備中">Manuscript in preparation</dd></dl>
         <button class="btn" type="button" data-sky="daylight" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
       </div>
@@ -420,7 +424,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=1fb2e504';
+import { createWalk } from './js/walk.js?v=3a922a94';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -582,6 +586,8 @@ function checkScene() {
 addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(checkScene); } }, { passive: true });
 addEventListener('resize', () => requestAnimationFrame(checkScene));
 
+/* Visual comfort — façade pattern on the window */
+document.querySelectorAll('[data-pat]').forEach((b) => b.addEventListener('click', () => W.setPattern(b.dataset.pat)));
 /* Solskin AI — the preference triangle (electricity · shading · view) */
 const TRI = { E: [130, 22], S: [22, 208], V: [238, 208] };
 const triCol = { E: '#ffd25c', S: '#8fa8ff', V: '#6fe0c0' };
@@ -759,6 +765,7 @@ function tick(dt) {
     $('moodv').textContent = rs.mood || '—';
     $('evv').textContent = `HDR bracket · ${rs.ev > 0 ? '+' : ''}${rs.ev} EV`;
     if (scene === 'room:solskin') solskinTick(dt);
+    if (scene === 'room:comfort') document.querySelectorAll('[data-pat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pat === rs.pattern)));
   }
   meter();
 }

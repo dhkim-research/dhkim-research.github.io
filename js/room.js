@@ -12,9 +12,9 @@ export const ROOM_STATES = {
              look: { sat: 1.12, con: 1.05, skyTop: 0x2a62c4, skyBot: 0xbfdcf2, skyMix: 0.85, bloom: 0.42 }, deck: { cov: 0.3, scale: 0.9 } },
   emotion: { sun: [3, 30, 0.0], hemi: 0.16, expo: 1.25, cam: [2.4, 1.45, 3.2], tgt: [-0.6, 1.15, -3], fov: 50, lamps: 1,
              look: { sat: 0.98, con: 1.04, lift: [0.0, 0.0, 0.03], skyTop: 0x27356e, skyBot: 0xd98a78, skyMix: 1.0, bloom: 0.6 }, deck: { cov: 0.25, scale: 1.1, lit: 0xf0a888, shade: 0x5a4a6a } },
-  hidyn:   { sun: [38, -18, 5.0], hemi: 1.0, expo: 1.35, cam: [-2.15, 1.55, 3.1], tgt: [0.7, 1.05, -4], fov: 50, tripod: 1, bracket: 1,
-             look: { sat: 1.05, con: 1.04, skyTop: 0x3468c0, skyBot: 0xcfe0ee, skyMix: 0.7, bloom: 0.4 }, deck: { cov: 0.42, scale: 1.0 } },
-  comfort: { sun: [11, 6, 5.4], hemi: 1.0, expo: 0.85, cam: [1.05, 1.2, -1.75], tgt: [0.1, 1.45, -8], fov: 58, person: 0, seated: 1,
+  hidyn:   { sun: [2, 0, 0.0], hemi: 0.025, expo: 1.0, cam: [0.42, 1.34, 2.05], tgt: [-0.05, 1.2, -1.4], fov: 44, tripod: 1, bracket: 1, lab: 1,
+             look: { sat: 1.0, con: 1.05, skyTop: 0x080c1a, skyBot: 0x161d33, skyMix: 1.0, bloom: 0.5 }, deck: { cov: 0.0, scale: 1.0 } },
+  comfort: { sun: [13, -14, 5.4], hemi: 1.0, expo: 0.85, cam: [1.55, 1.25, -1.05], tgt: [-0.35, 1.0, -4.6], fov: 62, person: 0, seated: 1, screen: 1,
              look: { sat: 1.1, con: 1.06, lift: [0.01, 0.005, 0.0], skyTop: 0x4a76c0, skyBot: 0xf3d6b4, skyMix: 0.7, bloom: 0.6 }, deck: { cov: 0.22, scale: 1.2, lit: 0xfff0dc } },
   solskin: { sun: [27, 22, 5.2], hemi: 0.95, expo: 1.45, cam: [-1.95, 1.6, 3.15], tgt: [0.7, 0.95, -3.2], fov: 52, person: 1, modules: 1,
              look: { sat: 1.12, con: 1.06, skyTop: 0x2a62c4, skyBot: 0xc6e0f4, skyMix: 0.85, bloom: 0.42 }, deck: { cov: 0.32, scale: 0.9 } }
@@ -125,7 +125,7 @@ export function createRoom(baseMats) {
     const body = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.11, 0.1), new THREE.MeshToonMaterial({ color: 0x1d1f22 })); body.position.y = 1.26; body.castShadow = true; tripod.add(body);
     const lens = new THREE.Mesh(new THREE.SphereGeometry(0.055, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x223355, metalness: 0.6, roughness: 0.05 })); lens.rotation.x = -Math.PI / 2; lens.position.set(0, 1.26, -0.06); tripod.add(lens);
   }
-  tripod.position.set(-0.3, 0, -0.9); scene.add(tripod);
+  tripod.position.set(0.2, 0, 0.95); tripod.rotation.y = 0; scene.add(tripod);
 
   /* Solskin: an adaptive solar façade just outside the glass — panels that turn */
   const modules = [], MOD = new THREE.Group();
@@ -151,8 +151,37 @@ export function createRoom(baseMats) {
   }
   scene.add(MOD);
 
+  /* HiDyn: a dark lab with Hidyni-like reference sources — seven discs, 0.1 to 100 000 cd/m² */
+  const K_LUM = 2600, rig = new THREE.Group(); rig.position.set(0, 0, -1.4); scene.add(rig);
+  { const al = new THREE.MeshToonMaterial({ color: 0x8c9096, gradientMap: g }), blk = new THREE.MeshToonMaterial({ color: 0x1c1d20, gradientMap: g });
+    const bar = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), al); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; rig.add(m); };
+    bar(0.05, 2.2, 0.05, -0.85, 1.1, 0); bar(0.05, 2.2, 0.05, 0.85, 1.1, 0); bar(0.05, 2.2, 0.05, 0, 1.1, 0.0);
+    for (const y of [0.78, 1.25, 1.72]) bar(1.75, 0.05, 0.05, 0, y, 0.02);
+    const spots = [[0, 1.25, 0.1], [0.62, 1.25, 1e5], [-0.62, 1.25, 1e4], [-0.36, 1.72, 1e3], [0.36, 1.72, 100], [-0.36, 0.78, 10], [0.36, 0.78, 1]];
+    for (const [x, y, L] of spots) {
+      const h = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.085, 0.24, 20), blk); h.rotation.x = Math.PI / 2; h.position.set(x, y, 0.1); h.castShadow = true; rig.add(h);
+      const v = L / K_LUM;
+      const disc = new THREE.Mesh(new THREE.CircleGeometry(0.052, 28), new THREE.MeshBasicMaterial({ color: new THREE.Color(v, v * 0.97, v * 0.9) })); disc.position.set(x, y, 0.222); rig.add(disc);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.012, 6, 24), al); rim.position.set(x, y, 0.222); rig.add(rim);
+    }
+    const glowL = new THREE.PointLight(0xfff2dc, 0, 9, 1.4); glowL.position.set(0.62, 1.25, 0.6); rig.add(glowL); rig.userData.glow = glowL;
+  }
+
+  /* Visual comfort: façade screens (stripe · bamboo · Voronoi) outside the window, casting patterned sun */
+  const patTex = {}, texLoader = new THREE.TextureLoader();
+  for (const k of ['stripe', 'bamboo', 'voronoi']) { const t = texLoader.load(`./img/pat_${k}.png`); t.wrapS = THREE.RepeatWrapping; t.repeat.set(4.4, 1); patTex[k] = t; }
+  const scrMat = new THREE.MeshToonMaterial({ color: 0x2a2b2e, gradientMap: g, alphaTest: 0.5, side: THREE.DoubleSide, alphaMap: patTex.voronoi, transparent: false });
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(WX * 2, WY1 - WY0), scrMat);
+  screen.customDepthMaterial = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, alphaMap: patTex.voronoi, alphaTest: 0.5 });
+  screen.castShadow = true; screen.position.set(0, (WY0 + WY1) / 2, WZ - 0.5); scene.add(screen);
+  let pattern = 'voronoi', patAuto = true, patSince = 0, screenY = 0;
+  function setPattern(k) {
+    if (k === pattern) return; pattern = k; screenY = 1;   // the new screen drops in from above
+    if (k !== 'none') { scrMat.alphaMap = patTex[k]; screen.customDepthMaterial.alphaMap = patTex[k]; scrMat.needsUpdate = true; screen.customDepthMaterial.needsUpdate = true; }
+  }
+
   /* state & blending */
-  const P = { alt: 31, az: 24, sunI: 5, hemi: 0.95, expo: 1.5, fov: 50, lamps: 0, tripod: 0, person: 0, modules: 0, bracket: 0, seated: 0 };
+  const P = { alt: 31, az: 24, sunI: 5, hemi: 0.95, expo: 1.5, fov: 50, lamps: 0, tripod: 0, person: 0, modules: 0, bracket: 0, seated: 0, lab: 0, screen: 0 };
   const camPos = new THREE.Vector3(2.25, 1.5, 3.35), camTgt = new THREE.Vector3(-0.35, 1.25, -4);
   let target = ROOM_STATES.about, name = 'about', since = 0, ai = 1, aiAuto = true;
   const Wt = [0.2, 0.3, 0.5];
@@ -168,7 +197,7 @@ export function createRoom(baseMats) {
     const k = 1 - Math.exp(-dt * 2.2), S = target;
     P.alt += (S.sun[0] - P.alt) * k; P.az += (S.sun[1] - P.az) * k; P.sunI += (S.sun[2] - P.sunI) * k;
     P.hemi += (S.hemi - P.hemi) * k; P.expo += (S.expo - P.expo) * k; P.fov += (S.fov - P.fov) * k;
-    for (const key of ['lamps', 'tripod', 'person', 'modules', 'bracket', 'seated']) P[key] += ((S[key] || 0) - P[key]) * Math.min(1, k * 1.6);
+    for (const key of ['lamps', 'tripod', 'person', 'modules', 'bracket', 'seated', 'lab', 'screen']) P[key] += ((S[key] || 0) - P[key]) * Math.min(1, k * 1.6);
     camPos.lerp(tmp.set(...S.cam), k); camTgt.lerp(tmp.set(...S.tgt), k);
 
     // gentle drift of the sun so light visibly moves
@@ -194,11 +223,18 @@ export function createRoom(baseMats) {
     state.mood = target.lamps ? ['warm · relaxed', 'cool · alert', 'dim · intimate'][mood] : '';
 
     tripod.visible = P.tripod > 0.5; person.visible = P.person > 0.5; MOD.visible = P.modules > 0.02;
+    rig.visible = P.lab > 0.5; rig.userData.glow.intensity = P.lab * 0.22;
+    // pattern screens: auto-cycle until the visitor picks one; each new screen slides down into place
+    if (name === 'comfort') { patSince += dt; if (patAuto && patSince > 6.5) { patSince = 0; const order = ['none', 'stripe', 'bamboo', 'voronoi']; setPattern(order[(order.indexOf(pattern) + 1) % 4]); } }
+    screenY += (0 - screenY) * Math.min(1, dt * 2.4);
+    screen.visible = P.screen > 0.5 && pattern !== 'none';
+    screen.position.y = (WY0 + WY1) / 2 + screenY * (WY1 - WY0 + 0.3);
+    state.pattern = pattern;
     MOD.position.y = (1 - P.modules) * 3.2;                 // the façade slides into place
     cone.material.opacity = 0.09 * P.modules * (ai ? 1 : 0.3);
 
     // HDR bracketing (HiDyn): the felt side steps through exposures
-    state.ev = P.bracket > 0.5 ? [-4, -2, 0, 2][Math.floor(since / 0.9) % 4] : 0;
+    state.ev = P.bracket > 0.5 ? [-4, -1, 2, 5, 8][Math.floor(since / 1.3) % 5] : 0;
 
     // Solskin AI: every panel's tilt and turn balances three objectives — electricity, shading, view —
     // with weights W = [e, s, v] that the page sets (from the visitor's triangle, or a learned occupant model)
@@ -235,6 +271,7 @@ export function createRoom(baseMats) {
     scene, camera, sun, sky, state, update, setState,
     get name() { return name; }, get P() { return P; }, get L() { return L; },
     setAI(v) { aiAuto = v === 'auto'; if (!aiAuto) ai = v ? 1 : 0; since = 0; },
+    setPattern(k) { patAuto = false; patSince = 0; setPattern(k); },
     setWeights(w) { const z = w[0] + w[1] + w[2] || 1; Wt[0] = w[0] / z; Wt[1] = w[1] / z; Wt[2] = w[2] / z; },
     get weights() { return Wt.slice(); },
     look() { const S = ROOM_STATES[name]; return { look: S.look, deck: S.deck, expo: P.expo }; },
