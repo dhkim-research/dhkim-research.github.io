@@ -1,361 +1,354 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Dong Hyun Kim, PhD | Lighting & Building Scientist</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Lighting and building scientist – daylight, visual comfort, HDR imaging, adaptive façades." />
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-  
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="main.css" />
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Dong Hyun Kim — architect and lighting researcher working on the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science.">
+<meta name="theme-color" content="#f1efea">
+<meta property="og:title" content="Dong Hyun Kim — Daylight Lab">
+<meta property="og:description" content="Measured light, felt light. A walk through London, Delft, Lausanne, Stockholm, Zürich and Tokyo.">
+<meta property="og:url" content="https://daylightlab.cloud/">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f1efea'/%3E%3Cpath d='M0 0h16v32H0z' fill='%23151515'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e8a33d'/%3E%3C/svg%3E">
+<title>Daylight Walk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,200..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans+JP:wght@300;400&display=swap">
+<style>
+  :root { --paper: #f1efea; --ink: #151515; --muted: #69645d; --amber: #e8a33d; --amber-ink: #8a5200; --glass: rgba(241, 239, 234, .82); color-scheme: light; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 14px/1.45 "IBM Plex Sans", "IBM Plex Sans JP", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
 
+  /* masthead */
+  .mast { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 22px); left: 28px; right: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; pointer-events: none; }
+  .mast > * { pointer-events: auto; }
+  .mast > div:first-child { background: var(--glass); padding: 10px 14px 11px; margin: -10px 0 0 -14px; }
+  .name { font: 500 clamp(20px, 2.1vw, 30px)/1 "Archivo", sans-serif; font-stretch: 118%; letter-spacing: -.01em; margin: 0; }
+  .tag { margin: 8px 0 0; font: 400 11px/1.4 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); opacity: .78; }
+  .tag span { text-transform: none; letter-spacing: .02em; }
+  .links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 9px; font-size: 10.5px; letter-spacing: .06em; }
+  .links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid rgba(21,21,21,.35); padding-bottom: 1px; }
+  .links a:hover { border-bottom-color: var(--ink); }
+  .lang { display: flex; gap: 2px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .06em; }
+  .lang button { background: var(--glass); border: 0; padding: 7px 10px; cursor: pointer; color: var(--muted); font: inherit; letter-spacing: inherit; }
+  .lang button[aria-pressed=true] { color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--ink); }
+
+  /* seam */
+  .seam { position: fixed; top: 0; bottom: 0; width: 0; pointer-events: none; }
+  .seam .grip { position: absolute; top: 50%; left: -19px; width: 38px; height: 38px; margin-top: -19px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); display: grid; place-items: center; pointer-events: auto; cursor: ew-resize; touch-action: none; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+  .seam .grip svg { width: 18px; height: 18px; }
+  .seam .lab { position: absolute; top: 112px; white-space: nowrap; font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; padding: 5px 8px; background: var(--glass); }
+  .seam .lab.l { right: 10px; } .seam .lab.r { left: 10px; }
+  .seam .lab i { font-style: normal; font-family: "IBM Plex Sans JP", sans-serif; letter-spacing: .04em; opacity: .7; margin-left: 6px; }
+
+  /* the meter */
+  .hint { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 74px); right: 28px; font-size: 10.5px; letter-spacing: .06em; background: var(--glass); padding: 5px 8px; transition: opacity 1s; pointer-events: none; }
+  .hint.off { opacity: 0; }
+  @media (max-width: 720px) { .hint { right: 16px; top: calc(env(safe-area-inset-top, 0px) + 64px); max-width: 60vw; } }
+  .probe { position: fixed; pointer-events: none; transform: translate(-50%, -50%); display: none; }
+  .probe .ring { width: 30px; height: 30px; border: 1.25px solid var(--ink); border-radius: 50%; position: relative; }
+  .probe .ring::before, .probe .ring::after { content: ""; position: absolute; background: var(--ink); }
+  .probe .ring::before { left: 50%; top: -7px; bottom: -7px; width: 1.25px; margin-left: -.6px; }
+  .probe .ring::after { top: 50%; left: -7px; right: -7px; height: 1.25px; margin-top: -.6px; }
+  .probe .val { position: absolute; left: 26px; top: -26px; white-space: nowrap; font: 500 12px "IBM Plex Mono", monospace; background: var(--paper); padding: 3px 7px; border: 1px solid var(--ink); font-variant-numeric: tabular-nums; }
+  .probe.felt .ring { border-color: #fff; border-style: dashed; }
+  .probe.felt .ring::before, .probe.felt .ring::after { background: transparent; }
+  .probe.felt .val { background: rgba(21,21,21,.66); color: #fff; border-color: transparent; font: italic 300 14px "IBM Plex Sans", sans-serif; }
+  .probe.glare .val { border-color: var(--amber-ink); color: var(--amber-ink); }
+
+  /* chapter caption & strip */
+  .foot { position: fixed; left: 28px; right: 28px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); display: grid; gap: 14px; pointer-events: none; }
+  .note { justify-self: start; max-width: 420px; background: var(--glass); padding: 12px 16px 13px; pointer-events: auto; }
+  .note .k { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-ink); }
+  .note p { margin: 4px 0 0; font: italic 300 15px/1.45 "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  .note .sub { margin-top: 6px; font: 400 12px/1.45 "IBM Plex Sans", sans-serif; color: var(--muted); font-style: normal; }
+  [lang=ja] .note p { font: 300 15px/1.6 "IBM Plex Sans JP", sans-serif; }
+  .strip { display: grid; grid-template-columns: auto repeat(6, minmax(0, 1fr)); gap: 0; background: var(--glass); pointer-events: auto; border-top: 1px solid var(--ink); }
+  .strip button { all: unset; cursor: pointer; padding: 10px 12px 11px; position: relative; min-width: 0; }
+  .strip .play { display: grid; place-items: center; width: 22px; padding: 10px 14px; border-right: 1px solid rgba(21,21,21,.15); }
+  .strip .play svg { width: 12px; height: 12px; }
+  .strip .ch .n { font: 500 10px "IBM Plex Mono", monospace; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .strip .ch .c { display: block; font: 500 14px/1.2 "Archivo", sans-serif; font-stretch: 110%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .strip .ch .bar { position: absolute; left: 0; right: 0; top: -1px; height: 3px; transform-origin: left; transform: scaleX(0); background: var(--ink); }
+  .strip .ch[aria-current=true] .n { color: var(--amber-ink); }
+  .strip .ch:not([aria-current=true]) .c { opacity: .55; }
+  .strip .ch:hover .c { opacity: 1; }
+
+  /* title card between chapters */
+  .card { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity .6s; }
+  .card.on { opacity: 1; }
+  .card div { text-align: center; }
+  .card .y { font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .14em; color: var(--amber-ink); }
+  .card h2 { margin: 10px 0 0; font: 300 clamp(44px, 7vw, 110px)/.95 "Archivo", sans-serif; font-stretch: 122%; letter-spacing: -.02em; }
+  .card .jp { margin-top: 12px; font: 300 15px "IBM Plex Sans JP", sans-serif; letter-spacing: .2em; color: var(--muted); }
+
+  .end { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity 1.2s; }
+  .end.on { opacity: 1; }
+  .end:not(.on) { visibility: hidden; }
+  .end .box { background: var(--glass); padding: 26px 30px; max-width: 460px; pointer-events: auto; }
+  .end h3 { margin: 0; font: 300 30px/1.1 "Archivo", sans-serif; font-stretch: 116%; }
+  .end p { margin: 10px 0 0; color: var(--muted); }
+  .end .mail { margin-top: 16px; font: 500 13px "IBM Plex Mono", monospace; user-select: all; color: var(--ink); }
+  .end button { margin-top: 18px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; background: none; border: 1px solid var(--ink); padding: 8px 12px; cursor: pointer; color: var(--ink); }
+
+  .loading { position: fixed; inset: 0; background: var(--paper); display: grid; place-items: center; transition: opacity .8s; z-index: 5; }
+  .loading.done { opacity: 0; pointer-events: none; }
+  .loading .lb { width: min(320px, 70vw); }
+  .loading .t { font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; }
+  .loading .track { margin-top: 10px; height: 1px; background: rgba(21,21,21,.15); }
+  .loading .fill { height: 1px; background: var(--ink); width: 0; transition: width .3s; }
+  .loading .err { margin-top: 14px; color: var(--amber-ink); font-size: 13px; }
+
+  @media (max-width: 720px) {
+    .mast { left: 16px; right: 16px; top: calc(env(safe-area-inset-top, 0px) + 14px); }
+    .foot { left: 0; right: 0; bottom: 0; gap: 8px; }
+    .note { justify-self: stretch; margin: 0 16px; padding: 10px 12px; }
+    .note p { font-size: 13.5px; }
+    .strip { grid-template-columns: auto repeat(6, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom, 0px); }
+    .strip button { padding: 9px 6px 10px; }
+    .strip .ch .c { font-size: 11.5px; }
+    .seam .lab { top: 118px; font-size: 9.5px; }
+    .tag { font-size: 9.5px; } .tag span { display: block; }
+    .strip .ch .n { display: none; }
+    .mast > div:first-child { margin: -6px 0 0 -8px; padding: 8px 10px; }
+    .seam .lab i { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .card, .end, .loading { transition: none; } }
+</style>
+</head>
 <body>
 
-  <nav class="navbar">
-    <div class="nav-wrap">
-      <a href="https://daylightlab.cloud" class="logo-container">
-        <img src="skypixel.png" alt="Logo" class="logo-img">
-      </a>
+<noscript><div style="position:fixed;inset:0;display:grid;place-items:center;background:#f1efea;z-index:9;padding:24px;font:15px/1.6 sans-serif"><div style="max-width:520px"><h1 style="font-weight:500">Dong Hyun Kim</h1><p>Architect and lighting researcher — the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science (from July 2026). Previously ETH Zürich (A/S), KTH Lighting Design (visiting postdoc), EPFL LIPID, TU Delft; BSc, MSc and PhD at The Bartlett, UCL.</p><p>donghyun.kim@rs.tus.ac.jp · <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en">Publications</a> · <a href="https://www.linkedin.com/in/donghkim">LinkedIn</a> · <a href="archive/">Previous site</a></p></div></div></noscript>
 
-      <div class="nav-desktop">
-        <ol>
-          <li><a href="#about"><span class="mono-num">01.</span> About</a></li>
-          <li><a href="#jobs"><span class="mono-num">02.</span> Experience</a></li>
-          <li><a href="#bento-projects"><span class="mono-num">03.</span> Work</a></li>
-          <li><a href="#contact"><span class="mono-num">04.</span> Contact</a></li>
-        </ol>
-        <a href="#" class="resume-btn">Resume</a>
-      </div>
 
-      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-      </div>
-    </div>
-  </nav>
+<canvas id="stage" aria-label="A first-person walk through six cities, split into measured and felt light"></canvas>
 
-  <div class="mobile-menu-overlay" id="mobile-menu">
-    <button class="menu-close-btn" onclick="toggleMenu()">
-      <i class="fas fa-times"></i>
-    </button>
-
-    <div class="mobile-nav-links">
-      <a href="#about" class="mobile-link" onclick="toggleMenu()">
-        <span class="mono-num">01.</span>
-        <span class="link-text">About</span>
-      </a>
-      <a href="#jobs" class="mobile-link" onclick="toggleMenu()">
-        <span class="mono-num">02.</span>
-        <span class="link-text">Experience</span>
-      </a>
-      <a href="#bento-projects" class="mobile-link" onclick="toggleMenu()">
-        <span class="mono-num">03.</span>
-        <span class="link-text">Work</span>
-      </a>
-      <a href="#contact" class="mobile-link" onclick="toggleMenu()">
-        <span class="mono-num">04.</span>
-        <span class="link-text">Contact</span>
-      </a>
-      <a href="#" class="resume-btn mobile-resume">Resume</a>
-    </div>
+<header class="mast">
+  <div>
+    <h1 class="name">Dong Hyun Kim</h1>
+    <p class="tag">Daylight Lab · <span data-en="measured light, felt light" data-ja="測った光と、感じた光">measured light, felt light</span></p>
+    <nav class="links mono"><a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en" target="_blank" rel="noopener" data-en="Publications ↗" data-ja="論文 ↗">Publications ↗</a><a href="https://www.linkedin.com/in/donghkim" target="_blank" rel="noopener">LinkedIn ↗</a><a href="archive/" data-en="Previous site" data-ja="旧サイト">Previous site</a></nav>
   </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-l="en" aria-pressed="true">EN</button>
+    <button type="button" data-l="ja" aria-pressed="false">日本語</button>
+  </div>
+</header>
 
-  <header class="hero">
-    <div id="particles-js"></div>
+<div class="seam" id="seam">
+  <span class="lab l">Measured<i>測った光</i></span>
+  <span class="lab r">Felt<i>感じた光</i></span>
+  <div class="grip" id="grip" role="slider" aria-label="Measured and felt split" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4 1.5 9 6 14M12 4l4.5 5-4.5 5"/></svg>
+  </div>
+</div>
 
-    <div class="wrap hero-wrap">
-      <div class="hero-copy">
-        <h2 class="mono-heading intro-label">Hi, my name is</h2>
-        <h1 class="main-name">Dong Hyun Kim.</h1>
-        
-        <p class="hero-desc">
-          I am a Postdoctoral researcher at the Institute of Technology in Architecture in <a href="https://ethz.ch/en.html" target="_blank">ETH Zurich</a>. 
-          I research how human comfort in architecture can be characterised in building physics.
-        </p>
-        
-        <div class="hero-links">
-          <a href="#"><i class="fas fa-file-pdf"></i> Download CV</a>
-          <a href="mailto:kim@arch.ethz.ch"><i class="fas fa-envelope"></i> Get in Touch</a>
-        </div>
-      </div>
-      </div>
-  </header>
+<div class="hint mono" id="hint" data-en="Move to look · drag to turn · double-click to face ahead" data-ja="マウスで見回す・ドラッグで向きを変える・ダブルクリックで正面へ">Move to look · drag to turn · double-click to face ahead</div>
+<div class="probe" id="probe"><div class="ring"></div><div class="val" id="pval">—</div></div>
 
-  <section id="about" class="fade">
-    <div class="wrap grid">
-      <div class="col-text">
-        <h2 class="numbered-title"><span class="mono-num">01.</span> About Me</h2>
-        
-        <p>
-          I am a scientist and engineer trained at <a href="https://www.ucl.ac.uk/bartlett/" target="_blank">University College London (UCL)</a>, where my path evolved from architectural design to the physics of the built environment. My expertise is built on a PhD in Building Physics (2018) and an MSc in Light and Lighting (2012), yet fundamentally grounded in the architectural mindset developed during my BSc (2011).
-        </p>
+<div class="card" id="card"><div><div class="y mono" id="cy"></div><h2 id="ct"></h2><div class="jp" id="cj"></div></div></div>
 
-        <p>
-          My research lies at the interface of technology and human perception, with a dedicated emphasis on how daylight shapes the occupant experience. Focused on fundamental questions of visual comfort and health, I explore the dynamic interplay between space, light, and time with an aim to bridge architectural design with building physics.
-        </p>
-        
-        <p>
-          I approach these challenges with a reverse-engineering mindset, using engineering as the language to translate complex human needs into quantifiable, responsive systems. My technical focus enhances architectural design intuition with physics and technologies—leveraging sensor technologies, machine learning, and predictive modeling to create responsive environments.
-        </p>
-      </div>
-      
-      <aside class="col-aside">
-        <div class="timeline">
-          <figure class="photo"><img src="profile1.jpg" alt="Portrait 1"></figure>
-          <figure class="photo"><img src="profile2.jpg" alt="Portrait 2"></figure>
-        </div>
-      </aside>
-    </div>
-  </section>
+<div class="end" id="end"><div class="box">
+  <h3 data-en="The window is open." data-ja="窓は開いている。">The window is open.</h3>
+  <p data-en="Assistant Professor, Department of Architecture, Tokyo University of Science — from July 2026." data-ja="東京理科大学 建築学科 助教（2026年7月〜）">Assistant Professor, Department of Architecture, Tokyo University of Science — from July 2026.</p>
+  <div class="mail">donghyun.kim@rs.tus.ac.jp</div>
+  <button type="button" id="again" data-en="Walk again" data-ja="もう一度歩く">Walk again</button>
+</div></div>
 
-  <section id="jobs" class="fade">
-    <div class="wrap">
-      <h2 class="numbered-title"><span class="mono-num">02.</span> Academic Employment</h2>
+<footer class="foot">
+  <div class="note" id="note"><div class="k" id="nk"></div><p id="np"></p><div class="sub" id="ns"></div></div>
+  <nav class="strip" id="strip" aria-label="Chapters">
+    <button class="play" id="play" type="button" aria-label="Pause"><svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="2.6" height="9"/><rect x="7.4" y="1.5" width="2.6" height="9"/></svg></button>
+  </nav>
+</footer>
 
-      <div class="jobs-container">
-        <div class="jobs-tabs" role="tablist">
-          <button class="job-tab active" data-id="job-eth">ETH Zürich</button>
-          <button class="job-tab" data-id="job-epfl">EPFL</button>
-          <button class="job-tab" data-id="job-tudelft">TU Delft</button>
-          <button class="job-tab" data-id="job-ucl">UCL</button>
-          <div class="job-highlight"></div> 
-        </div>
+<div class="loading" id="loading"><div class="lb"><div class="t"><span data-en="Gathering daylight" data-ja="光を集めています">Gathering daylight</span><span id="lp">0%</span></div><div class="track"><div class="fill" id="lf"></div></div><div class="err" id="lerr" hidden></div></div></div>
 
-        <div class="jobs-content">
-          <div id="job-eth" class="job-panel active" role="tabpanel">
-            <h3>Postdoctoral Researcher <span class="at-symbol">@</span> <a href="#" target="_blank">ETH Zürich</a></h3>
-            <p class="job-range">2025 – Present</p>
-            <ul class="job-list">
-              <li>Advancing the <strong>Solskin project</strong>—an adaptive façade system composed of orientable photovoltaic modules.</li>
-              <li>Developing control frameworks that synthesize machine learning with real-time physical measurements.</li>
-              <li>Dynamically adjusting shading mechanisms to optimize the balance between on-site energy generation and human visual/thermal comfort.</li>
-            </ul>
-          </div>
+<script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
+<script type="module">
+import { createWalk } from './js/walk.js';
 
-          <div id="job-epfl" class="job-panel" role="tabpanel">
-            <h3>Postdoctoral Researcher <span class="at-symbol">@</span> <a href="#" target="_blank">EPFL</a></h3>
-            <p class="job-range">2021 – 2024</p>
-            <ul class="job-list">
-              <li>Investigated factors affecting visual comfort under both daylighting and artificial lighting, aiming to refine existing visual comfort models.</li>
-              <li>Led research projects with a strong emphasis on improving discomfort glare prediction models for building occupants.</li>
-              <li>Examined potential psychological factors influencing discomfort glare perception and assessed whether predicted indices align with real-world sensations.</li>
-              <li>Evaluated hardware and software tools for applicability in various glare evaluation scenarios.</li>
-            </ul>
-          </div>
+const CH = [
+  { y: '2007 — 2018', t: 'London', jp: 'ロンドン', k: 'The Bartlett, UCL',
+    en: 'BSc Architecture, MSc Light & Lighting, PhD Built Environment. Learning to measure light under a sky that rarely held still.',
+    ja: '建築、照明、建築環境を学んだ十一年。めったに晴れない空の下で、光を測ることを覚えた。',
+    sub_en: 'Alone, with an umbrella.', sub_ja: 'ひとり、傘をさして。' },
+  { y: '2018 — 2020', t: 'Delft', jp: 'デルフト', k: 'TU Delft · Postdoc',
+    en: 'Married at the Stadhuis on the Markt — the red-and-white shutters, the big Dutch clouds.',
+    ja: 'マルクト広場の市庁舎で結婚した。赤と白の鎧戸、オランダの大きな雲。',
+    sub_en: 'Two shadows now.', sub_ja: '影はふたつになった。' },
+  { y: '2021 — 2024', t: 'Lausanne', jp: 'ローザンヌ', k: 'EPFL · LIPID',
+    en: 'Visual comfort and glare by the lake. Our daughter was born across the water in Morges.',
+    ja: '湖のほとりで、視覚的快適性とグレアの研究。娘はモルジュで生まれた。',
+    sub_en: 'Two shadows and a pram.', sub_ja: 'ふたつの影と、ベビーカー。' },
+  { y: '2024', t: 'Stockholm', jp: 'ストックホルム', k: 'KTH Lighting Design · Visiting Postdoc',
+    en: 'Visiting postdoc at KTH Lighting Design — a northern autumn of low sun and long shadows.',
+    ja: 'KTH 照明デザイン学科の客員ポスドク。低い太陽と長い影の、北の秋。',
+    sub_en: 'Two shadows and a pram, in the gold.', sub_ja: 'ふたつの影とベビーカー、金色の光の中で。' },
+  { y: '2025 — 2026', t: 'Zürich', jp: 'チューリッヒ', k: 'ETH Zürich · A/S',
+    en: 'Architecture and Building Systems — façades that answer the sun.',
+    ja: '建築と建築設備のチェア。太陽に応える外皮をつくる。',
+    sub_en: 'Three of us, walking.', sub_ja: '三人で歩く。' },
+  { y: '2026 —', t: 'Tokyo', jp: '東京', k: 'Tokyo University of Science',
+    en: 'Assistant Professor, Department of Architecture. A new beginning under a clear sky.',
+    ja: '建築学科 助教。澄んだ空の下での、新しい始まり。',
+    sub_en: 'Three of us, and an open window.', sub_ja: '三人と、開いた窓。' }
+];
 
-          <div id="job-tudelft" class="job-panel" role="tabpanel">
-            <h3>Postdoctoral Researcher <span class="at-symbol">@</span> <a href="#" target="_blank">TU Delft</a></h3>
-            <p class="job-range">2018 – 2020</p>
-            <ul class="job-list">
-              <li>Conducted cross-disciplinary research within the Chair of Indoor Environment focusing on the impacts of environmental factors on occupant health and comfort.</li>
-              <li>Analyzed large datasets from the European OFFICAIR project to identify office worker profiles in the Netherlands at higher health risk due to environmental stressors.</li>
-              <li>Co-conducted workshops and lab studies identifying primary-school children’s IEQ problems, investigating their potential as co-designers for better school environments.</li>
-            </ul>
-          </div>
+const $ = (id) => document.getElementById(id);
+const canvas = $('stage');
+let lang = 'en';
+const SPEED = 2.1;            // metres per second of auto-walk
+const LEN = 102;              // metres per chapter
+let W, playing = true, prog = 0, chapter = 0, split = 0.36, look = { x: 0, y: 0, tx: 0, ty: 0 }, busy = false, ended = false;
 
-          <div id="job-ucl" class="job-panel" role="tabpanel">
-            <h3>PhD Researcher <span class="at-symbol">@</span> <a href="#" target="_blank">UCL</a></h3>
-            <p class="job-range">2013 – 2018</p>
-            <ul class="job-list">
-              <li>Earned a PhD in Built Environment with a thesis titled <em>“Light and Emotion: Exploring Human Affect in Lighting.”</em></li>
-              <li>Focused on how temporal dynamics in modern architectural lighting environments influence occupants’ perception, emotion, and comfort.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+// chapter strip
+const strip = $('strip');
+CH.forEach((c, i) => {
+  const b = document.createElement('button'); b.className = 'ch'; b.type = 'button';
+  b.innerHTML = `<span class="bar"></span><span class="n">${String(i + 1).padStart(2, '0')} · ${c.y.split(' — ')[0]}</span><span class="c">${c.t}</span>`;
+  b.addEventListener('click', () => goTo(i)); strip.appendChild(b);
+});
+const chBtns = [...strip.querySelectorAll('.ch')];
 
-  <section id="bento-projects" class="fade">
-    <div class="wrap">
-      <h2 class="numbered-title"><span class="mono-num">03.</span> Some Selected Research</h2>
-      
-      <div class="bento-grid">
-        <a href="#" class="bento-card featured">
-          <div class="bento-content">
-            <div class="bento-tags">
-              <span>[ 2025 ]</span>
-              <span>ETH Zürich</span>
-            </div>
-            <h3>Solskin AI</h3>
-            <p>Adaptive façade systems using machine learning for real-time climate responsiveness and energy optimization.</p>
-          </div>
-          <div class="bento-visual">
-            <img src="placeholder.png" alt="Solskin AI">
-          </div>
-        </a>
+function setLang(l) {
+  lang = l; document.documentElement.lang = l;
+  document.querySelectorAll('.lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
+  document.querySelectorAll('[data-en]').forEach((el) => { el.textContent = el.dataset[l]; });
+  caption(chapter);
+}
+document.querySelectorAll('.lang button').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.l)));
 
-        <a href="#" class="bento-card">
-          <div class="bento-visual small">
-            <img src="placeholder.png" alt="HiDyn">
-          </div>
-          <div class="bento-content">
-            <div class="bento-tags">
-              <span>[ EPFL ]</span>
-              <span>H-D-R</span>
-            </div>
-            <h3>HiDyn Project</h3>
-            <p>High dynamic range imaging for visual comfort analysis in complex lighting.</p>
-          </div>
-        </a>
+function caption(i) {
+  const c = CH[i];
+  $('nk').textContent = `${String(i + 1).padStart(2, '0')} ${c.t} · ${c.k}`;
+  $('np').textContent = lang === 'ja' ? c.ja : c.en;
+  $('ns').textContent = lang === 'ja' ? c.sub_ja : c.sub_en;
+  chBtns.forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
+}
 
-        <a href="#" class="bento-card">
-          <div class="bento-visual small">
-            <img src="placeholder.png" alt="Visual Comfort">
-          </div>
-          <div class="bento-content">
-            <div class="bento-tags">
-              <span>[ TU Delft ]</span>
-              <span>Human-Centric</span>
-            </div>
-            <h3>Visual Comfort</h3>
-            <p>Developing new metrics for glare perception in daylit office environments.</p>
-          </div>
-        </a>
+// seam
+function placeSeam() {
+  $('seam').style.left = (split * 100) + '%';
+  $('grip').setAttribute('aria-valuenow', Math.round(split * 100));
+  if (W) W.setSplit(split);
+}
+let dragging = false;
+$('grip').addEventListener('pointerdown', (e) => { dragging = true; $('grip').setPointerCapture(e.pointerId); e.preventDefault(); });
+$('grip').addEventListener('pointermove', (e) => { if (dragging) { split = Math.min(1, Math.max(0, e.clientX / innerWidth)); placeSeam(); } });
+$('grip').addEventListener('pointerup', () => { dragging = false; });
+$('grip').addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') split = Math.max(0, split - 0.05); if (e.key === 'ArrowRight') split = Math.min(1, split + 0.05); placeSeam(); });
 
-        <a href="#" class="bento-card featured">
-          <div class="bento-content">
-            <div class="bento-tags">
-              <span>[ Publication ]</span>
-              <span>Building & Environment</span>
-            </div>
-            <h3>Spectral Rendering</h3>
-            <p>Simulating daylight spectral properties for precise circadian health assessments in architecture.</p>
-          </div>
-          <div class="bento-visual">
-            <img src="placeholder.png" alt="Daylight Simulation">
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
+// look + meter
+const probe = $('probe'), pval = $('pval');
+let pointer = null;
+// the view turns with the mouse; drag (or swipe) to turn further and keep looking that way
+let turn = 0, drag = null;
+const hover = { x: 0, y: 0 };
+const aim = () => { look.tx = hover.x + turn; look.ty = hover.y; };
+canvas.addEventListener('pointermove', (e) => {
+  if (drag) { turn = drag.turn - (e.clientX - drag.x) / innerWidth * 4.2; turn = Math.max(-3.4, Math.min(3.4, turn)); hover.y = drag.y0 - (e.clientY - drag.y) / innerHeight * 2.4; hover.y = Math.max(-1.2, Math.min(1.6, hover.y)); }
+  else if (e.pointerType === 'mouse') { hover.x = (e.clientX / innerWidth - 0.5) * 2 * 1.25; hover.y = -(e.clientY / innerHeight - 0.5) * 2 * 0.9; }
+  aim(); pointer = { x: e.clientX, y: e.clientY };
+});
+canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, turn, y0: hover.y }; canvas.setPointerCapture(e.pointerId); canvas.style.cursor = 'grabbing'; });
+const endDrag = () => { drag = null; canvas.style.cursor = ''; };
+canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointerleave', () => { if (drag) return; pointer = null; hover.x = 0; hover.y = 0; aim(); probe.style.display = 'none'; });
+canvas.addEventListener('dblclick', () => { turn = 0; aim(); });
 
-  <section id="contact" class="fade">
-    <div class="wrap">
-      <div class="contact-block">
-        <h2 class="numbered-title"><span class="mono-num">04.</span> What's Next?</h2>
-        <h2 style="font-size: 3rem; margin-bottom: 1.5rem; color: #2D3436;">Get In Touch</h2>
-        <p style="max-width: 600px;">
-          I am always interested in hearing and talking more about daylight and architecture studies. Whether you have a question or just want to say hi, my inbox is always open.
-        </p>
-        <a href="mailto:kim@arch.ethz.ch" class="hero-links" style="display: inline-block; margin-top: 2rem;">
-          <span style="font-family: inherit; font-weight: 700; color: #83C5C9; border: 2px solid #83C5C9; padding: 1rem 2rem; border-radius: 4px; text-decoration: none;">Say Hello</span>
-        </a>
-      </div>
-    </div>
-  </section>
+const fmt = (L) => L >= 10000 ? Math.round(L / 100) * 100 : L >= 1000 ? Math.round(L / 10) * 10 : L >= 100 ? Math.round(L) : L.toFixed(1);
+function felt(L) {
+  const en = L > 4000 ? 'glaring' : L > 1500 ? 'bright, a little sharp' : L > 400 ? 'bright' : L > 120 ? 'soft' : L > 30 ? 'quiet' : 'dim';
+  const ja = L > 4000 ? 'まぶしい' : L > 1500 ? '明るい、少し鋭い' : L > 400 ? '明るい' : L > 120 ? 'やわらかい' : L > 30 ? '静か' : '薄暗い';
+  return lang === 'ja' ? ja : en;
+}
+function meter() {
+  if (!pointer || !W) return;
+  const u = pointer.x / innerWidth, v = 1 - pointer.y / innerHeight;
+  W.setProbe(u, v);
+  const L = W.state.probeL, measured = u < split;
+  probe.style.display = 'block'; probe.style.left = pointer.x + 'px'; probe.style.top = pointer.y + 'px';
+  probe.classList.toggle('felt', !measured); probe.classList.toggle('glare', measured && L > 4000);
+  pval.textContent = measured ? `${fmt(L)} cd/m²` : felt(L);
+}
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="https://github.com/dhkim-research" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-        <a href="https://www.linkedin.com/in/donghkim" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-      </div>
-      <p>© 2025 Dong Hyun Kim | Hosted on GitHub Pages</p>
-    </div>
-  </footer>
+// chapters
+const card = $('card');
+function showCard(i) { const c = CH[i]; $('cy').textContent = c.y; $('ct').textContent = c.t; $('cj').textContent = c.jp; card.classList.add('on'); }
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+async function fadeTo(v, ms) {
+  const from = W.state.fade ?? 0, t0 = performance.now();
+  return new Promise((res) => { const step = () => { const k = Math.min(1, (performance.now() - t0) / ms), e = k * k * (3 - 2 * k); W.state.fade = from + (v - from) * e; W.fade(W.state.fade); k < 1 ? requestAnimationFrame(step) : res(); }; step(); });
+}
+async function goTo(i) {
+  if (busy) return; busy = true; ended = false; $('end').classList.remove('on');
+  showCard(i); await fadeTo(1, 700);
+  chapter = i; prog = 0; turn = 0; aim(); W.setCity(i); W.setProgress(0); caption(i);
+  await wait(650); card.classList.remove('on'); await fadeTo(0, 900);
+  busy = false;
+  if (i + 1 < CH.length) setTimeout(() => W.prebuild(i + 1), 400);
+}
+$('again').addEventListener('click', () => goTo(0));
 
-  <script src="scripts/particles.min.js"></script>
+const playBtn = $('play');
+const PAUSE = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="2.6" height="9"/><rect x="7.4" y="1.5" width="2.6" height="9"/></svg>';
+const PLAY = '<svg viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 1.5v9l8-4.5z"/></svg>';
+playBtn.addEventListener('click', () => { playing = !playing; playBtn.innerHTML = playing ? PAUSE : PLAY; playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play'); });
+addEventListener('keydown', (e) => {
+  if (e.key === ' ') { e.preventDefault(); playBtn.click(); }
+  if (e.key === ']' || e.key === 'PageDown') goTo((chapter + 1) % CH.length);
+  if (e.key === '[' || e.key === 'PageUp') goTo((chapter + CH.length - 1) % CH.length);
+});
 
-  <script>
-    // 1. Scroll Animation
-    const els = document.querySelectorAll('.fade');
-    const obs = new IntersectionObserver((entries)=> {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-    }, { threshold: 0.12 });
-    els.forEach(el => obs.observe(el));
-  </script>
+// boot
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+try {
+  W = await createWalk({ canvas, assets: './assets/', onProgress: (f) => { $('lp').textContent = Math.round(f * 100) + '%'; $('lf').style.width = (f * 100) + '%'; } });
+} catch (err) {
+  $('lerr').hidden = false; $('lerr').textContent = 'This walk needs WebGL 2. ' + (err && err.message ? err.message : '');
+  throw err;
+}
+window.W = W; window.goTo = goTo;
+W.state.fade = 1; W.fade(1);
+placeSeam(); caption(0); setLang('en');
+W.setCity(0); W.render(0.016);
+$('loading').classList.add('done');
+showCard(0); setTimeout(async () => { card.classList.remove('on'); await fadeTo(0, 1100); }, 1300);
+setTimeout(() => W.prebuild(1), 2500);
+setTimeout(() => $('hint').classList.add('off'), 9000);
+if (reduce) { playing = false; playBtn.innerHTML = PLAY; }
 
-  <script>
-    // 2. TABS LOGIC
-    const tabs = document.querySelectorAll('.job-tab');
-    const panels = document.querySelectorAll('.job-panel');
-    const highlight = document.querySelector('.job-highlight');
+let last = performance.now(), manual = false;
+window.__cap = { // deterministic stepping for recording
+  manual(on) { manual = on; }, step(dt) { tick(dt); },
+  set(i, p) { chapter = i; prog = p; W.setCity(i); W.setProgress(p); caption(i); },
+  card(on, i) { if (on) showCard(i); else card.classList.remove('on'); }, fade(v) { W.state.fade = v; W.fade(v); },
+  split(v) { split = v; placeSeam(); }, point(x, y) { pointer = x == null ? null : { x, y }; if (!pointer) probe.style.display = 'none'; },
+  look(x, y) { look.tx = x; look.ty = y; }, pause(p) { playing = !p; }
+};
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (!manual) tick(dt);
+  requestAnimationFrame(frame);
+}
+function tick(dt) {
+  if (playing && !busy && !ended) {
+    prog += dt * SPEED / LEN;
+    if (prog >= 1) { prog = 1; if (chapter + 1 < CH.length) goTo(chapter + 1); else { ended = true; $('end').classList.add('on'); } }
+  }
+  W.state.walkRate = playing && !busy && !ended ? SPEED / 1.45 : 0;
+  W.setProgress(prog);
+  look.x += (look.tx - look.x) * Math.min(1, dt * 4); look.y += (look.ty - look.y) * Math.min(1, dt * 4);
+  W.setLook(look.x, look.y);
+  W.render(dt);
+  chBtns.forEach((b, k) => { b.querySelector('.bar').style.transform = `scaleX(${k < chapter ? 1 : k === chapter ? prog : 0})`; });
+  meter();
+}
+requestAnimationFrame(frame);
+</script>
 
-    function moveHighlight(activeTab) {
-      const height = activeTab.offsetHeight;
-      const top = activeTab.offsetTop;
-      highlight.style.top = `${top}px`;
-      highlight.style.height = `${height}px`;
-    }
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        const targetId = tab.getAttribute('data-id');
-        document.getElementById(targetId).classList.add('active');
-        moveHighlight(tab);
-      });
-    });
-
-    window.addEventListener('load', () => moveHighlight(document.querySelector('.job-tab.active')));
-    window.addEventListener('resize', () => moveHighlight(document.querySelector('.job-tab.active')));
-  </script>
-
-  <script>
-    // 3. MENU TOGGLE (Mobile)
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const body = document.body;
-
-    function toggleMenu() {
-      // Toggle active class
-      mobileMenu.classList.toggle('active');
-      
-      // Stop scroll when menu is open
-      if(mobileMenu.classList.contains('active')) {
-        body.style.overflow = 'hidden';
-      } else {
-        body.style.overflow = 'auto';
-      }
-    }
-  </script>
-
-  <script>
-    // 4. PARTICLES (Restored to Connecting Dots + Circles)
-    particlesJS('particles-js',
-      {
-        "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-          /* Colors from your previous code */
-          "color": { "value": ["#7C7C7C", "#0000FC", "#0000BC", "#4428BC", "#940084", "#A80020", "#A81000", "#881400", "#503000", "#007800", "#006800", "#005800", "#004058", "#000000", "#F83800", "#F0D0B0", "#E40058", "#58F898", "#00B800", "#3CBCFC"] },
-          /* Shape: Circle */
-          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
-          "opacity": { "value": 0.8, "random": true, "anim": { "enable": false } },
-          "size": { "value": 4.5, "random": true, "anim": { "enable": false } },
-          /* CONNECTING LINES RESTORED */
-          "line_linked": { "enable": true, "distance": 150, "color": "#a1a1a1", "opacity": 0.4, "width": 1.2 },
-          /* Standard Movement */
-          "move": { "enable": true, "speed": 1.6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } }
-        },
-        "interactivity": {
-          "detect_on": "window", 
-          "events": {
-            "onhover": { "enable": true, "mode": ["grab", "bubble"] },
-            "onclick": { "enable": true, "mode": "push" },
-            "resize": true
-          },
-          "modes": {
-            "grab": { "distance": 250, "line_linked": { "opacity": 0.6 } },
-            "bubble": { "distance": 200, "size": 8, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 200, "duration": 0.4 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
-          }
-        },
-        "retina_detect": true
-      }
-    );
-  </script>
 </body>
 </html>
