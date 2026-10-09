@@ -8,7 +8,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js?v=d1954a06';
 import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=19e93967';
-import { createRoom, ROOM_STATES } from './room.js?v=b44aa769';
+import { createRoom, ROOM_STATES } from './room.js?v=f2867de1';
 
 export { CITIES, ROOM_STATES };
 
@@ -236,7 +236,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); cache.set(i, c); bakeLight(i, c); }
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); cache.set(i, c); c.bakedP = bakeLight(i, c); }
     return cache.get(i);
   }
   /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
@@ -422,7 +422,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
     setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },
-    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, setWeights(w) { room.setWeights(w); }, setPattern(k) { room.setPattern(k); }, setBench(i) { room.setBench(i); }, setBaked, room,
+    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, setWeights(w) { room.setWeights(w); }, setPattern(k) { room.setPattern(k); }, setBench(i) { room.setBench(i); }, setBaked, whenBaked(i) { return getCity(i).bakedP; }, room,
     get mode() { return mode; },
     get city() { return cur; }, get sunAlt() { return CITIES[cur].sun.alt; }
   };

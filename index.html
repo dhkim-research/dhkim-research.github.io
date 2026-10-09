@@ -7,10 +7,17 @@
 <meta name="theme-color" content="#f1efea">
 <meta property="og:title" content="Dong Hyun Kim — Daylight Lab">
 <meta property="og:description" content="Measured light, felt light. An academic journey through six cities, a room of projects, and a record of publications.">
+<meta property="og:image" content="https://daylightlab.jp/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://daylightlab.jp/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f1efea'/%3E%3Cpath d='M0 0h16v32H0z' fill='%23151515'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e8a33d'/%3E%3C/svg%3E">
 <title>Daylight Lab</title>
+<link rel="preload" as="image" href="img/poster_wide.webp" media="(orientation: landscape)">
+<link rel="preload" as="image" href="img/poster_tall.webp" media="(orientation: portrait)">
+<script>document.documentElement.classList.add('booting')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,200..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans+JP:wght@300;400;500&display=swap">
@@ -143,7 +150,7 @@
   .strip .ch:not([aria-current=true]) .c { opacity: .55; }
   .strip .enter { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-left: 1px solid var(--rule); font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
   .strip .enter:hover { background: var(--ink); color: var(--paper); }
-  .hint { position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 92px); right: 24px; font-size: 10.5px; letter-spacing: .06em; background: var(--glass); padding: 5px 8px; transition: opacity 1s; pointer-events: none; }
+  .hint { position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 128px); right: 24px; font-size: 10.5px; letter-spacing: .06em; background: var(--glass); padding: 5px 8px; transition: opacity 1s; pointer-events: none; }
   .hint.off { opacity: 0; }
 
   /* title card between chapters */
@@ -217,13 +224,17 @@
   footer.fine { position: relative; z-index: 3; pointer-events: none; padding: 0 28px 24px; font: 400 11px "IBM Plex Mono", monospace; color: var(--muted); }
   footer.fine span { background: var(--glass); padding: 4px 8px; }
 
-  .loading { position: fixed; inset: 0; background: var(--paper); display: grid; place-items: center; transition: opacity .8s; z-index: 20; }
+  /* the first frame: the baked London street, shown before any script has run; the live scene takes over under it */
+  .loading { position: fixed; inset: 0; z-index: 2; background: #9ea6ab url(img/poster_wide.webp) center / cover no-repeat; transition: opacity .9s ease; }
+  @media (orientation: portrait) { .loading { background-image: url(img/poster_tall.webp); } }
   .loading.done { opacity: 0; pointer-events: none; }
-  .loading .lb { width: min(320px, 70vw); }
-  .loading .t { font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; }
-  .loading .track { margin-top: 10px; height: 1px; background: rgba(21,21,21,.15); }
-  .loading .fill { height: 1px; background: var(--ink); width: 0; transition: width .3s; }
-  .loading .err { margin-top: 14px; color: var(--amber-ink); font-size: 13px; }
+  .loading .lb { position: absolute; left: 0; right: 0; top: 0; }
+  .loading .t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .loading .track { height: 2px; background: transparent; }
+  .loading .fill { height: 2px; background: var(--amber); width: 0; transition: width .3s; }
+  html.booting { overflow: hidden; }
+  html.booting main, html.booting .nav, html.booting .seam { pointer-events: none; }
+  .loading .err { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100vw - 48px)); background: var(--glass); padding: 14px 16px; color: var(--amber-ink); font-size: 13px; }
 
   /* Instruments */
   .bench { list-style: none; margin: 18px 0 0; padding: 0; font-size: 12px; }
@@ -256,6 +267,19 @@
   .cube [data-f=up] { grid-area: 1 / 2; } .cube [data-f=w] { grid-area: 2 / 1; } .cube [data-f=s] { grid-area: 2 / 2; } .cube [data-f=e] { grid-area: 2 / 3; } .cube [data-f=down] { grid-area: 3 / 2; } .cube [data-f=n] { grid-area: 4 / 2; }
   .mrt { font-size: 12px; color: var(--paper); }
 
+  /* one day: the hour of every section, and where the sun is */
+  .clock { position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 68px); right: 24px; display: flex; align-items: center; gap: 10px; background: var(--glass); padding: 6px 12px 6px 8px; pointer-events: none; transition: opacity .6s; }
+  .clock svg { width: 40px; height: 40px; display: block; }
+  .clock .ring { fill: none; stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+  .clock .day { fill: none; stroke: var(--ink); stroke-width: 1; opacity: .5; }
+  .clock line { stroke: var(--ink); stroke-width: 1; }
+  .clock #sdot { fill: var(--amber); stroke: var(--ink); stroke-width: 1; transition: fill .6s; }
+  .clock.night #sdot { fill: var(--paper); }
+  .clock b { display: block; font: 300 26px/1 "Archivo", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .clock span { display: block; margin-top: 3px; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  body.sky-on .clock { opacity: 0; }
+  .kick .tm { font-variant-numeric: tabular-nums; color: var(--ink); }
+
   @media (max-width: 760px) {
     .nav { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; flex-direction: column; align-items: stretch; gap: 6px; }
     .brand { padding: 8px 10px; } .brand span { font-size: 9.5px; }
@@ -272,6 +296,7 @@
     .strip button { padding: 9px 6px 10px; } .strip .ch .n { display: none; } .strip .ch .c { font-size: 11.5px; }
     .seam .lab { top: 132px; font-size: 9.5px; } .seam .lab i { display: none; }
     .hint { display: none; }
+    .clock { top: calc(env(safe-area-inset-top, 0px) + 112px); right: 12px; padding: 4px 9px 4px 5px; gap: 7px; } .clock svg { width: 30px; height: 30px; } .clock b { font-size: 19px; }
     .collab li, .cv li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
     .pubwrap { padding: 20px 16px 24px; }
     .counts { grid-template-columns: repeat(3, auto); }
@@ -312,6 +337,7 @@
     <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4 1.5 9 6 14M12 4l4.5 5-4.5 5"/></svg>
   </div>
 </div>
+<div class="clock" id="clock" aria-hidden="true"><svg viewBox="0 0 56 56"><circle class="ring" cx="28" cy="28" r="19"/><path class="day" d="M9 28 A19 19 0 0 1 47 28"/><line x1="3" x2="53" y1="28" y2="28"/><circle id="sdot" cx="9" cy="28" r="3.6"/></svg><div><b id="clk">08:10</b><span class="mono" id="clkl">London</span></div></div>
 <div class="hint mono" id="hint" data-en="Your cursor is a luminance meter · drag the seam" data-ja="カーソルは輝度計 · 境界線を動かす">Your cursor is a luminance meter · drag the seam</div>
 <div class="probe" id="probe"><div class="ring"></div><div class="val" id="pval">—</div></div>
 <div class="card" id="card"><div><div class="y mono" id="cy"></div><h2 id="ct"></h2><div class="jp" id="cj"></div></div></div>
@@ -327,7 +353,7 @@
   </section>
 
   <!-- ABOUT -->
-  <section class="sec" id="about" data-scene="room:about">
+  <section class="sec" id="about" data-scene="room:about" data-t="15:30">
     <div class="panel">
       <div class="kick" data-en="About · through the window" data-ja="紹介 · 窓の向こうへ">About · through the window</div>
       <h2 data-en="Between what a meter reads and what a person feels." data-ja="計測器が読む光と、人が感じる光のあいだ。">Between what a meter reads and what a person feels.</h2>
@@ -348,45 +374,10 @@
 
   <!-- PROJECTS -->
   <section id="projects">
-    <div class="sec" data-scene="room:emotion">
-      <div class="panel">
-        <figure class="plate"><img src="img/emotion.jpg?v=213c7860" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
-        <div class="kick">Project 01 · 2013–2018 · UCL</div>
-        <h2>Light &amp; Emotion</h2>
-        <p class="lede" data-en="How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、空間の種類だけでなく感情のために照明をデザインすべきだと考え、照明デザイナーとともに一つのオフィス空間・16の照明シーンで確かめました。">How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes.</p>
-        <div class="live"><span class="dot"></span><span id="moodv">—</span></div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>UCL Research Fellowship · Korea Engineering Industry Scholarship</dd><dt data-en="Output" data-ja="成果">Output</dt><dd class="lk"><a href="https://discovery.ucl.ac.uk/id/eprint/10042464/" target="_blank" rel="noopener">PhD dissertation, UCL (2018) ↗</a><br>Kim &amp; Mansfield, <i>Building and Environment</i> (2021)<br>Kim &amp; Mansfield, CIE Midterm Meeting (2017)</dd></dl>
-        <button class="btn" type="button" data-sky="emotion" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
-      </div>
-    </div>
-    <div class="sec" data-scene="room:hidyn">
-      <div class="panel">
-        <figure class="plate"><img src="img/hidyn.jpg?v=1c308c0c" alt="A false-colour luminance image of seven reference light sources next to a photograph of the Hidyni rig with a camera" loading="lazy" decoding="async"><figcaption data-en="Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1." data-ja="HiDynの高コントラスト輝度基準器「Hidyni」：6桁にわたる7つの光源を、HDRカメラで測った姿（左）と見たままの姿（右）。写真：HiDyn成果報告書D1。">Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1.</figcaption></figure>
-        <div class="kick">Project 02 · 2022–2025 · EURAMET</div>
-        <h2>HiDyn</h2>
-        <p class="lede" data-en="Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards." data-ja="グレアは感じやすく、測りにくい。夜空を背にした街灯は6桁もの輝度差をもち、カメラの1回の露出には収まりません。欧州計量プロジェクトHiDynでは、グレアと障害光の評価にHDR輝度カメラをどこまで信頼できるかを確かめ、規格につながるグッドプラクティスガイドをまとめました。">Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards.</p>
-        <div class="live"><span class="dot"></span><span id="evv">HDR bracket · 0 EV</span></div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>European Partnership on Metrology · 21NRM01 HiDyn</dd><dt data-en="My part" data-ja="担当">My part</dt><dd data-en="Camera tests for daylight glare, quality indices, good-practice guides" data-ja="昼光グレアのためのカメラ評価、品質指標、グッドプラクティスガイド">Camera tests for daylight glare, quality indices, good-practice guides</dd></dl>
-        <button class="btn" type="button" data-sky="glare" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
-      </div>
-    </div>
-    <div class="sec" data-scene="room:comfort">
-      <div class="panel">
-        <figure class="plate"><img src="img/comfort.jpg?v=dd4fa86d" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
-        <div class="kick">Project 03 · 2021–2024 · EPFL</div>
-        <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
-        <p class="lede" data-en="Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。30人が、ストライプ・竹・ボロノイの3つのファサード越しに太陽を視野に入れて作業しました。感じるまぶしさを変えたのは模様ではなく、その場の心地よさでした。">Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did.</p>
-        <div class="seg pats" role="group" aria-label="Façade pattern">
-          <button type="button" data-pat="none" aria-pressed="false" data-en="None" data-ja="なし">None</button><button type="button" data-pat="stripe" aria-pressed="false" data-en="Stripe" data-ja="ストライプ">Stripe</button><button type="button" data-pat="bamboo" aria-pressed="false" data-en="Bamboo" data-ja="竹">Bamboo</button><button type="button" data-pat="voronoi" aria-pressed="true" data-en="Voronoi" data-ja="ボロノイ">Voronoi</button>
-        </div>
-        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Swiss National Science Foundation (SNSF) · Swiss Government Excellence Fellowship</dd><dt data-en="Status" data-ja="状況">Status</dt><dd data-en="Manuscript in preparation" data-ja="論文準備中">Manuscript in preparation</dd></dl>
-        <button class="btn" type="button" data-sky="daylight" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
-      </div>
-    </div>
-    <div class="sec" data-scene="room:solskin">
+    <div class="sec" data-scene="room:solskin" data-t="16:00">
       <div class="panel">
         <figure class="plate cmp" id="cmp" style="--x:50%"><div class="cmpbox"><img src="img/solskin_open.jpg?v=6c403aa9" alt="Solskin façade fully open, seen from inside" loading="lazy" decoding="async"><img class="top" src="img/solskin_closed.jpg?v=15ceb0c6" alt="Solskin façade fully closed, seen from inside" loading="lazy" decoding="async"><span class="cl l mono">open</span><span class="cl r mono">closed</span><div class="bar" aria-hidden="true"><i></i></div><input type="range" min="0" max="100" value="50" aria-label="Compare open and closed façade"></div><figcaption data-en="The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure." data-ja="ETHチューリッヒZCBSラボのSolskinファサード — ドラッグして全開（眺望・昼光）と全閉（日射遮蔽・発電）を比較。同一露出のHDR画像。">The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure.</figcaption></figure>
-        <div class="kick">Project 04 · 2025–2026 · ETH Zürich × Solskin</div>
+        <div class="kick"><span class="tm">16:00</span> · 2025–2026 · ETH Zürich × Solskin</div>
         <h2>Solskin AI</h2>
         <p class="lede" data-en="Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once." data-ja="Solskinは太陽を追って動くアダプティブ・ソーラーファサード。発電しながら室内に日陰をつくります。ETHチューリッヒとZurich Soft RoboticsによるSolskin AIでは、AIによる制御で、建物のエネルギー、在室者の快適性、一人ひとりのニーズを同時に満たすことをめざしています。">Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once.</p>
         <h3 data-en="Three needs, one façade" data-ja="三つのニーズ、一つのファサード">Three needs, one façade</h3>
@@ -404,7 +395,42 @@
         <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Partners" data-ja="パートナー">Partners</dt><dd class="lk"><a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a> · <a href="https://www.solskin.swiss/en" target="_blank" rel="noopener">Solskin (Zurich Soft Robotics) ↗</a></dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The triangle and the room are an illustration, not project data or the project’s control logic." data-ja="三角形と部屋は説明用の図解であり、プロジェクトのデータや制御ロジックではありません。">The triangle and the room are an illustration, not project data or the project’s control logic.</dd></dl>
       </div>
     </div>
-    <div class="sec" data-scene="room:about">
+    <div class="sec" data-scene="room:comfort" data-t="17:15">
+      <div class="panel">
+        <figure class="plate"><img src="img/comfort.jpg?v=dd4fa86d" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
+        <div class="kick"><span class="tm">17:15</span> · 2021–2024 · EPFL</div>
+        <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
+        <p class="lede" data-en="Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。30人が、ストライプ・竹・ボロノイの3つのファサード越しに太陽を視野に入れて作業しました。感じるまぶしさを変えたのは模様ではなく、その場の心地よさでした。">Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did.</p>
+        <div class="seg pats" role="group" aria-label="Façade pattern">
+          <button type="button" data-pat="none" aria-pressed="false" data-en="None" data-ja="なし">None</button><button type="button" data-pat="stripe" aria-pressed="false" data-en="Stripe" data-ja="ストライプ">Stripe</button><button type="button" data-pat="bamboo" aria-pressed="false" data-en="Bamboo" data-ja="竹">Bamboo</button><button type="button" data-pat="voronoi" aria-pressed="true" data-en="Voronoi" data-ja="ボロノイ">Voronoi</button>
+        </div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Swiss National Science Foundation (SNSF) · Swiss Government Excellence Fellowship</dd><dt data-en="Status" data-ja="状況">Status</dt><dd data-en="Manuscript in preparation" data-ja="論文準備中">Manuscript in preparation</dd></dl>
+        <button class="btn" type="button" data-sky="daylight" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:emotion" data-t="18:10">
+      <div class="panel">
+        <figure class="plate"><img src="img/emotion.jpg?v=213c7860" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
+        <div class="kick"><span class="tm">18:10</span> · 2013–2018 · UCL</div>
+        <h2>Light &amp; Emotion</h2>
+        <p class="lede" data-en="How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、空間の種類だけでなく感情のために照明をデザインすべきだと考え、照明デザイナーとともに一つのオフィス空間・16の照明シーンで確かめました。">How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes.</p>
+        <div class="live"><span class="dot"></span><span id="moodv">—</span></div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>UCL Research Fellowship · Korea Engineering Industry Scholarship</dd><dt data-en="Output" data-ja="成果">Output</dt><dd class="lk"><a href="https://discovery.ucl.ac.uk/id/eprint/10042464/" target="_blank" rel="noopener">PhD dissertation, UCL (2018) ↗</a><br>Kim &amp; Mansfield, <i>Building and Environment</i> (2021)<br>Kim &amp; Mansfield, CIE Midterm Meeting (2017)</dd></dl>
+        <button class="btn" type="button" data-sky="emotion" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:hidyn" data-t="21:00">
+      <div class="panel">
+        <figure class="plate"><img src="img/hidyn.jpg?v=1c308c0c" alt="A false-colour luminance image of seven reference light sources next to a photograph of the Hidyni rig with a camera" loading="lazy" decoding="async"><figcaption data-en="Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1." data-ja="HiDynの高コントラスト輝度基準器「Hidyni」：6桁にわたる7つの光源を、HDRカメラで測った姿（左）と見たままの姿（右）。写真：HiDyn成果報告書D1。">Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1.</figcaption></figure>
+        <div class="kick"><span class="tm">21:00</span> · 2022–2025 · EURAMET</div>
+        <h2>HiDyn</h2>
+        <p class="lede" data-en="Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards." data-ja="グレアは感じやすく、測りにくい。夜空を背にした街灯は6桁もの輝度差をもち、カメラの1回の露出には収まりません。欧州計量プロジェクトHiDynでは、グレアと障害光の評価にHDR輝度カメラをどこまで信頼できるかを確かめ、規格につながるグッドプラクティスガイドをまとめました。">Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards.</p>
+        <div class="live"><span class="dot"></span><span id="evv">HDR bracket · 0 EV</span></div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>European Partnership on Metrology · 21NRM01 HiDyn</dd><dt data-en="My part" data-ja="担当">My part</dt><dd data-en="Camera tests for daylight glare, quality indices, good-practice guides" data-ja="昼光グレアのためのカメラ評価、品質指標、グッドプラクティスガイド">Camera tests for daylight glare, quality indices, good-practice guides</dd></dl>
+        <button class="btn" type="button" data-sky="glare" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:late" data-t="21:45">
       <div class="panel">
         <div class="kick" data-en="Collaborations" data-ja="共同研究">Collaborations</div>
         <h2 data-en="Light, shared." data-ja="分かち合う光。">Light, shared.</h2>
@@ -420,7 +446,7 @@
 
   <!-- INSTRUMENTS -->
   <section id="instruments">
-    <div class="sec" data-scene="room:bench" data-bench="0">
+    <div class="sec" data-scene="room:bench" data-bench="0" data-t="22:15">
       <div class="panel">
         <div class="kick" data-en="Instruments · the night bench" data-ja="計測器 · 夜の作業机">Instruments · the night bench</div>
         <h2 data-en="I build the instruments I measure with." data-ja="測るための道具は、自分でつくる。">I build the instruments I measure with.</h2>
@@ -429,7 +455,7 @@
       </div>
     </div>
 
-    <div class="sec" data-scene="room:bench" data-bench="1">
+    <div class="sec" data-scene="room:bench" data-bench="1" data-t="22:35">
       <div class="panel">
         <figure class="plate hdrdemo" id="hdrdemo">
           <div class="hdrbox" id="hdrbox"><img id="hdrimg" src="img/hdr/b2.jpg?v=db6c68b3" alt="Fisheye HDR of a test office with the sun in view, shown one exposure at a time" loading="lazy" decoding="async"><span class="hdrread mono" id="hdrread" hidden></span><span class="hdrtag mono" id="hdrtag">0 EV</span></div>
@@ -445,7 +471,7 @@
       </div>
     </div>
 
-    <div class="sec" data-scene="room:bench" data-bench="2">
+    <div class="sec" data-scene="room:bench" data-bench="2" data-t="22:55">
       <div class="panel">
         <figure class="plate epaper" id="epaper">
           <div class="ep"><div class="ephead mono"><b id="eptitle">CO2</b><span id="epstat"></span></div><svg id="epsvg" viewBox="0 0 440 200" role="img" aria-label="A day of sensor readings drawn as on an e-paper screen"></svg></div>
@@ -462,7 +488,7 @@
       </div>
     </div>
 
-    <div class="sec" data-scene="room:bench" data-bench="3">
+    <div class="sec" data-scene="room:bench" data-bench="3" data-t="23:15">
       <div class="panel">
         <figure class="plate kit" id="kit">
           <div class="kitrow">
@@ -483,7 +509,7 @@
   </section>
 
   <!-- PUBLICATIONS -->
-  <section class="sec pubsec" id="publications" data-scene="pubs">
+  <section class="sec pubsec" id="publications" data-scene="pubs" data-t="23:50">
     <div class="pubwrap">
       <div class="phead">
         <div>
@@ -507,7 +533,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section class="sec contact" id="contact" data-scene="tokyo">
+  <section class="sec contact" id="contact" data-scene="tokyo" data-t="31:40">
     <div class="panel">
       <div class="kick" data-en="Contact · Tokyo" data-ja="連絡 · 東京">Contact · Tokyo</div>
       <h2 data-en="The window is open." data-ja="窓は開いている。">The window is open.</h2>
@@ -523,7 +549,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=b5735712';
+import { createWalk } from './js/walk.js?v=fcedd106';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -652,7 +678,7 @@ async function applyScene(spec) {
   if (spec !== 'pubs') setSky(false);
   document.body.classList.toggle('in-pubs', spec === 'pubs');
   document.querySelectorAll('.menu a').forEach((a) => a.setAttribute('aria-current', 'false'));
-  const sec = spec === 'walk' ? 'walk' : spec === 'pubs' ? 'publications' : spec === 'tokyo' ? 'contact' : spec === 'room:bench' ? 'instruments' : (spec === 'room:about' && document.querySelector('#about').getBoundingClientRect().top < innerHeight * 0.5 && document.querySelector('#projects').getBoundingClientRect().top > innerHeight * 0.5) ? 'about' : 'projects';
+  const sec = spec === 'walk' ? 'walk' : spec === 'pubs' ? 'publications' : spec === 'tokyo' ? 'contact' : spec === 'room:bench' ? 'instruments' : spec === 'room:late' ? 'projects' : (spec === 'room:about' && document.querySelector('#about').getBoundingClientRect().top < innerHeight * 0.5 && document.querySelector('#projects').getBoundingClientRect().top > innerHeight * 0.5) ? 'about' : 'projects';
   document.querySelector(`.menu a[data-s="${sec}"]`)?.setAttribute('aria-current', 'true');
   document.body.classList.toggle('in-walk', spec === 'walk');
   // keep the panel on the measured side: the seam settles just right of it (unless the visitor has moved it)
@@ -661,7 +687,7 @@ async function applyScene(spec) {
     const pnl = host && host.querySelector('.panel');
     splitTarget = pnl ? Math.min(0.6, (pnl.getBoundingClientRect().right + 28) / innerWidth) : 0.36;
   }
-  const roomName = spec === 'pubs' ? 'about' : spec.startsWith('room') ? spec.split(':')[1] : null;
+  const roomName = spec === 'pubs' ? 'late' : spec.startsWith('room') ? spec.split(':')[1] : null;
   const wantMode = roomName ? 'room' : 'walk';
   if (roomName) W.setRoom(roomName);
   if (W.mode !== wantMode || (spec === 'tokyo') || (prev === 'tokyo' && spec === 'walk')) {
@@ -921,22 +947,57 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape' && skyOn) setSky(fal
 document.querySelectorAll('[data-sky]').forEach((b) => b.addEventListener('click', () => { setFilter(b.dataset.sky); document.getElementById('publications').scrollIntoView({ behavior: 'smooth' }); }));
 $('copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText('donghyun.kim@rs.tus.ac.jp'); $('copy').textContent = lang === 'ja' ? 'コピーしました' : 'Copied'; } catch { const r = document.createRange(); r.selectNodeContents(document.querySelector('.mail code')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } });
 
+
+/* ---------- one day: every section has its hour ---------- */
+const tBlocks = [...document.querySelectorAll('[data-t]')];
+const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+const clk = $('clk'), clkl = $('clkl'), sdot = $('sdot'), clockEl = $('clock');
+let clockN = 0;
+function dayClock() {
+  let m = null, where = '';
+  if (scene === 'walk') { m = 8 * 60 + 10 + (chapter + Math.max(0, prog)) * 70; where = lang === 'ja' ? CH[chapter].jp : CH[chapter].t; }
+  else {
+    const mid = innerHeight / 2;
+    for (let k = 0; k < tBlocks.length; k++) {
+      const r = tBlocks[k].getBoundingClientRect();
+      if (r.top <= mid && r.bottom > mid) {
+        const t0 = toMin(tBlocks[k].dataset.t); let t1 = k + 1 < tBlocks.length ? toMin(tBlocks[k + 1].dataset.t) : t0 + 25;
+        if (t1 - t0 > 180) t1 = t0 + 30;            // the night between Publications and Contact passes off-screen
+        m = t0 + (t1 - t0) * Math.min(1, Math.max(0, (mid - r.top) / r.height)); break;
+      }
+    }
+    if (m == null) return;
+  }
+  // the sun as the scene draws it
+  const L = W.mode === 'room' ? W.room.L : W.state.L, alt = Math.asin(Math.max(-1, Math.min(1, L.y))) * 180 / Math.PI;
+  const lit = W.mode === 'room' ? W.room.P.sunI > 0.3 : true;
+  const ja = lang === 'ja', next = m >= 1440, mm = ((m % 1440) + 1440) % 1440;
+  clk.textContent = `${String(Math.floor(mm / 60)).padStart(2, '0')}:${String(Math.floor(mm % 60)).padStart(2, '0')}`;
+  const sun = lit && alt > 0.5 && (h0 => h0 >= 6 && h0 <= 18.5)(mm / 60) ? (ja ? `太陽 ${Math.round(alt)}°` : `sun ${Math.round(alt)}°`) : (mm > 17 * 60 || mm < 5 * 60 ? (ja ? '夜' : 'night') : (ja ? '日の出前' : 'before sunrise'));
+  clkl.textContent = [next ? (ja ? '翌朝' : 'next morning') : '', where, sun].filter(Boolean).join(' · ');
+  // the dial: day on the upper half (06:00 → 18:30), night on the lower half
+  const h = mm / 60, day = h >= 6 && h <= 18.5;
+  const a = day ? Math.PI * (1 - (h - 6) / 12.5) : -Math.PI * (((h - 18.5 + 24) % 24) / 11.5);
+  sdot.setAttribute('cx', (28 + 19 * Math.cos(a)).toFixed(2)); sdot.setAttribute('cy', (28 - 19 * Math.sin(a)).toFixed(2));
+  clockEl.classList.toggle('night', !day);
+}
 /* ---------- boot ---------- */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 try {
   W = await createWalk({ canvas, assets: './assets/', onProgress: (f) => { $('lp').textContent = Math.round(f * 100) + '%'; $('lf').style.width = (f * 100) + '%'; } });
-} catch (err) { $('lerr').hidden = false; $('lerr').textContent = 'This page needs WebGL 2. ' + (err && err.message ? err.message : ''); throw err; }
+} catch (err) { document.documentElement.classList.remove('booting'); $('lerr').hidden = false; $('lerr').textContent = 'This page needs WebGL 2. ' + (err && err.message ? err.message : ''); throw err; }
 sky = createSky($('skyc'), { onPick: (s, x, y) => pubCard(s, x, y) });
 window.W = W; window.goTo = goTo;
-W.state.fade = 1; W.fade(1);
+W.state.fade = 0; W.fade(0);
 setW(wander(dayT));
 document.body.classList.add('in-walk'); placeSeam(); caption(0); setLang('en');
-W.setCity(0); W.render(0.016);
-$('loading').classList.add('done');
+W.setCity(0);
+// hand over from the poster only when the live street looks like it: London's baked light loaded, two frames drawn
+await Promise.race([W.whenBaked(0), new Promise((r) => setTimeout(r, 2500))]);
+W.render(0.016); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+$('loading').classList.add('done'); document.documentElement.classList.remove('booting');
 let seen = false; try { seen = localStorage.getItem('dl-seen') === '1'; localStorage.setItem('dl-seen', '1'); } catch {}
-if (location.hash && location.hash !== '#journey') { await fadeTo(0, 400); }
-else if (!seen) { showCard(0); setTimeout(async () => { card.classList.remove('on'); await fadeTo(0, 1100); }, 1300); }
-else { await fadeTo(0, 700); }
+if (!seen && !(location.hash && location.hash !== '#journey')) { showCard(0); setTimeout(() => card.classList.remove('on'), 1700); }
 checkScene();
 setTimeout(() => W.prebuild(1), 2500); setTimeout(() => W.prebuild(5), 6000);
 setTimeout(() => $('hint').classList.add('off'), 9000);
@@ -967,6 +1028,7 @@ function tick(dt) {
     if (scene === 'room:comfort') document.querySelectorAll('[data-pat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pat === rs.pattern)));
   }
   meter();
+  if ((clockN = (clockN + 1) % 3) === 0) dayClock();
 }
 requestAnimationFrame(frame);
 </script>

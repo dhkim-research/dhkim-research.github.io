@@ -22,7 +22,10 @@ export const ROOM_STATES = {
              look: { sat: 1.12, con: 1.06, skyTop: 0x2a62c4, skyBot: 0xc6e0f4, skyMix: 0.85, bloom: 0.42 }, deck: { cov: 0.32, scale: 0.9 } },
   // Instruments: late evening, only the desk lamp, the things I measure with laid out on the desk
   bench:   { sun: [-4, 10, 0.0], hemi: 0.42, expo: 1.4, cam: [1.95, 1.32, -1.55], tgt: [1.2, 0.8, -2.85], fov: 42, lamps: 1, deskOnly: 1, bench: 1,
-             look: { sat: 1.02, con: 1.05, skyTop: 0x141a3c, skyBot: 0x3a3a66, skyMix: 1.0, bloom: 0.55 }, deck: { cov: 0.0, scale: 1.0 } }
+             look: { sat: 1.02, con: 1.05, skyTop: 0x141a3c, skyBot: 0x3a3a66, skyMix: 1.0, bloom: 0.55 }, deck: { cov: 0.0, scale: 1.0 } },
+  // late: the same room as About, hours later — lamps low and warm, the city dark outside (Collaborations, Publications)
+  late:    { sun: [-8, 24, 0.0], hemi: 0.22, expo: 1.3, cam: [2.25, 1.5, 3.35], tgt: [-0.35, 1.25, -4], fov: 50, lamps: 0.75,
+             look: { sat: 0.98, con: 1.04, lift: [0.0, 0.0, 0.02], skyTop: 0x0e1430, skyBot: 0x2a2d55, skyMix: 1.0, bloom: 0.5 }, deck: { cov: 0.0, scale: 1.0 } }
 };
 // where the camera looks for each instrument on the bench: [cam, target]
 const BENCH_VIEWS = [
@@ -323,7 +326,7 @@ export function createRoom(baseMats) {
 
     // lamps: they come on one by one, then the room moves through three moods
     const moods = [[0xffa45a, 1.0], [0xfff1e0, 1.7], [0xff8a4a, 0.45]];
-    const mood = name === 'day' || name === 'bench' ? 0 : Math.floor(since / 5.5) % 3, mk = moods[mood];
+    const mood = name === 'day' || name === 'bench' || name === 'late' ? 0 : Math.floor(since / 5.5) % 3, mk = moods[mood];
     lamps.forEach((l, i) => {
       const on = name === 'day' ? P.lamps : P.lamps * THREE.MathUtils.smoothstep(since, 0.6 + i * 0.7, 1.0 + i * 0.7);
       l.level += ((target.lamps && !(target.deskOnly && i < 2) ? on : 0) - l.level) * Math.min(1, dt * 5);
