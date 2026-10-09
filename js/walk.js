@@ -7,7 +7,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js?v=d1954a06';
-import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=19e93967';
+import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=9372f113';
 import { createRoom, ROOM_STATES } from './room.js?v=f2867de1';
 
 export { CITIES, ROOM_STATES };
@@ -23,7 +23,7 @@ const FinalShader = {
     tDiffuse: { value: null }, tDepth: { value: null }, uNear: { value: 0.1 }, uFar: { value: 9000 }, uInkFelt: { value: 0.6 }, uSplit: { value: 0.5 }, uExpo: { value: 1 }, uK: { value: K_LUM }, uGlare: { value: GLARE },
     uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uGrade: { value: new THREE.Vector3(1, 1, 1) },
     uFade: { value: 0 }, uFadeCol: { value: new THREE.Color(0xf4efe6) }, uPaper: { value: new THREE.Color(0xf1ede4) }, uInk: { value: new THREE.Color(0x1d2733) },
-    uMeasured: { value: 1 }, uFeltEV: { value: 1 }, uFalse: { value: 0 },
+    uMeasured: { value: 1 }, uFeltEV: { value: 1 }, uFalse: { value: 0 }, uArt: { value: 0 },
     uSat: { value: 1.1 }, uCon: { value: 1.0 }, uLift: { value: new THREE.Vector3(0, 0, 0) },
     uSkyTop: { value: new THREE.Color(0x3a74c8) }, uSkyBot: { value: new THREE.Color(0xcfe2f0) }, uSkyMix: { value: 0 }, uOvercast: { value: 0 },
     uInvProj: { value: new THREE.Matrix4() }, uCamWorld: { value: new THREE.Matrix4() }, uSunDir: { value: new THREE.Vector3(0, 1, 0) },
@@ -31,7 +31,7 @@ const FinalShader = {
   },
   vertexShader: /* glsl */`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: /* glsl */`
-    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured, uFalse; uniform vec2 uRes;
+    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured, uFalse, uArt; uniform vec2 uRes;
     float hash(vec2 p){ p = fract(p*vec2(443.897,441.423)); p += dot(p, p.yx+19.19); return fract((p.x+p.y)*p.x); }
     uniform vec3 uGrade, uFadeCol, uPaper, uInk, uLift, uSkyTop, uSkyBot; uniform float uFeltEV; uniform float uSat, uCon, uSkyMix, uOvercast, uCloudCov, uCloudScale; uniform mat4 uInvProj, uCamWorld; uniform vec3 uSunDir, uCloudLit, uCloudShade; uniform vec2 uWind; varying vec2 vUv;
     float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
@@ -45,18 +45,36 @@ const FinalShader = {
       float lap = abs(l + r + d + u - 4.0*c) / c;
       return smoothstep(0.02, 0.08, lap) * smoothstep(900.0, 120.0, c);
     }
+    // felt side through a painter's hand (uArt 1 = Van Gogh, 2 = Monet): the image is smeared along a flow of
+    // brush strokes and the strokes leave bristle marks (a line integral of noise along the same flow)
     void main(){
-      vec3 hdr = texture2D(tDiffuse, vUv).rgb * uExpo;
+      vec3 hdrM = texture2D(tDiffuse, vUv).rgb * uExpo;                   // the meter reads the scene as it is
+      vec3 hdr = hdrM; float stroke = 0.5; vec2 uvF = vUv;
+      if (uArt > 0.5) {
+        float kk = 900.0 / uRes.y; vec2 sp = vUv * uRes * kk;
+        bool vg = uArt < 1.5;
+        vec2 q = vg ? sp / 230.0 + uTime * 0.003 : sp / 95.0;             // Van Gogh: long swirls; Monet: short, restless dabs
+        float e = 0.04, n0 = fbm(q), nx = fbm(q + vec2(e, 0.)), ny = fbm(q + vec2(0., e));
+        vec2 d = normalize(vec2(ny - n0, -(nx - n0)) + vec2(1e-5, 0.));
+        float stepPx = vg ? 2.6 : 1.25, cell = vg ? 2.2 : 1.6;
+        vec3 acc = vec3(0.); float tex = 0.;
+        for (int k = -4; k <= 4; k++) {
+          vec2 o = d * float(k) * stepPx;
+          acc += texture2D(tDiffuse, vUv + o / (uRes * kk)).rgb;
+          tex += hash(floor((sp + o) / cell));
+        }
+        hdr = acc / 9.0 * uExpo; stroke = tex / 9.0;
+      }
       vec2 px = vUv*uRes;
       float vig = smoothstep(1.25, 0.35, length((vUv-0.5)*vec2(uRes.x/uRes.y,1.0)*1.05));
       float g = hash(px + fract(uTime*7.13)*91.7) - 0.5;
       // ---- felt: tone-mapped, graded, a little warm in the highlights
-      float dz = texture2D(tDepth, vUv).x;
+      float dz = texture2D(tDepth, uvF).x;
       float isSky = step(0.99999, dz);
       vec3 felt = aces(hdr * uGrade * 1.05 * uFeltEV);
       // sky: a painted gradient (keeping the sun's glow) and a perspective cloud deck drawn in two tones
       if (isSky > 0.5) {
-        vec4 vv = uInvProj * vec4(vUv*2.0-1.0, 1.0, 1.0); vv /= vv.w;
+        vec4 vv = uInvProj * vec4(uvF*2.0-1.0, 1.0, 1.0); vv /= vv.w;
         vec3 dir = normalize((uCamWorld * vec4(vv.xyz, 0.0)).xyz);
         float sy = smoothstep(0.0, 0.75, dir.y);
         vec3 skyPaint = mix(uSkyBot, uSkyTop, sy);
@@ -83,11 +101,30 @@ const FinalShader = {
       felt = felt + uLift * (1.0 - felt);
       felt = mix(felt, felt*vec3(1.03,1.0,0.95), smoothstep(0.55,1.0,dot(felt,vec3(0.33))));
       float ink = edgeAt(vUv, px);
+      if (uArt > 0.5) {
+        float l = dot(felt, vec3(0.2126, 0.7152, 0.0722));
+        float st = clamp((stroke - 0.5) * 3.2 + 0.5, 0.0, 1.0);
+        vec3 tint;
+        if (uArt < 1.5) {   // Van Gogh: ultramarine shadows, chrome-yellow lights, everything a little more
+          tint = l < 0.45 ? mix(vec3(.02,.05,.28), vec3(.10,.30,.30), l / 0.45) : mix(vec3(.10,.30,.30), vec3(1.0,.80,.22), (l - 0.45) / 0.55);
+          felt = mix(felt * 1.08, tint, 0.38);
+        } else {            // Monet's London: violet and blue close by, the fog glowing rose and orange as it recedes
+          float glowR = 1.0 - smoothstep(0.0, 0.75, length((vUv - vec2(0.6, 0.6)) * vec2(uRes.x / uRes.y, 1.0)));
+          float far = clamp(max(max(isSky, smoothstep(15.0, 120.0, lin(vUv))) * 0.85, glowR * 0.7), 0.0, 1.0);
+          vec3 a0 = mix(vec3(.05,.05,.24), vec3(.30,.17,.32), far), a1 = mix(vec3(.34,.32,.66), vec3(.86,.50,.46), far), a2 = mix(vec3(.88,.62,.74), vec3(1.0,.74,.36), far);
+          tint = l < 0.5 ? mix(a0, a1, l / 0.5) : mix(a1, a2, (l - 0.5) / 0.5);
+          felt = mix(felt, tint, 0.7);
+          felt = clamp((felt - 0.42) * 1.22 + 0.42, 0.0, 1.0);       // deeper blue-violet silhouettes against the glow
+          felt = mix(felt, vec3(1.0,.55,.25), step(0.965, stroke + hash(floor(px / 3.0)) * 0.04) * far * 0.6);   // flecks of orange in the fog
+          ink *= 0.3;       // Monet drew no outlines
+        }
+        felt *= (uArt < 1.5 ? 0.80 : 0.82) + (uArt < 1.5 ? 0.40 : 0.36) * st;   // bristle marks along every stroke
+      }
       felt = srgb(felt);
       felt = mix(felt, felt*vec3(0.32,0.30,0.34), ink*uInkFelt);
       felt = felt * mix(0.8, 1.0, vig) + g*0.022;
       // ---- measured: luminance as ink isolines on paper (quarter-decade steps)
-      float L = max(dot(hdr, vec3(0.2126,0.7152,0.0722)) * uK, 1e-3);
+      float L = max(dot(hdrM, vec3(0.2126,0.7152,0.0722)) * uK, 1e-3);
       float v = log2(L) / log2(10.0) * 4.0;
       float w = fwidth(v);
       float f = fract(v), d = min(f, 1.0-f) / max(w, 1e-4);
@@ -262,7 +299,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); }
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); streetArt(i, c); }
     return cache.get(i);
   }
   /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
@@ -329,6 +366,68 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     mesh.renderOrder = 2;
     c.root.add(mesh);
   }
+  /* London: one stencil piece sprayed on the pavement along the walk — street-art manner, an original image:
+     a figure under an umbrella holds a light meter up to a grey sky; a small sun is stuck behind the cloud. */
+  function streetArt(i, c) {
+    if (CITIES[i].key !== 'london') return;
+    const N = 1024, cv = document.createElement('canvas'); cv.width = N; cv.height = N; const g = cv.getContext('2d');
+    const ink = '#141414', sun = '#f2c230';
+    const shapes = (ctx, col) => {
+      ctx.fillStyle = col; ctx.strokeStyle = col; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      // the cloud
+      for (const [x, y, r] of [[600, 190, 66], [680, 160, 88], [775, 185, 70], [720, 225, 66], [640, 235, 52]]) { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+      // a city gent in a long coat and a bowler hat
+      ctx.beginPath(); ctx.moveTo(388, 560); ctx.lineTo(462, 560); ctx.lineTo(500, 845); ctx.lineTo(350, 845); ctx.closePath(); ctx.fill();
+      ctx.fillRect(388, 840, 28, 70); ctx.fillRect(436, 840, 28, 70);
+      ctx.beginPath(); ctx.ellipse(392, 912, 32, 11, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.ellipse(460, 912, 32, 11, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(425, 515, 36, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(425, 486, 46, 10, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(425, 482, 30, Math.PI, 0); ctx.fill();
+      // an open umbrella held low over the shoulder: flat canopy, scalloped rim, ribs showing, hooked handle
+      ctx.save(); ctx.translate(300, 470); ctx.rotate(-0.18);
+      ctx.beginPath(); ctx.moveTo(-175, 40);
+      ctx.bezierCurveTo(-150, -40, 150, -40, 175, 40);
+      for (let k = 0; k < 6; k++) { const x0 = 175 - k * 58.3; ctx.quadraticCurveTo(x0 - 29, 16, x0 - 58.3, 40); }
+      ctx.fill();
+      ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = 6;
+      for (const xr of [-116, -58, 0, 58, 116]) { ctx.beginPath(); ctx.moveTo(0, -18); ctx.lineTo(xr, 34); ctx.stroke(); }
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(0, 175); ctx.stroke();
+      ctx.beginPath(); ctx.arc(-18, 175, 18, 0, Math.PI); ctx.stroke(); ctx.restore();
+      ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(398, 600); ctx.lineTo(345, 650); ctx.lineTo(312, 640); ctx.stroke();
+      // the other arm up, a spot meter aimed at the cloud
+      ctx.beginPath(); ctx.moveTo(455, 590); ctx.lineTo(522, 505); ctx.lineTo(548, 425); ctx.stroke();
+      ctx.save(); ctx.translate(560, 392); ctx.rotate(0.6); ctx.fillRect(-20, -46, 40, 66); ctx.beginPath(); ctx.arc(0, -52, 16, 0, 7); ctx.fill(); ctx.restore();
+      ctx.lineWidth = 7; ctx.setLineDash([2, 22]); ctx.beginPath(); ctx.moveTo(590, 335); ctx.lineTo(655, 240); ctx.stroke(); ctx.setLineDash([]);
+      // the words, in stencil letters
+      ctx.font = '900 64px Impact, "Arial Narrow", Archivo, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('STILL LOOKING', 520, 1000);
+    };
+    // the sun first, half hidden behind the cloud, in the one colour
+    g.fillStyle = sun; g.beginPath(); g.arc(800, 120, 46, 0, 7); g.fill();
+    g.strokeStyle = sun; g.lineWidth = 10; g.lineCap = 'round';
+    for (let k = 0; k < 8; k++) { const a = -Math.PI * 0.9 + k * 0.27; g.beginPath(); g.moveTo(800 + Math.cos(a) * 66, 120 + Math.sin(a) * 66); g.lineTo(800 + Math.cos(a) * 92, 120 + Math.sin(a) * 92); g.stroke(); }
+    // overspray: the same shapes, blurred and faint, then the crisp stencil on top
+    g.save(); g.filter = 'blur(6px)'; g.globalAlpha = 0.35; shapes(g, ink); g.restore();
+    shapes(g, ink);
+    // stencil bridges in the letters, and a few drips
+    g.globalCompositeOperation = 'destination-out'; g.fillStyle = '#000';
+    for (let x = 300; x < 760; x += 37) g.fillRect(x, 952, 5, 60);
+    g.globalCompositeOperation = 'source-over'; g.fillStyle = ink;
+    let r = 11; const rnd = () => ((r = (r * 16807) % 2147483647) - 1) / 2147483646;
+    for (const [x, y] of [[372, 845], [480, 845], [700, 268], [610, 280], [540, 1005], [430, 1008], [300, 515]]) { const L = 30 + rnd() * 110; g.fillRect(x - 2.5, y, 5, L); g.beginPath(); g.arc(x, y + L, 5, 0, 7); g.fill(); }
+    // speckle: spray paint never covers evenly
+    g.globalCompositeOperation = 'destination-out';
+    for (let k = 0; k < 3500; k++) { g.globalAlpha = 0.2 + rnd() * 0.5; g.beginPath(); g.arc(rnd() * N, rnd() * N, 0.6 + rnd() * 1.6, 0, 7); g.fill(); }
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    const m = new THREE.MeshToonMaterial({ map: tex, gradientMap: bakedRamp, transparent: true, alphaTest: 0.3, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 });
+    // sprayed on the pavement ahead, stretched along the walk like the road paint so it reads from eye height
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 7.6), m); mesh.receiveShadow = true; mesh.renderOrder = 2; mesh.rotation.x = -Math.PI / 2;
+    const x = CITIES[i].camX + 1.25, z = Z0 - 10.5;
+    c.static.updateMatrixWorld(true);
+    const hit = new THREE.Raycaster(new THREE.Vector3(x, 6, z), new THREE.Vector3(0, -1, 0), 0, 12).intersectObject(c.static, true)[0];
+    mesh.position.set(x, (hit ? hit.point.y : 0.14) + 0.02, z);
+    c.root.add(mesh);
+  }
   function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
   function setBaked(v) {
     useBaked = !!v;
@@ -392,6 +491,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     F.uCloudLit.value.set(cl.lit ?? 0xffffff).multiplyScalar(cl.litI ?? 1.0); F.uCloudShade.value.set(cl.shade ?? 0xb9bdd2);
     F.uWind.value.set(...(cl.wind || [0.012, 0.004])); F.uSunDir.value.copy(L);
     bloom.strength = lk.bloom ?? 0.32;
+    F.uArt.value = lk.art ?? 0;
   }
 
   /* the room (About · Projects) */

@@ -268,11 +268,11 @@ export const CITIES = [
   // London — grey, drizzly, the muted "BBC" palette: lifted teal shadows, low saturation, soft light
   { key: 'london', name: 'London', lat: 51.5, camX: 5.0, yaw: 0.2, sun: { alt: 24, az: -14 }, sky: { turbidity: 10, rayleigh: 0.6, mie: 0.02, g: 0.7 }, fog: [0x9ea6ab, 30, 260], expo: 1.25,
     weather: 'rain', clouds: 0, cloudDeck: { cov: 0.55, scale: 1.6, lit: 0xc8cdd0, shade: 0xa7aeb3, wind: [0.02, 0.006] }, family: 'one', grade: [0.97, 1.0, 1.0],
-    look: { sat: 0.72, con: 0.9, lift: [0.035, 0.05, 0.055], skyTop: 0x7c858c, skyBot: 0xb7bdc0, overcast: 1, bloom: 0.18, shadowSoft: 7, sunI: 1.1, hemiI: 2.3, sunCol: 0xdfe4e6, hemiSky: 0xc4ccd2 } },
+    look: { sat: 0.72, con: 0.9, lift: [0.035, 0.05, 0.055], skyTop: 0x7c858c, skyBot: 0xb7bdc0, overcast: 1, bloom: 0.18, shadowSoft: 7, sunI: 1.1, hemiI: 2.3, sunCol: 0xdfe4e6, hemiSky: 0xc4ccd2, art: 2 } },
   // Delft — Dutch-master skies: big moving cumulus over clear, slightly cool light; brick reds sing
   { key: 'delft', name: 'Delft', lat: 52.0, camX: 5.6, yaw: 0.3, sun: { alt: 22, az: -14 }, sky: { turbidity: 2.6, rayleigh: 2.4, mie: 0.005, g: 0.8 }, fog: [0xcad8e6, 60, 380], expo: 0.95,
     cloudDeck: { cov: 0.5, scale: 0.9, lit: 0xfffaf0, shade: 0x9aa3b8, wind: [0.03, 0.01] }, family: 'two', grade: [1.0, 1.0, 1.03],
-    look: { sat: 1.12, con: 1.05, lift: [0.0, 0.01, 0.02], skyTop: 0x3d6fb4, skyBot: 0xd9e6f0, skyMix: 0.45, bloom: 0.28 } },
+    look: { sat: 1.12, con: 1.05, lift: [0.0, 0.01, 0.02], skyTop: 0x3d6fb4, skyBot: 0xd9e6f0, skyMix: 0.45, bloom: 0.28, art: 1 } },
   // Lausanne — alpine clarity over the lake, deep blue, sharp mountains
   { key: 'lausanne', name: 'Lausanne', lat: 46.5, camX: -0.6, yaw: 0.0, cloudY: 380, sun: { alt: 17, az: 20 }, sky: { turbidity: 1.6, rayleigh: 1.6, mie: 0.003, g: 0.8 }, fog: [0xd2dae4, 160, 2800], expo: 0.66,
     cloudDeck: { cov: 0.22, scale: 1.1, lit: 0xffffff, shade: 0xc4cde0 }, family: 'pram', grade: [1.02, 1.0, 1.0],
