@@ -276,19 +276,19 @@ export const CITIES = [
   // Lausanne — alpine clarity over the lake, deep blue, sharp mountains
   { key: 'lausanne', name: 'Lausanne', lat: 46.5, camX: -0.6, yaw: 0.0, cloudY: 380, sun: { alt: 17, az: 20 }, sky: { turbidity: 1.6, rayleigh: 1.6, mie: 0.003, g: 0.8 }, fog: [0xd2dae4, 160, 2800], expo: 0.66,
     cloudDeck: { cov: 0.22, scale: 1.1, lit: 0xffffff, shade: 0xc4cde0 }, family: 'pram', grade: [1.02, 1.0, 1.0],
-    look: { sat: 1.12, con: 1.04, lift: [0.02, 0.025, 0.035], skyTop: 0x2f66c0, skyBot: 0xcfe0ef, skyMix: 0.6, bloom: 0.3 } },
+    look: { sat: 1.12, con: 1.04, lift: [0.02, 0.025, 0.035], skyTop: 0x2f66c0, skyBot: 0xcfe0ef, skyMix: 0.6, bloom: 0.3, art: 3 } },
   // Stockholm — the low northern sun: long gold light, pastel facades, a pink-apricot sky
   { key: 'stockholm', name: 'Stockholm', lat: 59.3, camX: -1.2, yaw: 0.04, sun: { alt: 8, az: -4 }, sky: { turbidity: 2.4, rayleigh: 2.8, mie: 0.008, g: 0.86 }, fog: [0xe4c8ac, 60, 400], expo: 1.0,
     cloudDeck: { cov: 0.3, scale: 1.6, lit: 0xffe2c4, shade: 0xc49a9a }, family: 'pram', grade: [1.05, 0.99, 0.94],
-    look: { sat: 1.08, con: 1.02, lift: [0.03, 0.015, 0.0], skyTop: 0x6f8fc0, skyBot: 0xf3c9a2, skyMix: 0.55, bloom: 0.42 } },
+    look: { sat: 1.08, con: 1.02, lift: [0.03, 0.015, 0.0], skyTop: 0x6f8fc0, skyBot: 0xf3c9a2, skyMix: 0.55, bloom: 0.42, art: 4 } },
   // Zürich — Föhn-clear: crisp, cool, clean
   { key: 'zurich', name: 'Zürich', lat: 47.4, camX: 5.4, yaw: 0.2, sun: { alt: 24, az: -14 }, sky: { turbidity: 1.8, rayleigh: 1.7, mie: 0.004, g: 0.8 }, fog: [0xcfdbe8, 70, 440], expo: 0.92,
     cloudDeck: { cov: 0.18, scale: 1.3, lit: 0xffffff, shade: 0xc8d0e2 }, family: 'three', grade: [0.99, 1.0, 1.03],
-    look: { sat: 1.1, con: 1.08, lift: [0.0, 0.005, 0.015], skyTop: 0x2e65bd, skyBot: 0xd4e3f0, skyMix: 0.55, bloom: 0.26 } },
+    look: { sat: 1.1, con: 1.08, lift: [0.0, 0.005, 0.015], skyTop: 0x2e65bd, skyBot: 0xd4e3f0, skyMix: 0.55, bloom: 0.26, art: 5 } },
   // Tokyo — the clear Tokyo blue: saturated sky, white cumulus, bright and sharp
   { key: 'tokyo', name: 'Tokyo', lat: 35.7, camX: 0.5, yaw: 0.1, sun: { alt: 27, az: -12 }, sky: { turbidity: 2.0, rayleigh: 2.2, mie: 0.006, g: 0.85 }, fog: [0xd6e4f0, 80, 1100], expo: 1.0,
     cloudDeck: { cov: 0.36, scale: 0.8, lit: 0xffffff, litI: 1.1, shade: 0xb4c4e4, wind: [0.008, 0.012] }, family: 'tokyo', grade: [1.0, 1.0, 1.02],
-    look: { sat: 1.18, con: 1.06, skyTop: 0x1550c4, skyBot: 0xa9d4f2, skyMix: 1.0, bloom: 0.34 } }
+    look: { sat: 1.18, con: 1.06, skyTop: 0x1550c4, skyBot: 0xa9d4f2, skyMix: 1.0, bloom: 0.34, art: 6 } }
 ];
 
 export function buildCity(i, mats, ctx) {

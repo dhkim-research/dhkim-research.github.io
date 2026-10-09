@@ -7,7 +7,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js?v=d1954a06';
-import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=9372f113';
+import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=3e9c0b28';
 import { createRoom, ROOM_STATES } from './room.js?v=f2867de1';
 
 export { CITIES, ROOM_STATES };
@@ -50,13 +50,28 @@ const FinalShader = {
     void main(){
       vec3 hdrM = texture2D(tDiffuse, vUv).rgb * uExpo;                   // the meter reads the scene as it is
       vec3 hdr = hdrM; float stroke = 0.5; vec2 uvF = vUv;
-      if (uArt > 0.5) {
-        float kk = 900.0 / uRes.y; vec2 sp = vUv * uRes * kk;
-        bool vg = uArt < 1.5;
-        vec2 q = vg ? sp / 230.0 + uTime * 0.003 : sp / 95.0;             // Van Gogh: long swirls; Monet: short, restless dabs
-        float e = 0.04, n0 = fbm(q), nx = fbm(q + vec2(e, 0.)), ny = fbm(q + vec2(0., e));
-        vec2 d = normalize(vec2(ny - n0, -(nx - n0)) + vec2(1e-5, 0.));
-        float stepPx = vg ? 2.6 : 1.25, cell = vg ? 2.2 : 1.6;
+      // painters: 1 Van Gogh · 2 Monet · 3 Hodler · 4 Jansson · 5 Klee · 6 Hiroshige
+      float kk = 900.0 / uRes.y; vec2 sp = vUv * uRes * kk;
+      vec2 kcell = vec2(0.), kf = vec2(0.);
+      if (uArt > 4.5 && uArt < 5.5) {                                    // Klee: the scene seen through a grid of coloured squares
+        float cs = 34.0; vec2 g = sp / cs + 0.06 * vec2(vnoise(sp * 0.03), vnoise(sp * 0.03 + 7.1));   // hand-ruled, never quite straight
+        kcell = floor(g); kf = fract(g) - 0.5;
+        vec2 cuv = vUv + (-kf * cs) / (uRes * kk);
+        hdr = mix(texture2D(tDiffuse, cuv).rgb * uExpo, hdrM, 0.7); stroke = hash(kcell);
+      } else if (uArt > 0.5 && uArt < 4.5) {
+        vec2 d; float stepPx, cell;
+        if (uArt < 1.5) {        // Van Gogh: long swirls
+          vec2 q = sp / 230.0 + uTime * 0.003; float e = 0.04, n0 = fbm(q), nx = fbm(q + vec2(e, 0.)), ny = fbm(q + vec2(0., e));
+          d = normalize(vec2(ny - n0, -(nx - n0)) + vec2(1e-5, 0.)); stepPx = 2.6; cell = 2.2;
+        } else if (uArt < 2.5) { // Monet: short, restless dabs
+          vec2 q = sp / 95.0; float e = 0.04, n0 = fbm(q), nx = fbm(q + vec2(e, 0.)), ny = fbm(q + vec2(0., e));
+          d = normalize(vec2(ny - n0, -(nx - n0)) + vec2(1e-5, 0.)); stepPx = 1.25; cell = 1.6;
+        } else if (uArt < 3.5) { // Hodler: everything laid in parallel, horizontal bands
+          d = normalize(vec2(1.0, 0.06 * sin(sp.y * 0.02))); stepPx = 2.4; cell = 3.4;
+        } else {                 // Jansson: long, slow curves, like water at dusk
+          vec2 q = sp / 420.0 + uTime * 0.002; float e = 0.04, n0 = fbm(q), nx = fbm(q + vec2(e, 0.)), ny = fbm(q + vec2(0., e));
+          d = normalize(vec2(ny - n0, -(nx - n0)) + vec2(1e-5, 0.)); stepPx = 2.1; cell = 2.6;
+        }
         vec3 acc = vec3(0.); float tex = 0.;
         for (int k = -4; k <= 4; k++) {
           vec2 o = d * float(k) * stepPx;
@@ -64,6 +79,8 @@ const FinalShader = {
           tex += hash(floor((sp + o) / cell));
         }
         hdr = acc / 9.0 * uExpo; stroke = tex / 9.0;
+      } else if (uArt > 5.5) {   // Hiroshige: no strokes — a woodblock: the grain of the block and the fibres of the paper
+        stroke = 0.5 + 0.5 * (vnoise(vec2(sp.x * 0.9, sp.y * 0.05)) - 0.5) + 0.25 * (hash(floor(sp * 0.5)) - 0.5);
       }
       vec2 px = vUv*uRes;
       float vig = smoothstep(1.25, 0.35, length((vUv-0.5)*vec2(uRes.x/uRes.y,1.0)*1.05));
@@ -93,6 +110,15 @@ const FinalShader = {
           cc += rim * uCloudLit * 0.25 * (1.0 - uOvercast);
           skyCol = mix(skyCol, cc, c);
         }
+        if (uArt > 2.5 && uArt < 3.5 && dir.y > 0.0) {                    // Hodler: clouds in rows parallel to the lake
+          float rib = sin(dir.y * 70.0 + fbm(dir.xz / (dir.y + 0.1) * 0.4) * 5.0);
+          float cr = smoothstep(0.55, 0.8, rib) * smoothstep(0.02, 0.1, dir.y) * (1.0 - smoothstep(0.35, 0.6, dir.y));
+          skyCol = mix(skyCol, mix(vec3(.98,.95,.86), vec3(.78,.80,.88), smoothstep(0.65, 0.8, rib)), cr);
+        }
+        if (uArt > 5.5) {                                                  // Hiroshige: the bokashi — Prussian blue printed down from the top
+          skyCol = mix(skyCol, vec3(.02,.07,.26), smoothstep(0.55, 0.95, vUv.y) * 0.9);
+          skyCol = mix(skyCol, vec3(.96,.86,.70), smoothstep(0.35, 0.0, dir.y) * 0.35);   // a warm wash at the horizon
+        }
         felt = skyCol;
       }
       float fl = dot(felt, vec3(0.2126,0.7152,0.0722));
@@ -108,7 +134,7 @@ const FinalShader = {
         if (uArt < 1.5) {   // Van Gogh: ultramarine shadows, chrome-yellow lights, everything a little more
           tint = l < 0.45 ? mix(vec3(.02,.05,.28), vec3(.10,.30,.30), l / 0.45) : mix(vec3(.10,.30,.30), vec3(1.0,.80,.22), (l - 0.45) / 0.55);
           felt = mix(felt * 1.08, tint, 0.38);
-        } else {            // Monet's London: violet and blue close by, the fog glowing rose and orange as it recedes
+        } else if (uArt < 2.5) { // Monet's London: violet and blue close by, the fog glowing rose and orange as it recedes
           float glowR = 1.0 - smoothstep(0.0, 0.75, length((vUv - vec2(0.6, 0.6)) * vec2(uRes.x / uRes.y, 1.0)));
           float far = clamp(max(max(isSky, smoothstep(15.0, 120.0, lin(vUv))) * 0.85, glowR * 0.7), 0.0, 1.0);
           vec3 a0 = mix(vec3(.05,.05,.24), vec3(.30,.17,.32), far), a1 = mix(vec3(.34,.32,.66), vec3(.86,.50,.46), far), a2 = mix(vec3(.88,.62,.74), vec3(1.0,.74,.36), far);
@@ -118,7 +144,25 @@ const FinalShader = {
           felt = mix(felt, vec3(1.0,.55,.25), step(0.965, stroke + hash(floor(px / 3.0)) * 0.04) * far * 0.6);   // flecks of orange in the fog
           ink *= 0.3;       // Monet drew no outlines
         }
-        felt *= (uArt < 1.5 ? 0.80 : 0.82) + (uArt < 1.5 ? 0.40 : 0.36) * st;   // bristle marks along every stroke
+        if (uArt > 2.5 && uArt < 3.5) {        // Hodler: flat, clear, a few colours — lake turquoise, violet shade, pale gold light
+          tint = l < 0.5 ? mix(vec3(.10,.12,.36), vec3(.16,.48,.56), l / 0.5) : mix(vec3(.16,.48,.56), vec3(.98,.92,.62), (l - 0.5) / 0.5);
+          felt = mix(floor(felt * 6.0 + 0.5) / 6.0, tint, 0.38);
+        } else if (uArt > 3.5 && uArt < 4.5) { // Jansson: Stockholm in deep Prussian blue, every light turned to gold
+          tint = l < 0.5 ? mix(vec3(.01,.03,.16), vec3(.06,.20,.52), l / 0.5) : mix(vec3(.06,.20,.52), vec3(1.0,.74,.30), (l - 0.5) / 0.5);
+          felt = mix(felt, tint, 0.62);
+        } else if (uArt > 4.5 && uArt < 5.5) { // Klee: each square its own warm or cool, borders left as bare ground
+          vec3 kp = stroke < 0.17 ? vec3(.90,.55,.25) : stroke < 0.34 ? vec3(.80,.36,.38) : stroke < 0.5 ? vec3(.25,.55,.55) : stroke < 0.67 ? vec3(.52,.40,.62) : stroke < 0.84 ? vec3(.88,.78,.45) : vec3(.55,.62,.42);
+          felt = mix(felt, felt * kp * 1.9, 0.34);
+          float bd = smoothstep(0.44, 0.5, max(abs(kf.x), abs(kf.y)));
+          felt = mix(felt, vec3(.86,.80,.68), bd * 0.3);
+        } else if (uArt > 5.5) {               // Hiroshige: flat colour in four values, and the ink line does the drawing
+          tint = l < 0.45 ? mix(vec3(.06,.09,.24), vec3(.42,.52,.50), l / 0.45) : mix(vec3(.42,.52,.50), vec3(.97,.92,.80), (l - 0.45) / 0.55);
+          felt = mix(felt, tint, 0.3);                                     // indigo, a grey-green, and the paper itself
+          felt = floor(felt * 4.0 + 0.5) / 4.0 * 0.6 + felt * 0.4;
+          ink = min(1.0, ink * 1.4);
+        }
+        float bristle = uArt < 1.5 ? 0.40 : uArt < 2.5 ? 0.36 : uArt < 3.5 ? 0.16 : uArt < 4.5 ? 0.26 : uArt < 5.5 ? 0.12 : 0.22;
+        felt *= (1.0 - bristle * 0.5) + bristle * st;                       // bristle marks, paper grain or woodblock fibre
       }
       felt = srgb(felt);
       felt = mix(felt, felt*vec3(0.32,0.30,0.34), ink*uInkFelt);
@@ -299,7 +343,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); streetArt(i, c); }
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); streetArt(i, c); pixelPal(i, c); }
     return cache.get(i);
   }
   /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
@@ -428,6 +472,85 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     mesh.position.set(x, (hit ? hit.point.y : 0.14) + 0.02, z);
     c.root.add(mesh);
   }
+
+  /* Tokyo: a small 8-bit colleague who runs on ahead, light meter in hand, and climbs every vending machine on the way.
+     Its readout is a rough horizontal illuminance: direct sun when the sky is clear to the sun, sky alone in shade. */
+  function pixelPal(i, c) {
+    const C = CITIES[i]; if (C.key !== 'tokyo') return;
+    // the right-hand pavement, and the vending machines along it to climb on (sampled once, by casting down)
+    c.static.updateMatrixWorld(true);
+    const down = new THREE.Raycaster(); down.far = 12; const DN = new THREE.Vector3(0, -1, 0), XW = 3.15, XM = 3.0;
+    const prof = [];
+    for (let z = 40; z >= -150; z -= 0.25) {
+      down.set(new THREE.Vector3(XW, 6, z), DN); const g = down.intersectObject(c.static, true)[0];
+      down.set(new THREE.Vector3(XM, 6, z), DN); const m = down.intersectObject(c.static, true)[0];
+      const top = m && m.point.y > 1.7 && m.point.y < 2.1 ? m.point.y : null;
+      prof.push({ z, g: g ? g.point.y : 0.15, m: top });
+    }
+    const spot = (z) => prof[THREE.MathUtils.clamp(Math.round((40 - z) / 0.25), 0, prof.length - 1)];
+    const PAL = { K: '#16161f', H: '#2a2230', S: '#f0c49c', G: '#e8f6ff', C: '#f4f1ea', c: '#c4c8cc', T: '#1f9e8f', P: '#2c3c70', B: '#121216', M: '#5c6370', D: '#ffffff', Y: '#ffd23f' };
+    const F = {
+      measure: ['...........DDD..', '..........KMMMK.', '....KKKK...MMM..', '...KHHHHK...S...', '..KHHHHHHK..S...', '..KHSSSSHK..C...', '..KHGKGSSK..C...', '..KSSSSSSK.CC...', '...KSSSSK.CC....', '..TTTTTTTTC.....', '.CCCCTCCCC......', '.CCCCTCCCc......', '.CCcCCCCcC......', '.SCcCCCCcC......', '..CcCCCCcC......', '..CCCCCCCC......', '...PPP.PPP......', '...PPP.PPP......', '...PP...PP......', '..BBB..BBB......'],
+      run1:    ['................', '................', '....KKKK....DDD.', '...KHHHHK..KMMMK', '..KHHHHHHK..MMM.', '..KHSSSSHK...S..', '..KHGKGSSK..CC..', '..KSSSSSSK.CC...', '...KSSSSK.CC....', '..TTTTTTTTC.....', '.CCCCTCCCC......', 'SCCCCTCCCc......', '.CCcCCCCcC......', '..CcCCCCcC......', '..CCCCCCCC......', '..PPP..PPP......', '.PPP....PPP.....', 'PPP......PP.....', 'BB.......BBB....', '................'],
+      run2:    ['................', '................', '....KKKK....DDD.', '...KHHHHK..KMMMK', '..KHHHHHHK..MMM.', '..KHSSSSHK...S..', '..KHGKGSSK..CC..', '..KSSSSSSK.CC...', '...KSSSSK.CC....', '..TTTTTTTTC.....', '.CCCCTCCCC......', '.CCCCTCCCc......', '.SCcCCCCcC......', '..CcCCCCcC......', '..CCCCCCCC......', '...PPPPPP.......', '....PPPP........', '....PP.PP.......', '...BBB.BBB......', '................'],
+      jump:    ['............DDD.', '...........KMMMK', '....KKKK....MMM.', '...KHHHHK...S...', '..KHHHHHHK..S...', '..KHSSSSHK..C...', 'S.KHGKGSSK.CC...', 'C.KSSSSSSKCC....', 'CC.KSSSSKCC.....', '.CTTTTTTTTC.....', '..CCCTCCCC......', '..CCCTCCCc......', '..CcCCCCcC......', '..CcCCCCcC......', '..CCCCCCCC......', '..PPPPPPPP......', '..PP....PP......', '.BBB....BBB.....', '................', '................']
+    };
+    const tex = {};
+    for (const [k, rows] of Object.entries(F)) for (const flip of [0, 1]) {
+      const cv = document.createElement('canvas'); cv.width = 16; cv.height = 20; const g = cv.getContext('2d');
+      rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') { g.fillStyle = PAL[ch]; g.fillRect(flip ? 15 - x : x, y, 1, 1); } }));
+      const t = new THREE.CanvasTexture(cv); t.magFilter = t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; t.colorSpace = THREE.SRGBColorSpace;
+      tex[k + flip] = t;
+    }
+    const pal = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex.measure0, color: new THREE.Color(1.1, 1.1, 1.1), alphaTest: 0.5, fog: false }));
+    pal.center.set(0.5, 0); pal.scale.set(1.04, 1.3, 1); c.root.add(pal);
+    // the readout: a 3×5 pixel font in a small dark window
+    const GL = { 0: '7,5,5,5,7', 1: '2,6,2,2,7', 2: '7,1,7,4,7', 3: '7,1,3,1,7', 4: '5,5,7,1,1', 5: '7,4,7,1,7', 6: '7,4,7,5,7', 7: '7,1,1,2,2', 8: '7,5,7,5,7', 9: '7,5,7,1,7', L: '4,4,4,4,7', U: '5,5,5,5,7', X: '5,5,2,5,5', ' ': '0,0,0,0,0' };
+    const rc = document.createElement('canvas'); rc.width = 41; rc.height = 9; const rg = rc.getContext('2d');
+    const rtex = new THREE.CanvasTexture(rc); rtex.magFilter = rtex.minFilter = THREE.NearestFilter; rtex.generateMipmaps = false; rtex.colorSpace = THREE.SRGBColorSpace;
+    const drawRead = (str) => {
+      rg.fillStyle = '#16161f'; rg.fillRect(0, 0, 41, 9); rg.fillStyle = '#ffd23f';
+      [...str].forEach((ch, k) => (GL[ch] || GL[' ']).split(',').forEach((row, y) => { for (let x = 0; x < 3; x++) if (+row & (4 >> x)) rg.fillRect(2 + k * 4 + x, 2 + y, 1, 1); }));
+      rtex.needsUpdate = true;
+    };
+    drawRead('LUX 00000');
+    const read = new THREE.Sprite(new THREE.SpriteMaterial({ map: rtex, color: new THREE.Color(1.2, 1.2, 1.2), fog: false }));
+    read.center.set(0.5, 0); read.scale.set(1.85, 0.4, 1); c.root.add(read);
+    // it runs a dozen metres ahead, hops up onto each vending machine it passes, and stops to measure when you stop
+    const ray = new THREE.Raycaster(); ray.far = 200;
+    const pos = new THREE.Vector3(), tgt = new THREE.Vector3(), from = new THREE.Vector3();
+    let lastT = 0, lastZ = null, onTop = null, hop = 1, dist = 0, still = 0, E = 0, Eshow = 0, nextRead = 0, lastStr = '';
+    c.movers.push((t, cz) => {
+      const dt = Math.min(0.1, Math.max(0, t - lastT)); lastT = t;
+      const z = cz - 12.5, sp = spot(z), up = sp.m != null;
+      tgt.set(up ? XM : XW, up ? sp.m : sp.g, z);
+      const moved = lastZ == null ? 0 : Math.abs(z - lastZ); lastZ = z; dist += moved;
+      still = moved > 1e-4 ? 0 : still + dt;
+      if (onTop === null) { onTop = up; pos.copy(tgt); }
+      if (up !== onTop) { onTop = up; from.copy(pos); hop = 0; }
+      if (hop < 1) {
+        hop = Math.min(1, hop + Math.max(dt, moved * 0.4) / 0.45);
+        pos.lerpVectors(from, tgt, hop); pos.y += Math.sin(hop * Math.PI) * 0.9;
+        pal.material.map = tex.jump0;
+      } else {
+        pos.copy(tgt);
+        if (still > 0.25) { pal.material.map = tex.measure0; pos.y += Math.abs(Math.sin(t * 4.0)) * 0.03; }
+        else { const ph = Math.floor(dist / 0.55) % 2; pal.material.map = tex['run' + (1 + ph) + '0']; pos.y += ph * 0.05; }
+      }
+      pal.position.copy(pos); read.position.set(pos.x, pos.y + 1.42, pos.z);
+      if (t > nextRead) {                                    // take a reading: can the meter's dome see the sun?
+        nextRead = t + 0.3;
+        const o = pos.clone(); o.y += 1.25; ray.set(o, state.L);
+        const shade = ray.intersectObject(c.static, true).length > 0;
+        E = (shade ? 0 : 92000 * Math.max(0, state.L.y)) + 16000 * (shade ? 0.55 : 1);
+        E *= 1 + Math.sin(t * 13.1) * 0.004;
+      }
+      Eshow += (E - Eshow) * Math.min(1, dt * 6);
+      const str = 'LUX ' + String(Math.round(Math.min(99999, Eshow) / 10) * 10).padStart(5, '0');
+      if (str !== lastStr) { drawRead(str); lastStr = str; }
+    });
+  }
+
   function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
   function setBaked(v) {
     useBaked = !!v;
