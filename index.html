@@ -280,13 +280,20 @@
   body.sky-on .clock { opacity: 0; }
   .kick .tm { font-variant-numeric: tabular-nums; color: var(--ink); }
 
+  /* art direction: photographs are prints — paper mat, ink hairline, caption on the paper.
+     Instruments (hdrspace, the logger, the kit) stay screens: dark, lit from within. */
+  .plate.print { background: #f8f6ef; padding: 10px 10px 0; border-bottom: 1px solid var(--rule); }
+  .plate.print img, .plate.print .cmpbox { outline: 1px solid rgba(21,21,21,.28); outline-offset: -1px; }
+  .plate.print figcaption { background: transparent; color: var(--muted); padding: 8px 2px 10px; }
+  .hint { display: none !important; }      /* the clock and the About line say it now */
+
   @media (max-width: 760px) {
     .nav { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; flex-direction: column; align-items: stretch; gap: 6px; }
     .brand { padding: 8px 10px; } .brand span { font-size: 9.5px; }
     .menu { overflow-x: auto; font-size: 10px; } .menu a { padding: 7px 7px; }
     .sec { padding: 150px 12px 40px; justify-content: flex-end; }
     .panel { max-width: none; padding: 18px 18px 20px; }
-    .plate { margin: -18px -18px 14px; } .plate figcaption { padding: 6px 18px 7px; }
+    .plate { margin: -18px -18px 14px; } .plate figcaption { padding: 6px 18px 7px; } .plate.print { padding: 8px 8px 0; } .plate.print figcaption { padding: 7px 2px 9px; }
     #projects .panel { max-width: none; }
     .decide { grid-template-columns: minmax(0, 1fr); }
     #tri { max-width: 240px; }
@@ -376,7 +383,7 @@
   <section id="projects">
     <div class="sec" data-scene="room:solskin" data-t="16:00">
       <div class="panel">
-        <figure class="plate cmp" id="cmp" style="--x:50%"><div class="cmpbox"><img src="img/solskin_open.jpg?v=6c403aa9" alt="Solskin façade fully open, seen from inside" loading="lazy" decoding="async"><img class="top" src="img/solskin_closed.jpg?v=15ceb0c6" alt="Solskin façade fully closed, seen from inside" loading="lazy" decoding="async"><span class="cl l mono">open</span><span class="cl r mono">closed</span><div class="bar" aria-hidden="true"><i></i></div><input type="range" min="0" max="100" value="50" aria-label="Compare open and closed façade"></div><figcaption data-en="The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure." data-ja="ETHチューリッヒZCBSラボのSolskinファサード — ドラッグして全開（眺望・昼光）と全閉（日射遮蔽・発電）を比較。同一露出のHDR画像。">The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure.</figcaption></figure>
+        <figure class="plate print cmp" id="cmp" style="--x:50%"><div class="cmpbox"><img src="img/solskin_open.jpg?v=6c403aa9" alt="Solskin façade fully open, seen from inside" loading="lazy" decoding="async"><img class="top" src="img/solskin_closed.jpg?v=15ceb0c6" alt="Solskin façade fully closed, seen from inside" loading="lazy" decoding="async"><span class="cl l mono">open</span><span class="cl r mono">closed</span><div class="bar" aria-hidden="true"><i></i></div><input type="range" min="0" max="100" value="50" aria-label="Compare open and closed façade"></div><figcaption data-en="The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure." data-ja="ETHチューリッヒZCBSラボのSolskinファサード — ドラッグして全開（眺望・昼光）と全閉（日射遮蔽・発電）を比較。同一露出のHDR画像。">The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure.</figcaption></figure>
         <div class="kick"><span class="tm">16:00</span> · 2025–2026 · ETH Zürich × Solskin</div>
         <h2>Solskin AI</h2>
         <p class="lede" data-en="Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once." data-ja="Solskinは太陽を追って動くアダプティブ・ソーラーファサード。発電しながら室内に日陰をつくります。ETHチューリッヒとZurich Soft RoboticsによるSolskin AIでは、AIによる制御で、建物のエネルギー、在室者の快適性、一人ひとりのニーズを同時に満たすことをめざしています。">Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once.</p>
@@ -397,7 +404,7 @@
     </div>
     <div class="sec" data-scene="room:comfort" data-t="17:15">
       <div class="panel">
-        <figure class="plate"><img src="img/comfort.jpg?v=dd4fa86d" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
+        <figure class="plate print"><img src="img/comfort.jpg?v=dd4fa86d" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
         <div class="kick"><span class="tm">17:15</span> · 2021–2024 · EPFL</div>
         <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
         <p class="lede" data-en="Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。30人が、ストライプ・竹・ボロノイの3つのファサード越しに太陽を視野に入れて作業しました。感じるまぶしさを変えたのは模様ではなく、その場の心地よさでした。">Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did.</p>
@@ -410,7 +417,7 @@
     </div>
     <div class="sec" data-scene="room:emotion" data-t="18:10">
       <div class="panel">
-        <figure class="plate"><img src="img/emotion.jpg?v=213c7860" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
+        <figure class="plate print"><img src="img/emotion.jpg?v=213c7860" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
         <div class="kick"><span class="tm">18:10</span> · 2013–2018 · UCL</div>
         <h2>Light &amp; Emotion</h2>
         <p class="lede" data-en="How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、空間の種類だけでなく感情のために照明をデザインすべきだと考え、照明デザイナーとともに一つのオフィス空間・16の照明シーンで確かめました。">How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes.</p>
@@ -421,7 +428,7 @@
     </div>
     <div class="sec" data-scene="room:hidyn" data-t="21:00">
       <div class="panel">
-        <figure class="plate"><img src="img/hidyn.jpg?v=1c308c0c" alt="A false-colour luminance image of seven reference light sources next to a photograph of the Hidyni rig with a camera" loading="lazy" decoding="async"><figcaption data-en="Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1." data-ja="HiDynの高コントラスト輝度基準器「Hidyni」：6桁にわたる7つの光源を、HDRカメラで測った姿（左）と見たままの姿（右）。写真：HiDyn成果報告書D1。">Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1.</figcaption></figure>
+        <figure class="plate print"><img src="img/hidyn.jpg?v=1c308c0c" alt="A false-colour luminance image of seven reference light sources next to a photograph of the Hidyni rig with a camera" loading="lazy" decoding="async"><figcaption data-en="Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1." data-ja="HiDynの高コントラスト輝度基準器「Hidyni」：6桁にわたる7つの光源を、HDRカメラで測った姿（左）と見たままの姿（右）。写真：HiDyn成果報告書D1。">Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1.</figcaption></figure>
         <div class="kick"><span class="tm">21:00</span> · 2022–2025 · EURAMET</div>
         <h2>HiDyn</h2>
         <p class="lede" data-en="Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards." data-ja="グレアは感じやすく、測りにくい。夜空を背にした街灯は6桁もの輝度差をもち、カメラの1回の露出には収まりません。欧州計量プロジェクトHiDynでは、グレアと障害光の評価にHDR輝度カメラをどこまで信頼できるかを確かめ、規格につながるグッドプラクティスガイドをまとめました。">Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards.</p>
@@ -549,7 +556,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=fcedd106';
+import { createWalk } from './js/walk.js?v=5ab76c5d';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -603,7 +610,7 @@ function setLang(l) {
 document.querySelectorAll('.menu button[data-l]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.l)));
 function caption(i) {
   const c = CH[i];
-  $('nk').innerHTML = `${String(i + 1).padStart(2, '0')} ${c.t} · ` + (c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${c.k} ↗</a>` : c.k);
+  $('nk').innerHTML = `${c.y} · ` + (c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${c.k} ↗</a>` : c.k);
   $('np').textContent = lang === 'ja' ? c.ja : c.en; $('ns').textContent = lang === 'ja' ? c.sub_ja : c.sub_en;
   chBtns.forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
 }

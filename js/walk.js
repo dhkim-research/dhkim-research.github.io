@@ -236,7 +236,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); cache.set(i, c); c.bakedP = bakeLight(i, c); }
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); }
     return cache.get(i);
   }
   /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
@@ -255,7 +255,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
       const meta = await r.json();
       const [buf, tex] = await Promise.all([fetch(url('.uv1.bin')).then((q) => q.arrayBuffer()), new THREE.TextureLoader().loadAsync(new URL(`../lm/${meta.map}?v=${lmVer}`, import.meta.url).href)]);
       tex.channel = 1; tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false; tex.minFilter = THREE.LinearFilter;   // islands sit 1–2 px apart: no mips, no bleeding
-      const grp = c.root.children[c.root.children.length - 1];
+      const grp = c.static;
       for (const part of meta.meshes) {
         const mesh = grp.children.find((m) => m.name === part.name);
         if (!mesh || mesh.geometry.attributes.position.count !== part.count) { console.warn('lightmap: geometry changed since the bake —', CITIES[i].key, part.name); continue; }
@@ -266,10 +266,46 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
       c.baked = true; if (cur === i) lightFill();
     } catch (e) { /* no lightmap for this city: the live look stays */ }
   }
+  /* the city's name painted on the street ahead, the way that city paints its roads: stretched along the
+     walk so it reads in perspective, a little worn. Typography in the world instead of on a panel. */
+  const PAINT = {
+    // [word, years, paint, metres right of the walker's line]
+    london: ['LONDON', '2007–2018', '#f2efe6', -1.9], delft: ['DELFT', '2018–2020', '#f2efe6', 0.4], lausanne: ['LAUSANNE', '2021–2024', '#f2efe6', 0.9],
+    stockholm: ['STOCKHOLM', '2024', '#f2efe6', 1.2], zurich: ['ZÜRICH', '2025–2026', '#f2c230', -1.6], tokyo: ['東京', '2026–', '#f2efe6', 0.1]
+  };
+  async function roadPaint(i, c) {
+    const C = CITIES[i], P = PAINT[C.key]; if (!P) return;
+    const cv = document.createElement('canvas'); cv.width = 512; cv.height = 2048;
+    const g = cv.getContext('2d'), ja = C.key === 'tokyo';
+    try { await document.fonts.load(ja ? '500 200px "IBM Plex Sans JP"' : '600 200px Archivo'); } catch (e) { /* system font then */ }
+    g.clearRect(0, 0, 512, 2048); g.fillStyle = P[2]; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    // letters 4.5× taller than wide, as road markings are, so they look right from eye height
+    const word = P[0], fam = ja ? '"IBM Plex Sans JP", "Hiragino Sans", sans-serif' : 'Archivo, "Arial Narrow", sans-serif';
+    g.font = `${ja ? 500 : 600} 120px ${fam}`;
+    const tw = g.measureText(word).width, sx = Math.min(1, 470 / tw);
+    g.save(); g.translate(256, 1250); g.scale(sx, 4.6); g.fillText(word, 0, 0); g.restore();
+    g.font = `500 64px "IBM Plex Mono", ui-monospace, monospace`;
+    g.save(); g.translate(256, 1840); g.scale(1, 3.2); g.fillText(P[1], 0, 0); g.restore();
+    // wear: the paint has been walked on
+    g.globalCompositeOperation = 'destination-out';
+    let r = 7 + i; const rnd = () => ((r = (r * 16807) % 2147483647) - 1) / 2147483646;
+    for (let k = 0; k < 2600; k++) { g.globalAlpha = 0.25 + rnd() * 0.6; g.beginPath(); g.ellipse(rnd() * 512, rnd() * 2048, 0.6 + rnd() * 2.2, 1.5 + rnd() * 6, 0, 0, 7); g.fill(); }
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    const m = new THREE.MeshToonMaterial({ map: tex, gradientMap: bakedRamp, transparent: true, alphaTest: 0.35, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 });
+    const W_ = 2.3, L_ = 9.2, mesh = new THREE.Mesh(new THREE.PlaneGeometry(W_, L_), m);
+    mesh.rotation.x = -Math.PI / 2; mesh.receiveShadow = true; mesh.name = 'paint';
+    // on the ground just left of the walker's line, 8–17 m ahead of where the walk begins
+    const x = C.camX + P[3], z = Z0 - 14;
+    const ray = new THREE.Raycaster(new THREE.Vector3(x, 6, z), new THREE.Vector3(0, -1, 0), 0, 12);
+    c.static.updateMatrixWorld(true);
+    const hit = ray.intersectObject(c.static, true)[0];
+    mesh.position.set(x, (hit ? hit.point.y : 0) + 0.004, z);
+    c.root.add(mesh);
+  }
   function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
   function setBaked(v) {
     useBaked = !!v;
-    for (const c of cache.values()) if (c.baked) c.root.children[c.root.children.length - 1].children.forEach((m) => { if (m.userData.baked) m.material = useBaked ? m.userData.baked : m.userData.live; });
+    for (const c of cache.values()) if (c.baked) c.static.children.forEach((m) => { if (m.userData.baked) m.material = useBaked ? m.userData.baked : m.userData.live; });
     lightFill();
   }
   function setCity(i) {
