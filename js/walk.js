@@ -23,7 +23,7 @@ const FinalShader = {
     tDiffuse: { value: null }, tDepth: { value: null }, uNear: { value: 0.1 }, uFar: { value: 9000 }, uInkFelt: { value: 0.6 }, uSplit: { value: 0.5 }, uExpo: { value: 1 }, uK: { value: K_LUM }, uGlare: { value: GLARE },
     uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uGrade: { value: new THREE.Vector3(1, 1, 1) },
     uFade: { value: 0 }, uFadeCol: { value: new THREE.Color(0xf4efe6) }, uPaper: { value: new THREE.Color(0xf1ede4) }, uInk: { value: new THREE.Color(0x1d2733) },
-    uMeasured: { value: 1 }, uFeltEV: { value: 1 },
+    uMeasured: { value: 1 }, uFeltEV: { value: 1 }, uFalse: { value: 0 },
     uSat: { value: 1.1 }, uCon: { value: 1.0 }, uLift: { value: new THREE.Vector3(0, 0, 0) },
     uSkyTop: { value: new THREE.Color(0x3a74c8) }, uSkyBot: { value: new THREE.Color(0xcfe2f0) }, uSkyMix: { value: 0 }, uOvercast: { value: 0 },
     uInvProj: { value: new THREE.Matrix4() }, uCamWorld: { value: new THREE.Matrix4() }, uSunDir: { value: new THREE.Vector3(0, 1, 0) },
@@ -31,7 +31,7 @@ const FinalShader = {
   },
   vertexShader: /* glsl */`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: /* glsl */`
-    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured; uniform vec2 uRes;
+    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured, uFalse; uniform vec2 uRes;
     float hash(vec2 p){ p = fract(p*vec2(443.897,441.423)); p += dot(p, p.yx+19.19); return fract((p.x+p.y)*p.x); }
     uniform vec3 uGrade, uFadeCol, uPaper, uInk, uLift, uSkyTop, uSkyBot; uniform float uFeltEV; uniform float uSat, uCon, uSkyMix, uOvercast, uCloudCov, uCloudScale; uniform mat4 uInvProj, uCamWorld; uniform vec3 uSunDir, uCloudLit, uCloudShade; uniform vec2 uWind; varying vec2 vUv;
     float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
@@ -101,6 +101,17 @@ const FinalShader = {
       float hatch = step(0.5, fract((px.x - px.y) / 6.0));
       paper = mix(paper, mix(paper, vec3(0.93,0.62,0.22), 0.55 + 0.25*hatch), glare);
       vec3 meas = mix(paper, uInk, clamp(line*0.85 + edge*0.9, 0.0, 1.0));
+      // ---- or as an HDR tool shows it: false colour on log10 cd/m², 1 → 100 000, decade lines, the sun white
+      if (uFalse > 0.001) {
+        float lg = log2(L) / log2(10.0), t = clamp(lg, 0.0, 5.0);
+        vec3 c0 = vec3(.071,.063,.157), c1 = vec3(.204,.141,.471), c2 = vec3(.086,.502,.627), c3 = vec3(.376,.769,.471), c4 = vec3(.965,.831,.282), c5 = vec3(.980,.376,.157);
+        vec3 fc = t < 1.0 ? mix(c0, c1, t) : t < 2.0 ? mix(c1, c2, t - 1.0) : t < 3.0 ? mix(c2, c3, t - 2.0) : t < 4.0 ? mix(c3, c4, t - 3.0) : mix(c4, c5, t - 4.0);
+        fc = mix(fc, vec3(1.0), smoothstep(5.0, 5.3, lg));
+        float vd = lg * 2.0, wd = fwidth(vd), fd = fract(vd), dd = min(fd, 1.0 - fd) / max(wd, 1e-4);
+        float dline = (1.0 - smoothstep(0.5, 1.4, dd)) * (1.0 - smoothstep(0.35, 0.9, wd)) * (mod(floor(vd + 0.5), 2.0) < 0.5 ? 0.55 : 0.25);
+        fc = mix(fc, vec3(0.02, 0.02, 0.05), max(dline, edge * 0.45));
+        meas = mix(meas, fc, uFalse);
+      }
       meas += g*0.03;
       // ---- seam
       float sx = uSplit*uRes.x;
@@ -116,14 +127,27 @@ const FinalShader = {
 
 /* 1×1 probe: encodes measured luminance at a UV into RG bytes */
 const ProbeShader = {
-  uniforms: { tDiffuse: { value: null }, uAt: { value: new THREE.Vector2(0.5, 0.5) }, uExpo: { value: 1 }, uK: { value: K_LUM } },
+  uniforms: { tDiffuse: { value: null }, uAt: { value: new THREE.Vector2(0.5, 0.5) }, uExpo: { value: 1 }, uK: { value: K_LUM }, uRad: { value: new THREE.Vector2(0.002, 0.002) } },
   vertexShader: `void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
-  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uAt; uniform float uExpo, uK;
-    void main(){ vec3 c = vec3(0.); for(int i=-1;i<=1;i++) for(int j=-1;j<=1;j++) c += texture2D(tDiffuse, uAt + vec2(float(i),float(j))*0.002).rgb;
+  // the mean over the meter's 1° acceptance spot (uRad = its radius in UV), as a spot luminance meter reads
+  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uAt, uRad; uniform float uExpo, uK;
+    void main(){ vec3 c = vec3(0.); for(int i=-1;i<=1;i++) for(int j=-1;j<=1;j++) c += texture2D(tDiffuse, uAt + vec2(float(i),float(j))*uRad*0.7).rgb;
       float L = max(dot(c/9.0*uExpo, vec3(0.2126,0.7152,0.0722))*uK, 1e-3);
       float lv = clamp((log2(L)/log2(10.0) + 2.0)/8.0, 0.0, 0.99999);
       float hi = floor(lv*255.0)/255.0; float lo = fract(lv*255.0);
       gl_FragColor = vec4(hi, lo, 0.0, 1.0); }`
+};
+
+/* a coarse luminance map of the frame (log10 cd/m² in two bytes), read back a few times a second for contour labels */
+const GridShader = {
+  uniforms: { tDiffuse: { value: null }, uExpo: { value: 1 }, uK: { value: K_LUM }, uSize: { value: new THREE.Vector2(128, 72) } },
+  vertexShader: `void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uSize; uniform float uExpo, uK;
+    void main(){ vec2 uv = gl_FragCoord.xy / uSize, h = 0.25 / uSize; vec3 c = vec3(0.);
+      c += texture2D(tDiffuse, uv + vec2(-h.x,-h.y)).rgb; c += texture2D(tDiffuse, uv + vec2(h.x,-h.y)).rgb; c += texture2D(tDiffuse, uv + vec2(-h.x,h.y)).rgb; c += texture2D(tDiffuse, uv + h).rgb;
+      float L = max(dot(c*0.25*uExpo, vec3(0.2126,0.7152,0.0722))*uK, 1e-3);
+      float lv = clamp((log2(L)/log2(10.0) + 2.0)/8.0, 0.0, 0.99999);
+      gl_FragColor = vec4(floor(lv*255.0)/255.0, fract(lv*255.0), 0.0, 1.0); }`
 };
 
 /* ---------------------------------------------------------------- the engine */
@@ -175,6 +199,8 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const probeScene = new THREE.Scene(); const probeQuad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), probeMat); probeQuad.frustumCulled = false; probeScene.add(probeQuad);
   const probeCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const probeBuf = new Uint8Array(4);
+  const GW = 128; let GH = 72, gridRT = new THREE.WebGLRenderTarget(GW, GH), gridBuf = new Uint8Array(GW * GH * 4);
+  const gridMat = new THREE.ShaderMaterial(GridShader), gridScene = new THREE.Scene(); { const q = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), gridMat); q.frustumCulled = false; gridScene.add(q); }
 
   /* models */
   const loader = new GLTFLoader();
@@ -426,6 +452,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
       place(dt);
     }
     fin.uniforms.uSplit.value = state.split; fin.uniforms.uTime.value = state.t; fin.uniforms.uMeasured.value = state.measured ? 1 : 0;
+    fin.uniforms.uFalse.value += ((state.falseColour ? 1 : 0) - fin.uniforms.uFalse.value) * Math.min(1, dt * 6);
     renderer.setRenderTarget(rt); renderer.render(S, cam);
     bloom.render(renderer, null, rt, dt, false);
     fin.uniforms.tDiffuse.value = rt.texture;
@@ -438,7 +465,21 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
       renderer.render(fxScene, camera);
       renderer.setScissorTest(false); renderer.autoClear = true;
     }
-    // probe the HDR buffer under the pointer (cheap: 1 px)
+    // the meter's spot: 1° across, whatever the camera's field of view
+    const fovV = cam.fov, aspect = size.x / size.y;
+    state.spotPx = (canvas.clientHeight || innerHeight) / fovV;
+    probeMat.uniforms.uRad.value.set(0.5 / fovV / aspect, 0.5 / fovV);
+    // the luminance map for contour labels: ~6 times a second, only while someone looks at the measured side
+    if (state.wantGrid && state.measured && (probeCount % 10) === 5) {
+      const gh = Math.max(24, Math.round(GW / aspect));
+      if (gh !== GH) { GH = gh; gridRT.setSize(GW, GH); gridBuf = new Uint8Array(GW * GH * 4); }
+      gridMat.uniforms.tDiffuse.value = rt.texture; gridMat.uniforms.uExpo.value = fin.uniforms.uExpo.value; gridMat.uniforms.uSize.value.set(GW, GH);
+      renderer.setRenderTarget(gridRT); renderer.render(gridScene, probeCam); renderer.readRenderTargetPixels(gridRT, 0, 0, GW, GH, gridBuf); renderer.setRenderTarget(null);
+      const lg = state.grid && state.grid.lg.length === GW * GH ? state.grid.lg : new Float32Array(GW * GH);
+      for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) { const k = ((GH - 1 - y) * GW + x) * 4; lg[y * GW + x] = (gridBuf[k] + gridBuf[k + 1] / 255) / 255 * 8 - 2; }   // rows top → bottom
+      state.grid = { w: GW, h: GH, lg, t: state.t };
+    }
+    // probe the HDR buffer under the pointer
     if ((probeCount++ % 4) === 0) {
       probeMat.uniforms.tDiffuse.value = rt.texture;
       probeMat.uniforms.uAt.value.copy(state.probeAt); probeMat.uniforms.uExpo.value = fin.uniforms.uExpo.value;
@@ -456,6 +497,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     setSplit(v) { state.split = v; }, setLook(x, y) { state.lookX = x; state.lookY = y; },
     setProbe(u, v) { state.probeAt.set(u, v); },
     setMeasured(on) { state.measured = on; },
+    setFalseColour(on) { state.falseColour = !!on; }, wantGrid(on) { state.wantGrid = !!on; },
     fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
     setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },

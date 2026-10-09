@@ -62,16 +62,23 @@
   body.sky-on .seam .lab { background: rgba(21,21,21,.6); color: #f1efea; }
 
   /* the meter */
-  .probe { position: fixed; z-index: 6; pointer-events: none; transform: translate(-50%, -50%); display: none; }
-  .probe .ring { width: 30px; height: 30px; border: 1.25px solid var(--ink); border-radius: 50%; position: relative; }
-  .probe .ring::before, .probe .ring::after { content: ""; position: absolute; background: var(--ink); }
-  .probe .ring::before { left: 50%; top: -7px; bottom: -7px; width: 1.25px; margin-left: -.6px; }
-  .probe .ring::after { top: 50%; left: -7px; right: -7px; height: 1.25px; margin-top: -.6px; }
-  .probe .val { position: absolute; left: 26px; top: -26px; white-space: nowrap; font: 500 12px "IBM Plex Mono", monospace; background: var(--paper); padding: 3px 7px; border: 1px solid var(--ink); font-variant-numeric: tabular-nums; }
-  .probe.felt .ring { border-color: #fff; border-style: dashed; }
-  .probe.felt .ring::before, .probe.felt .ring::after { background: transparent; }
-  .probe.felt .val { background: rgba(21,21,21,.66); color: #fff; border-color: transparent; font: italic 300 14px "IBM Plex Sans", sans-serif; }
-  .probe.glare .val { border-color: var(--amber-ink); color: var(--amber-ink); }
+  /* the cursor is a spot luminance meter: a 9° finder field, the 1° acceptance spot, an LCD readout.
+     Both circles are sized from the camera's field of view, so 1° on screen is 1° in the scene. */
+  .probe { position: fixed; z-index: 6; pointer-events: none; left: 0; top: 0; display: none; --s: 16px; color: var(--ink); }
+  .probe .fov { position: absolute; left: 0; top: 0; width: calc(var(--s) * 9); height: calc(var(--s) * 9); transform: translate(-50%, -50%); border: 1px solid rgba(21,21,21,.5); border-radius: 50%; }
+  .probe .fov i { position: absolute; background: currentColor; opacity: .7; }
+  .probe .fov i:nth-child(1) { left: 50%; top: -1px; width: 1px; height: 7px; } .probe .fov i:nth-child(2) { left: 50%; bottom: -1px; width: 1px; height: 7px; }
+  .probe .fov i:nth-child(3) { top: 50%; left: -1px; height: 1px; width: 7px; } .probe .fov i:nth-child(4) { top: 50%; right: -1px; height: 1px; width: 7px; }
+  .probe .spot { position: absolute; left: 0; top: 0; width: max(7px, var(--s)); height: max(7px, var(--s)); transform: translate(-50%, -50%); border: 1.5px solid var(--ink); border-radius: 50%; box-shadow: 0 0 0 1px rgba(241,239,234,.7); }
+  .probe .deg { position: absolute; left: 0; top: 0; transform: translate(calc(max(7px, var(--s)) / 2 + 4px), calc(-100% - 2px)); font: 500 9px "IBM Plex Mono", monospace; }
+  .probe .val { position: absolute; left: calc(var(--s) * 3.3); top: calc(var(--s) * 3.3); white-space: nowrap; font: 500 14px/1 "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; letter-spacing: .02em; background: #151515; color: #f1efea; padding: 6px 8px 5px; }
+  .probe .val small { font-size: 9.5px; margin-left: 5px; opacity: .7; letter-spacing: .04em; }
+  .probe.felt .fov { border-style: dashed; border-color: rgba(255,255,255,.85); color: #fff; }
+  .probe.felt .spot, .probe.felt .deg { display: none; }
+  .probe.felt .val { background: rgba(21,21,21,.6); font: italic 300 15px "IBM Plex Sans", sans-serif; }
+  .probe.glare .val { color: #f4b04a; }
+  .iso { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+  body.sky-on .iso, body.in-pubs .iso { display: none; }
 
   /* scrolling content */
   main { position: relative; z-index: 3; pointer-events: none; }
@@ -287,6 +294,15 @@
   .plate.print figcaption { background: transparent; color: var(--muted); padding: 8px 2px 10px; }
   .hint { display: none !important; }      /* the clock and the About line say it now */
 
+  .seam .mmode { position: absolute; right: 10px; top: 160px; pointer-events: auto; display: grid; justify-items: end; gap: 6px; transition: opacity .5s; }
+  .seam .mmode .seg { margin: 0; background: var(--glass); }
+  .seam .mmode .seg button { padding: 5px 8px; font-size: 10px; white-space: nowrap; }
+  .seam .mmode .leg { background: var(--glass); padding: 4px 7px; font-size: 9.5px; letter-spacing: .04em; color: var(--muted); white-space: nowrap; }
+  .seam .mmode .leg.lg-fc { display: none; position: relative; gap: 12px; padding-top: 11px; color: var(--ink); }
+  .seam .mmode .leg.lg-fc i { position: absolute; left: 7px; right: 7px; top: 4px; height: 4px; background: linear-gradient(90deg, #121028, #342478, #1680a0, #60c478, #f6d448, #fa6028); }
+  .seam.fc .mmode .leg.lg-fc { display: flex; } .seam.fc .mmode .leg.lg-iso { display: none; }
+  body.in-pubs .seam .mmode, body.sky-on .seam .mmode { opacity: 0; pointer-events: none; }
+
   @media (max-width: 760px) {
     .nav { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; flex-direction: column; align-items: stretch; gap: 6px; }
     .brand { padding: 8px 10px; } .brand span { font-size: 9.5px; }
@@ -302,6 +318,7 @@
     .strip .enter { grid-column: 1 / -1; justify-content: center; border-left: 0; border-top: 1px solid var(--rule); }
     .strip button { padding: 9px 6px 10px; } .strip .ch .n { display: none; } .strip .ch .c { font-size: 11.5px; }
     .seam .lab { top: 132px; font-size: 9.5px; } .seam .lab i { display: none; }
+    .seam .mmode { top: 168px; right: auto; left: 10px; justify-items: start; } .seam .mmode .leg.lg-iso { display: none; } .seam .mmode .leg.lg-fc { gap: 8px; }
     .hint { display: none; }
     .clock { top: calc(env(safe-area-inset-top, 0px) + 112px); right: 12px; padding: 4px 9px 4px 5px; gap: 7px; } .clock svg { width: 30px; height: 30px; } .clock b { font-size: 19px; }
     .collab li, .cv li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
@@ -340,13 +357,17 @@
 <div class="seam" id="seam">
   <span class="lab l">Measured<i>測った光</i></span>
   <span class="lab r">Felt<i>感じた光</i></span>
+  <div class="mmode" id="mmode"><div class="seg" role="group" aria-label="How the measured side draws luminance"><button type="button" data-mm="iso" aria-pressed="true" data-en="Isolines" data-ja="等輝度線">Isolines</button><button type="button" data-mm="fc" aria-pressed="false" data-en="False colour" data-ja="疑似カラー">False colour</button></div>
+    <div class="leg lg-iso mono" data-en="lines every ¼ decade · labels in cd/m²" data-ja="線は1/4桁ごと · 数値は cd/m²">lines every ¼ decade · labels in cd/m²</div>
+    <div class="leg lg-fc mono"><i></i><span>1</span><span>10</span><span>100</span><span>1k</span><span>10k</span><span>100k cd/m²</span></div></div>
   <div class="grip" id="grip" role="slider" aria-label="Measured and felt split" aria-valuemin="0" aria-valuemax="100" tabindex="0">
     <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4 1.5 9 6 14M12 4l4.5 5-4.5 5"/></svg>
   </div>
 </div>
 <div class="clock" id="clock" aria-hidden="true"><svg viewBox="0 0 56 56"><circle class="ring" cx="28" cy="28" r="19"/><path class="day" d="M9 28 A19 19 0 0 1 47 28"/><line x1="3" x2="53" y1="28" y2="28"/><circle id="sdot" cx="9" cy="28" r="3.6"/></svg><div><b id="clk">08:10</b><span class="mono" id="clkl">London</span></div></div>
 <div class="hint mono" id="hint" data-en="Your cursor is a luminance meter · drag the seam" data-ja="カーソルは輝度計 · 境界線を動かす">Your cursor is a luminance meter · drag the seam</div>
-<div class="probe" id="probe"><div class="ring"></div><div class="val" id="pval">—</div></div>
+<div class="probe" id="probe"><div class="fov"><i></i><i></i><i></i><i></i></div><div class="spot"></div><span class="deg">1°</span><div class="val" id="pval">—</div></div>
+<canvas class="iso" id="iso" aria-hidden="true"></canvas>
 <div class="card" id="card"><div><div class="y mono" id="cy"></div><h2 id="ct"></h2><div class="jp" id="cj"></div></div></div>
 <div class="pcard" id="pcard"></div>
 
@@ -556,7 +577,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=f42e2935';
+import { createWalk } from './js/walk.js?v=00762d7d';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -648,9 +669,71 @@ function meter() {
   const u = pointer.x / innerWidth, v = 1 - pointer.y / innerHeight;
   W.setProbe(u, v);
   const L = W.state.probeL, measured = u < split;
-  probe.style.display = 'block'; probe.style.left = pointer.x + 'px'; probe.style.top = pointer.y + 'px';
+  probe.style.display = 'block'; probe.style.transform = `translate(${pointer.x}px, ${pointer.y}px)`;
+  probe.style.setProperty('--s', (W.state.spotPx || 16).toFixed(1) + 'px');
   probe.classList.toggle('felt', !measured); probe.classList.toggle('glare', measured && L > 4000);
-  pval.textContent = measured ? `${fmt(L)} cd/m²` : feltWord(L);
+  if (measured) pval.innerHTML = `${fmt(L)}<small>cd/m²</small>`; else pval.textContent = feltWord(L);
+}
+
+/* ---------- measured side: isolines or false colour, and contour labels like a map ---------- */
+let falseCol = false;
+$('mmode').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; falseCol = b.dataset.mm === 'fc';
+  $('mmode').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === b))); $('seam').classList.toggle('fc', falseCol); if (W) W.setFalseColour(falseCol); });
+const iso = $('iso'), ictx = iso.getContext('2d'); let isoT = -1, isoLabels = [];
+function isoSize() { const d = Math.min(2, devicePixelRatio || 1); iso.width = Math.round(innerWidth * d); iso.height = Math.round(innerHeight * d); }
+addEventListener('resize', isoSize); isoSize();
+const isoText = (n) => ['1', '3.2', '10', '32', '100', '316', '1k', '3.2k', '10k', '32k', '100k', '316k'][n] || '';   // half-decades of cd/m²
+function isoUpdate() {
+  const G = W.state.grid; if (!G || G.t === isoT) return; isoT = G.t;
+  const { w, h, lg } = G, sx = innerWidth / w, sy = innerHeight / h, maxX = split * innerWidth - 36, cand = [];
+  const top = innerWidth > 760 ? 110 : 200, bottom = innerHeight - (scene === 'walk' ? 100 : 40);
+  const at = (x, y) => lg[y * w + x] * 2;                 // half-decades
+  // never under text: panels, captions, the menu, the clock
+  const keep = [...document.querySelectorAll('.panel, .nav, .clock, .strip, .mmode, .seam .lab, #note')].map((el) => el.getBoundingClientRect()).filter((r) => r.width && r.bottom > 0 && r.top < innerHeight);
+  const covered = (px, py) => keep.some((r) => px > r.left - 10 && px < r.right + 10 && py > r.top - 10 && py < r.bottom + 10);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+    const a = at(x, y);
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const b = at(x + dx, y + dy), fa = Math.floor(a), fb = Math.floor(b); if (fa === fb) continue;
+      const n = Math.max(fa, fb); if (n < 0 || n > 11) continue;
+      const t = (n - a) / (b - a), px = (x + 0.5 + dx * t) * sx, py = (y + 0.5 + dy * t) * sy;
+      if (px < 24 || px > maxX || py < top || py > bottom || covered(px, py)) continue;
+      const gx = (at(x + 1, y) - at(x - 1, y)) / (2 * sx), gy = (at(x, y + 1) - at(x, y - 1)) / (2 * sy), g = Math.hypot(gx, gy);
+      if (g > 1 / 14 || g < 1 / 500) continue;            // too crowded, or too flat to follow
+      let ang = Math.atan2(gy, gx) + Math.PI / 2; if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
+      cand.push({ x: px, y: py, n, ang, score: 1 / (Math.abs(Math.log(g * 70)) + 0.35) });
+    }
+  }
+  for (const L of isoLabels) {
+    let best = null, bd = 48;
+    for (const c of cand) if (c.n === L.n) { const d = Math.hypot(c.x - L.tx, c.y - L.ty); if (d < bd) { bd = d; best = c; } }
+    L.alive = !!best; if (best) { L.tx = best.x; L.ty = best.y; L.ta = best.ang; best.used = true; }
+  }
+  cand.sort((p, q) => q.score - p.score);
+  for (const c of cand) {
+    if (isoLabels.filter((L) => L.alive).length >= 9) break;
+    if (c.used || isoLabels.some((L) => L.alive && (Math.hypot(L.tx - c.x, L.ty - c.y) < 120 || (L.n === c.n && Math.hypot(L.tx - c.x, L.ty - c.y) < 260)))) continue;
+    isoLabels.push({ n: c.n, x: c.x, y: c.y, tx: c.x, ty: c.y, a: c.ang, ta: c.ang, o: 0, alive: true });
+  }
+}
+function isoDraw(dt) {
+  const d = iso.width / innerWidth; ictx.setTransform(1, 0, 0, 1, 0, 0); ictx.clearRect(0, 0, iso.width, iso.height);
+  const on = W && W.state.measured && !skyOn && scene !== 'pubs' && split > 0.06;
+  W.wantGrid(on); if (!on) { isoLabels = []; return; }
+  isoUpdate();
+  ictx.font = `500 ${10 * d}px "IBM Plex Mono", ui-monospace, monospace`; ictx.textAlign = 'center'; ictx.textBaseline = 'middle';
+  const edge = split * innerWidth;
+  for (const L of isoLabels) {
+    L.x += (L.tx - L.x) * Math.min(1, dt * 7); L.y += (L.ty - L.y) * Math.min(1, dt * 7); L.a += (L.ta - L.a) * Math.min(1, dt * 7);
+    const visible = L.alive && L.x < edge - 30;
+    L.o += ((visible ? 1 : 0) - L.o) * Math.min(1, dt * (visible ? 4 : 8));
+    if (L.o < 0.02) continue;
+    const txt = isoText(L.n), tw = ictx.measureText(txt).width;
+    ictx.save(); ictx.globalAlpha = L.o; ictx.translate(L.x * d, L.y * d); ictx.rotate(L.a);
+    ictx.fillStyle = falseCol ? 'rgba(12,12,22,.82)' : 'rgba(241,237,228,.96)'; ictx.fillRect(-tw / 2 - 3 * d, -6.5 * d, tw + 6 * d, 13 * d);
+    ictx.fillStyle = falseCol ? '#f1efea' : '#1d2733'; ictx.fillText(txt, 0, 0.5 * d); ictx.restore();
+  }
+  isoLabels = isoLabels.filter((L) => L.alive || L.o > 0.02);
 }
 
 /* ---------- walk chapters ---------- */
@@ -1034,7 +1117,7 @@ function tick(dt) {
     if (scene === 'room:solskin') solskinTick(dt);
     if (scene === 'room:comfort') document.querySelectorAll('[data-pat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pat === rs.pattern)));
   }
-  meter();
+  meter(); isoDraw(dt);
   if ((clockN = (clockN + 1) % 3) === 0) dayClock();
 }
 requestAnimationFrame(frame);
