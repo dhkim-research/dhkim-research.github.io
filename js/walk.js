@@ -299,7 +299,8 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     const ray = new THREE.Raycaster(new THREE.Vector3(x, 6, z), new THREE.Vector3(0, -1, 0), 0, 12);
     c.static.updateMatrixWorld(true);
     const hit = ray.intersectObject(c.static, true)[0];
-    mesh.position.set(x, (hit ? hit.point.y : 0) + 0.004, z);
+    mesh.position.set(x, (hit ? hit.point.y : 0) + (C.weather === 'rain' ? 0.02 : 0.004), z);   // above the wet sheen in London
+    mesh.renderOrder = 2;
     c.root.add(mesh);
   }
   function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
