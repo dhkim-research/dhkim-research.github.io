@@ -1,0 +1,40 @@
+{
+ "city": "london",
+ "map": "london.webp",
+ "res": 2048,
+ "lmMax": 1.676,
+ "samples": 256,
+ "note": "lightMap = sRGB-decoded texel \u00d7 lmMax (three.js irradiance units); sky + bounced sun, no direct sun",
+ "meshes": [
+  {
+   "name": "ground",
+   "count": 144,
+   "offset": 0
+  },
+  {
+   "name": "trim",
+   "count": 152724,
+   "offset": 576
+  },
+  {
+   "name": "wall",
+   "count": 2736,
+   "offset": 611472
+  },
+  {
+   "name": "dark",
+   "count": 2484,
+   "offset": 622416
+  },
+  {
+   "name": "roof",
+   "count": 1104,
+   "offset": 632352
+  },
+  {
+   "name": "face",
+   "count": 1920,
+   "offset": 636768
+  }
+ ]
+}

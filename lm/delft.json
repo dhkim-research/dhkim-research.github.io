@@ -1,0 +1,40 @@
+{
+ "city": "delft",
+ "map": "delft.webp",
+ "res": 2048,
+ "lmMax": 1.7827,
+ "samples": 256,
+ "note": "lightMap = sRGB-decoded texel \u00d7 lmMax (three.js irradiance units); sky + bounced sun, no direct sun",
+ "meshes": [
+  {
+   "name": "ground",
+   "count": 144,
+   "offset": 0
+  },
+  {
+   "name": "trim",
+   "count": 106392,
+   "offset": 576
+  },
+  {
+   "name": "wall",
+   "count": 14688,
+   "offset": 426144
+  },
+  {
+   "name": "roof",
+   "count": 1344,
+   "offset": 484896
+  },
+  {
+   "name": "dark",
+   "count": 15144,
+   "offset": 490272
+  },
+  {
+   "name": "leaf",
+   "count": 224640,
+   "offset": 550848
+  }
+ ]
+}

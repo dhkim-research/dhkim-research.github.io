@@ -1,0 +1,40 @@
+{
+ "city": "lausanne",
+ "map": "lausanne.webp",
+ "res": 2048,
+ "lmMax": 1.9414,
+ "samples": 256,
+ "note": "lightMap = sRGB-decoded texel \u00d7 lmMax (three.js irradiance units); sky + bounced sun, no direct sun",
+ "meshes": [
+  {
+   "name": "ground",
+   "count": 108,
+   "offset": 0
+  },
+  {
+   "name": "trim",
+   "count": 80820,
+   "offset": 432
+  },
+  {
+   "name": "wall",
+   "count": 984,
+   "offset": 323712
+  },
+  {
+   "name": "dark",
+   "count": 13236,
+   "offset": 327648
+  },
+  {
+   "name": "roof",
+   "count": 552,
+   "offset": 380592
+  },
+  {
+   "name": "leaf",
+   "count": 146880,
+   "offset": 382800
+  }
+ ]
+}

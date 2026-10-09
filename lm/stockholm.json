@@ -1,0 +1,35 @@
+{
+ "city": "stockholm",
+ "map": "stockholm.webp",
+ "res": 2048,
+ "lmMax": 1.3862,
+ "samples": 256,
+ "note": "lightMap = sRGB-decoded texel \u00d7 lmMax (three.js irradiance units); sky + bounced sun, no direct sun",
+ "meshes": [
+  {
+   "name": "ground",
+   "count": 144,
+   "offset": 0
+  },
+  {
+   "name": "trim",
+   "count": 134436,
+   "offset": 576
+  },
+  {
+   "name": "wall",
+   "count": 3684,
+   "offset": 538320
+  },
+  {
+   "name": "dark",
+   "count": 2196,
+   "offset": 553056
+  },
+  {
+   "name": "roof",
+   "count": 1368,
+   "offset": 561840
+  }
+ ]
+}

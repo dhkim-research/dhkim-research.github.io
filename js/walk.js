@@ -236,8 +236,41 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) cache.set(i, buildCity(i, mats, ctx));
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); cache.set(i, c); bakeLight(i, c); }
     return cache.get(i);
+  }
+  /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
+     Direct sun and its shadows stay live; the lightmap replaces most of the hemisphere fill. */
+  const bakedRamp = new THREE.DataTexture(new Uint8Array([40, 64, 190, 255]), 4, 1, THREE.RedFormat);   // a little painted lift stays in the shade
+  bakedRamp.minFilter = bakedRamp.magFilter = THREE.NearestFilter; bakedRamp.needsUpdate = true;
+  const BAKED_HEMI = 0.35;           // a little hemisphere light stays for the walkers, buses and trams
+  let hemiBase = 1, useBaked = true;
+  const lmIndex = fetch(new URL('../lm/index.json', import.meta.url).href, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : {})).then((j) => { lmVer = j.v || ''; return j.cities || []; }).catch(() => []);
+  let lmVer = '';
+  async function bakeLight(i, c) {
+    const url = (f) => new URL(`../lm/${CITIES[i].key}${f}?v=${lmVer}`, import.meta.url).href;
+    try {
+      if (!(await lmIndex).includes(CITIES[i].key)) return;
+      const r = await fetch(url('.json')); if (!r.ok) return;
+      const meta = await r.json();
+      const [buf, tex] = await Promise.all([fetch(url('.uv1.bin')).then((q) => q.arrayBuffer()), new THREE.TextureLoader().loadAsync(new URL(`../lm/${meta.map}?v=${lmVer}`, import.meta.url).href)]);
+      tex.channel = 1; tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false; tex.minFilter = THREE.LinearFilter;   // islands sit 1–2 px apart: no mips, no bleeding
+      const grp = c.root.children[c.root.children.length - 1];
+      for (const part of meta.meshes) {
+        const mesh = grp.children.find((m) => m.name === part.name);
+        if (!mesh || mesh.geometry.attributes.position.count !== part.count) { console.warn('lightmap: geometry changed since the bake —', CITIES[i].key, part.name); continue; }
+        mesh.geometry.setAttribute('uv1', new THREE.BufferAttribute(new Uint16Array(buf, part.offset, part.count * 2), 2, true));
+        const m = mesh.material.clone(); m.lightMap = tex; m.lightMapIntensity = meta.lmMax; m.gradientMap = bakedRamp;
+        mesh.userData.live = mesh.material; mesh.userData.baked = m; if (useBaked) mesh.material = m;
+      }
+      c.baked = true; if (cur === i) lightFill();
+    } catch (e) { /* no lightmap for this city: the live look stays */ }
+  }
+  function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
+  function setBaked(v) {
+    useBaked = !!v;
+    for (const c of cache.values()) if (c.baked) c.root.children[c.root.children.length - 1].children.forEach((m) => { if (m.userData.baked) m.material = useBaked ? m.userData.baked : m.userData.live; });
+    lightFill();
   }
   function setCity(i) {
     if (i === cur) return;
@@ -263,6 +296,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     if (lk.sunI !== undefined) { sun.intensity = lk.sunI; hemi.intensity = lk.hemiI; }
     if (lk.sunCol) sun.color.set(lk.sunCol); if (lk.hemiSky) hemi.color.set(lk.hemiSky);
     else hemi.color.set(0xa9c6ff);
+    hemiBase = hemi.intensity; lightFill();
     rain.visible = C.weather === 'rain'; umbrella.visible = C.weather === 'rain';
     // water
     for (const wd of city.waters) {
@@ -388,7 +422,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
     setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },
-    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, setWeights(w) { room.setWeights(w); }, setPattern(k) { room.setPattern(k); }, setBench(i) { room.setBench(i); }, room,
+    setRoom(n) { room.setState(n); }, setAI(v) { room.setAI(v); }, setWeights(w) { room.setWeights(w); }, setPattern(k) { room.setPattern(k); }, setBench(i) { room.setBench(i); }, setBaked, room,
     get mode() { return mode; },
     get city() { return cur; }, get sunAlt() { return CITIES[cur].sun.alt; }
   };

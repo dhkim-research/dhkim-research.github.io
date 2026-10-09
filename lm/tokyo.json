@@ -1,0 +1,40 @@
+{
+ "city": "tokyo",
+ "map": "tokyo.webp",
+ "res": 2048,
+ "lmMax": 2.5399,
+ "samples": 256,
+ "note": "lightMap = sRGB-decoded texel \u00d7 lmMax (three.js irradiance units); sky + bounced sun, no direct sun",
+ "meshes": [
+  {
+   "name": "ground",
+   "count": 144,
+   "offset": 0
+  },
+  {
+   "name": "trim",
+   "count": 56880,
+   "offset": 576
+  },
+  {
+   "name": "wall",
+   "count": 15156,
+   "offset": 228096
+  },
+  {
+   "name": "dark",
+   "count": 24612,
+   "offset": 288720
+  },
+  {
+   "name": "leaf",
+   "count": 6480,
+   "offset": 387168
+  },
+  {
+   "name": "face",
+   "count": 2640,
+   "offset": 413088
+  }
+ ]
+}
