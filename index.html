@@ -225,6 +225,37 @@
   .loading .fill { height: 1px; background: var(--ink); width: 0; transition: width .3s; }
   .loading .err { margin-top: 14px; color: var(--amber-ink); font-size: 13px; }
 
+  /* Instruments */
+  .bench { list-style: none; margin: 18px 0 0; padding: 0; font-size: 12px; }
+  .bench li { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; padding: 8px 0; border-top: 1px solid var(--rule); }
+  .bench b { font-weight: 500; color: var(--amber-ink); } .bench li > span:last-child { color: var(--muted); }
+  .plate .seg { margin-top: 0; border-color: rgba(241,239,234,.45); flex-wrap: wrap; }
+  .plate .seg button { color: rgba(241,239,234,.72); padding: 6px 9px; }
+  .plate .seg button[aria-pressed=true] { background: var(--paper); color: var(--ink); }
+  .hdrbox { position: relative; display: grid; place-items: center; background: #0f1012; padding: 12px 0 4px; touch-action: pan-y; }
+  .hdrbox img { width: min(100%, 330px); aspect-ratio: 1; height: auto; cursor: crosshair; border-radius: 50%; }
+  .hdrtag { position: absolute; left: 14px; top: 12px; font-size: 10.5px; letter-spacing: .06em; color: var(--paper); background: rgba(0,0,0,.45); padding: 3px 7px; }
+  .hdrread { position: absolute; z-index: 2; pointer-events: none; transform: translate(14px, -130%); white-space: nowrap; font-size: 12px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: 3px 7px; font-variant-numeric: tabular-nums; }
+  .hdrread.bad { color: var(--amber-ink); border-color: var(--amber-ink); }
+  .hdrctl { background: #121416; padding: 8px 26px 2px; }
+  .hdrctl input { width: 100%; margin: 0; accent-color: var(--amber); }
+  .hdrctl .ticks { display: flex; justify-content: space-between; font-size: 10px; color: rgba(241,239,234,.7); font-variant-numeric: tabular-nums; }
+  .fclegend { position: relative; background: #121416; padding: 12px 26px 4px; display: flex; justify-content: space-between; font-size: 9.5px; color: rgba(241,239,234,.75); }
+  .fclegend i { position: absolute; left: 26px; right: 26px; top: 4px; height: 5px; background: linear-gradient(90deg, #121028, #342478, #1680a0, #60c478, #f6d448, #fa6028); }
+  .shot { margin: 16px 0 0; } .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+  .shot figcaption { margin-top: 4px; font-size: 10px; letter-spacing: .06em; color: var(--muted); }
+  .ep { background: #d9d6cc; color: #1a1a1a; padding: 14px 20px 8px; }
+  .ephead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 11px; } .ephead b { font-size: 14px; font-weight: 600; }
+  .ep svg { display: block; width: 100%; height: auto; margin-top: 6px; }
+  .epctl, .kitctl { background: #121416; padding: 10px 26px 4px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .kitrow { background: #121416; display: grid; grid-template-columns: minmax(0, 1fr) 132px; gap: 14px; align-items: center; padding: 14px 20px 4px; }
+  .kitrow svg { display: block; width: 100%; height: auto; }
+  .cube { display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 34px); gap: 2px; font: 500 11px "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  .cube span { display: grid; place-items: center; align-content: center; color: #151515; background: var(--c, #ccc); transition: background .8s; line-height: 1.05; }
+  .cube span i { font-style: normal; font-size: 8.5px; opacity: .7; letter-spacing: .04em; }
+  .cube [data-f=up] { grid-area: 1 / 2; } .cube [data-f=w] { grid-area: 2 / 1; } .cube [data-f=s] { grid-area: 2 / 2; } .cube [data-f=e] { grid-area: 2 / 3; } .cube [data-f=down] { grid-area: 3 / 2; } .cube [data-f=n] { grid-area: 4 / 2; }
+  .mrt { font-size: 12px; color: var(--paper); }
+
   @media (max-width: 760px) {
     .nav { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; flex-direction: column; align-items: stretch; gap: 6px; }
     .brand { padding: 8px 10px; } .brand span { font-size: 9.5px; }
@@ -246,6 +277,8 @@
     .counts { grid-template-columns: repeat(3, auto); }
     .sel { grid-template-columns: minmax(0, 1fr); }
     .pubsec { padding: 150px 8px 40px; }
+    .hdrctl, .epctl, .kitctl, .fclegend { padding-left: 18px; padding-right: 18px; } .fclegend i { left: 18px; right: 18px; }
+    .kitrow { grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 12px 14px 4px; }
   }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card, .loading, #skyc { transition: none; } }
 </style>
@@ -264,6 +297,7 @@
     <a href="#journey" data-s="walk" data-en="Journey" data-ja="歩み">Journey</a>
     <a href="#about" data-s="about" data-en="About" data-ja="紹介">About</a>
     <a href="#projects" data-s="projects" data-en="Projects" data-ja="研究">Projects</a>
+    <a href="#instruments" data-s="instruments" data-en="Instruments" data-ja="計測器">Instruments</a>
     <a href="#publications" data-s="publications" data-en="Publications" data-ja="論文">Publications</a>
     <a href="#contact" data-s="contact" data-en="Contact" data-ja="連絡">Contact</a>
     <span class="sep"></span>
@@ -278,7 +312,7 @@
     <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4 1.5 9 6 14M12 4l4.5 5-4.5 5"/></svg>
   </div>
 </div>
-<div class="hint mono" id="hint" data-en="Move to look · drag to turn · drag the seam" data-ja="マウスで見回す・ドラッグで向きを変える・境界線を動かす">Move to look · drag to turn · drag the seam</div>
+<div class="hint mono" id="hint" data-en="Your cursor is a luminance meter · drag the seam" data-ja="カーソルは輝度計 · 境界線を動かす">Your cursor is a luminance meter · drag the seam</div>
 <div class="probe" id="probe"><div class="ring"></div><div class="val" id="pval">—</div></div>
 <div class="card" id="card"><div><div class="y mono" id="cy"></div><h2 id="ct"></h2><div class="jp" id="cj"></div></div></div>
 <div class="pcard" id="pcard"></div>
@@ -299,6 +333,7 @@
       <h2 data-en="Between what a meter reads and what a person feels." data-ja="計測器が読む光と、人が感じる光のあいだ。">Between what a meter reads and what a person feels.</h2>
       <h3 data-en="Felt" data-ja="感じた光">Felt</h3>
       <p class="lede" data-en="I am an architect and lighting researcher. A room can pass every daylight metric and still feel harsh; a dim café can read as ‘inadequate’ and feel exactly right. My work sits in that gap — measuring light carefully with HDR imaging and photometry, and asking people what the light does to them." data-ja="建築と照明の研究者です。昼光指標をすべて満たしても居心地の悪い部屋があり、「暗すぎる」と測られても心地よいカフェがあります。HDR画像と測光で光を丁寧に測り、その光が人に何をもたらすのかを問う——その隙間が私の研究の場所です。">I am an architect and lighting researcher. A room can pass every daylight metric and still feel harsh; a dim café can read as ‘inadequate’ and feel exactly right. My work sits in that gap — measuring light carefully with HDR imaging and photometry, and asking people what the light does to them.</p>
+      <p data-en="I also like sensors — most of my studies begin by building or calibrating the thing that measures. Your cursor here is one: on the measured side it reads luminance." data-ja="センサーも好きです。研究の多くは、測る道具をつくり、較正するところから始まります。このページのカーソルもそのひとつ——測った光の側では輝度を読み取ります。">I also like sensors — most of my studies begin by building or calibrating the thing that measures. Your cursor here is one: on the measured side it reads luminance.</p>
       <h3 data-en="Measured" data-ja="測った光">Measured</h3>
       <ul class="cv">
         <li><span>2026–</span><span data-en="Assistant Professor, Department of Architecture, Tokyo University of Science" data-ja="東京理科大学 建築学科 助教">Assistant Professor, Department of Architecture, Tokyo University of Science</span></li>
@@ -383,6 +418,70 @@
     </div>
   </section>
 
+  <!-- INSTRUMENTS -->
+  <section id="instruments">
+    <div class="sec" data-scene="room:bench" data-bench="0">
+      <div class="panel">
+        <div class="kick" data-en="Instruments · the night bench" data-ja="計測器 · 夜の作業机">Instruments · the night bench</div>
+        <h2 data-en="I build the instruments I measure with." data-ja="測るための道具は、自分でつくる。">I build the instruments I measure with.</h2>
+        <p class="lede" data-en="I like sensors. Most of my studies start long before the first participant — with a camera that has to be calibrated, or a logger that has to survive three weeks on a windowsill. These are tools I wrote or built along the way. The code is open, so anyone can check the numbers." data-ja="センサーが好きです。研究の多くは、最初の参加者よりずっと前——較正しなければならないカメラや、窓辺で三週間動き続けなければならないロガーから始まります。ここにあるのは、その途中で書いたり組み立てたりした道具です。コードは公開しているので、誰でも数値を確かめられます。">I like sensors. Most of my studies start long before the first participant — with a camera that has to be calibrated, or a logger that has to survive three weeks on a windowsill. These are tools I wrote or built along the way. The code is open, so anyone can check the numbers.</p>
+        <ul class="bench mono"><li><b>01</b> hdrspace <span data-en="calibrated HDR" data-ja="較正HDR">calibrated HDR</span></li><li><b>02</b> AirQ-Logger <span data-en="air, on e-paper" data-ja="空気をe-paperに">air, on e-paper</span></li><li><b>03</b> <span data-en="Room sensor kit" data-ja="室内センサーキット">Room sensor kit</span> <span data-en="light, heat, air" data-ja="光・熱・空気">light, heat, air</span></li></ul>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="1">
+      <div class="panel">
+        <figure class="plate hdrdemo" id="hdrdemo">
+          <div class="hdrbox" id="hdrbox"><img id="hdrimg" src="img/hdr/b2.jpg?v=db6c68b3" alt="Fisheye HDR of a test office with the sun in view, shown one exposure at a time" loading="lazy" decoding="async"><span class="hdrread mono" id="hdrread" hidden></span><span class="hdrtag mono" id="hdrtag">0 EV</span></div>
+          <div class="hdrctl"><input type="range" id="hdrr" min="0" max="5" step="1" value="2" aria-label="Exposure in the bracket, then merged"><div class="ticks mono"><span>−6</span><span>−3</span><span>0</span><span>+3</span><span>+6</span><span data-en="merge" data-ja="合成">merge</span></div></div>
+          <div class="fclegend mono" id="fcleg" hidden><i></i><span>1</span><span>10</span><span>100</span><span>1k</span><span>10k</span><span>100k cd/m²</span></div>
+          <figcaption data-en="Five exposures, three stops apart: none of them holds both the sun and the keyboard. Merged, every pixel is a luminance — hover to read it. A test office; the exposures are simulated from the merged HDR." data-ja="3段ずつ離した5枚の露出。どれも太陽とキーボードを同時には写せません。合成すると、すべての画素が輝度になります——カーソルで読み取れます。実験用オフィス。各露出は合成HDRから再現したものです。">Five exposures, three stops apart: none of them holds both the sun and the keyboard. Merged, every pixel is a luminance — hover to read it. A test office; the exposures are simulated from the merged HDR.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 01 · software · 2026" data-ja="計測器 01 · ソフトウェア · 2026">Instrument 01 · software · 2026</div>
+        <h2>hdrspace</h2>
+        <p class="lede" data-en="Ordinary raw converters make pictures; hdrspace makes measurements. It turns a bracket of camera RAW files into one HDR image in cd/m², keeps the whole chain linear, and writes every step into the file — so each number can be traced back to the shutter that made it." data-ja="普通のRAW現像ソフトがつくるのは写真。hdrspaceがつくるのは測定値です。カメラのRAWブラケットを cd/m² のHDR画像一枚にまとめ、処理をすべて線形に保ち、各ステップをファイルに書き込みます。どの数値も、それを撮ったシャッターまでたどれます。">Ordinary raw converters make pictures; hdrspace makes measurements. It turns a bracket of camera RAW files into one HDR image in cd/m², keeps the whole chain linear, and writes every step into the file — so each number can be traced back to the shutter that made it.</p>
+        <dl class="meta sheet"><dt data-en="Measures" data-ja="測るもの">Measures</dt><dd data-en="Luminance (cd/m²) · colour (CIE XYZ)" data-ja="輝度（cd/m²）・色（CIE XYZ）">Luminance (cd/m²) · colour (CIE XYZ)</dd><dt data-en="In" data-ja="入力">In</dt><dd data-en="Camera RAW brackets, fisheye or not, with shutter, aperture and colour calibration" data-ja="カメラRAWブラケット（魚眼にも対応）、シャッター・絞り・色の較正つき">Camera RAW brackets, fisheye or not, with shutter, aperture and colour calibration</dd><dt data-en="Out" data-ja="出力">Out</dt><dd data-en="Radiance HDR, every step in the header" data-ja="Radiance HDR、全工程をヘッダーに記録">Radiance HDR, every step in the header</dd><dt data-en="Also" data-ja="ほかに">Also</dt><dd data-en="Glare (evalglare in C++), view visibility (HDR-VDP 3), perceptual maps, tone mapping" data-ja="グレア（evalglareのC++移植）、眺望の見え（HDR-VDP 3）、知覚マップ、トーンマッピング">Glare (evalglare in C++), view visibility (HDR-VDP 3), perceptual maps, tone mapping</dd><dt data-en="Code" data-ja="コード">Code</dt><dd class="lk">macOS · C++ · GPL-3.0 · <a href="https://github.com/dhkim-research/hdrspace" target="_blank" rel="noopener">GitHub ↗</a></dd></dl>
+        <figure class="shot"><img src="img/hdr/app.jpg?v=32eef4cc" alt="The hdrspace app: a fisheye HDR in the viewer with the tool rail and inspector" loading="lazy" decoding="async"><figcaption class="mono" data-en="the app · viewer" data-ja="アプリ · ビューア">the app · viewer</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="2">
+      <div class="panel">
+        <figure class="plate epaper" id="epaper">
+          <div class="ep"><div class="ephead mono"><b id="eptitle">CO2</b><span id="epstat"></span></div><svg id="epsvg" viewBox="0 0 440 200" role="img" aria-label="A day of sensor readings drawn as on an e-paper screen"></svg></div>
+          <div class="epctl">
+            <div class="seg" role="group" aria-label="Sensor" id="epsens"><button type="button" data-k="co2" aria-pressed="true">CO₂</button><button type="button" data-k="pm" aria-pressed="false">PM2.5</button><button type="button" data-k="t" aria-pressed="false">T</button><button type="button" data-k="rh" aria-pressed="false">RH</button></div>
+            <div class="seg" role="group" aria-label="Time window" id="epwin"><button type="button" data-w="0-24" aria-pressed="true">All</button><button type="button" data-w="8-12" aria-pressed="false">08–12</button><button type="button" data-w="12-16" aria-pressed="false">12–16</button><button type="button" data-w="16-20" aria-pressed="false">16–20</button><button type="button" data-w="20-24" aria-pressed="false">20–24</button></div>
+          </div>
+          <figcaption data-en="The logger’s analysis screen, redrawn: pick a sensor and a time-of-day window, as on the device. Example data, not field measurements." data-ja="ロガーの解析画面を再現：本体と同じく、センサーと時間帯を選べます。例示用のデータで、実測値ではありません。">The logger’s analysis screen, redrawn: pick a sensor and a time-of-day window, as on the device. Example data, not field measurements.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 02 · firmware · M5Stack PaperS3" data-ja="計測器 02 · ファームウェア · M5Stack PaperS3">Instrument 02 · firmware · M5Stack PaperS3</div>
+        <h2>AirQ-Logger</h2>
+        <p class="lede" data-en="Up to ten small air-quality nodes talk over ESP-NOW to one e-paper logger, which writes every packet to a microSD card. Local logging comes first. Wi-Fi only when asked — it shares the 2.4 GHz radio, and a lost sample is worse than a late upload." data-ja="最大10台の小さな空気質ノードが、ESP-NOWで一台のe-paperロガーに送信し、ロガーはすべてをmicroSDに書き込みます。まずはローカルに記録すること。Wi-Fiは必要なときだけ——同じ2.4 GHzの無線を使うので、アップロードが遅れるより、データが欠けるほうが困るからです。">Up to ten small air-quality nodes talk over ESP-NOW to one e-paper logger, which writes every packet to a microSD card. Local logging comes first. Wi-Fi only when asked — it shares the 2.4 GHz radio, and a lost sample is worse than a late upload.</p>
+        <dl class="meta sheet"><dt data-en="Measures" data-ja="測るもの">Measures</dt><dd>CO₂ · PM1–PM10 · T · RH · VOC · NOx</dd><dt data-en="Nodes" data-ja="ノード">Nodes</dt><dd data-en="Up to 10 M5Stack AirQ, over ESP-NOW" data-ja="M5Stack AirQ 最大10台、ESP-NOW">Up to 10 M5Stack AirQ, over ESP-NOW</dd><dt data-en="Out" data-ja="出力">Out</dt><dd data-en="TSV on microSD; optional HTTPS upload" data-ja="microSDにTSV、HTTPSアップロードは任意">TSV on microSD; optional HTTPS upload</dd><dt data-en="Code" data-ja="コード">Code</dt><dd class="lk">Arduino C++ · MIT · <a href="https://github.com/dhkim-research/AirQ-Logger" target="_blank" rel="noopener">GitHub ↗</a></dd></dl>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="3">
+      <div class="panel">
+        <figure class="plate kit" id="kit">
+          <div class="kitrow">
+            <svg id="kitsvg" viewBox="0 0 300 190" role="img" aria-label="Illuminance and melanopic EDI over an example day, on a log scale"></svg>
+            <div class="cube" id="cube" aria-label="Plane radiant temperatures on the six faces of the cube">
+              <span data-f="up"></span><span data-f="w"></span><span data-f="s"></span><span data-f="e"></span><span data-f="n"></span><span data-f="down"></span>
+            </div>
+          </div>
+          <div class="kitctl"><div class="seg" role="group" aria-label="Sun on the floor" id="kitsun"><button type="button" data-sun="0" aria-pressed="true" data-en="Overcast" data-ja="曇り">Overcast</button><button type="button" data-sun="1" aria-pressed="false" data-en="Sun on the floor" data-ja="床に日だまり">Sun on the floor</button></div><span class="mrt mono" id="mrt"></span></div>
+          <figcaption data-en="Left: lux and melanopic EDI through an example day — daylight is rich in the blue that the body’s clock reads, warm evening lamps are not. Right: six faces, six radiant temperatures; their fourth-power mean is the mean radiant temperature. Example values, not field data." data-ja="左：例示した一日の照度とメラノピックEDI。体内時計が読み取る青を、昼光は多く含み、夕方の暖色の照明はあまり含みません。右：六つの面、六つの放射温度。その4乗平均が平均放射温度です。例示値で、実測データではありません。">Left: lux and melanopic EDI through an example day — daylight is rich in the blue that the body’s clock reads, warm evening lamps are not. Right: six faces, six radiant temperatures; their fourth-power mean is the mean radiant temperature. Example values, not field data.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 03 · field kit" data-ja="計測器 03 · フィールドキット">Instrument 03 · field kit</div>
+        <h2 data-en="Room sensor kit" data-ja="室内センサーキット">Room sensor kit</h2>
+        <p class="lede" data-en="For field studies in homes: a few battery sensors that sit quietly for weeks. One reads light the way the body does — melanopic EDI next to plain lux. A small cube reads the six surfaces around it for radiant temperature. The rest log CO₂, particles, humidity and whether anyone is there." data-ja="住宅でのフィールド調査のために：数週間、静かに置いておけるバッテリー式センサーの組み合わせ。ひとつは体が読むように光を測り、照度と並べてメラノピックEDIを記録します。小さなキューブは周囲の六つの面から放射温度を読み、残りはCO₂、粒子、湿度、そして在室を記録します。">For field studies in homes: a few battery sensors that sit quietly for weeks. One reads light the way the body does — melanopic EDI next to plain lux. A small cube reads the six surfaces around it for radiant temperature. The rest log CO₂, particles, humidity and whether anyone is there.</p>
+        <dl class="meta sheet"><dt data-en="Light" data-ja="光">Light</dt><dd data-en="8-channel spectral → lux, CCT, melanopic EDI (CIE S 026)" data-ja="8チャンネル分光 → 照度・色温度・メラノピックEDI（CIE S 026）">8-channel spectral → lux, CCT, melanopic EDI (CIE S 026)</dd><dt data-en="Heat" data-ja="熱">Heat</dt><dd data-en="Six-face radiant cube → mean radiant temperature" data-ja="六面の放射キューブ → 平均放射温度">Six-face radiant cube → mean radiant temperature</dd><dt data-en="Air" data-ja="空気">Air</dt><dd>CO₂ · PM2.5 · PM10 · T · RH</dd><dt data-en="People" data-ja="人">People</dt><dd data-en="mmWave presence, no camera" data-ja="ミリ波で在室検知、カメラなし">mmWave presence, no camera</dd></dl>
+      </div>
+    </div>
+  </section>
+
   <!-- PUBLICATIONS -->
   <section class="sec pubsec" id="publications" data-scene="pubs">
     <div class="pubwrap">
@@ -424,7 +523,7 @@
 
 <script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
 <script type="module">
-import { createWalk } from './js/walk.js?v=3a922a94';
+import { createWalk } from './js/walk.js?v=60fe0acf';
 import { createSky } from './js/sky.js?v=62e90914';
 import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
 
@@ -452,6 +551,7 @@ const CH = [
 const $ = (id) => document.getElementById(id);
 const canvas = $('stage');
 let lang = 'en';
+const langHooks = [];
 const SPEED = 2.1, LEN = 102;
 let W, sky, playing = true, prog = 0, chapter = 0, split = 0.36, look = { x: 0, y: 0, tx: 0, ty: 0 }, busy = false;
 let scene = 'walk', sceneBusy = false, pendingScene = null;
@@ -472,6 +572,7 @@ function setLang(l) {
   document.querySelectorAll('.menu button[data-l]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
   document.querySelectorAll('[data-en]').forEach((el) => { el.textContent = el.dataset[l]; });
   caption(chapter); buildPubs(); if (sky) sky.setLang(l); if (W && W.room) setW(W.room.weights);
+  langHooks.forEach((f) => f());
 }
 document.querySelectorAll('.menu button[data-l]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.l)));
 function caption(i) {
@@ -551,7 +652,7 @@ async function applyScene(spec) {
   if (spec !== 'pubs') setSky(false);
   document.body.classList.toggle('in-pubs', spec === 'pubs');
   document.querySelectorAll('.menu a').forEach((a) => a.setAttribute('aria-current', 'false'));
-  const sec = spec === 'walk' ? 'walk' : spec === 'pubs' ? 'publications' : spec === 'tokyo' ? 'contact' : (spec === 'room:about' && document.querySelector('#about').getBoundingClientRect().top < innerHeight * 0.5 && document.querySelector('#projects').getBoundingClientRect().top > innerHeight * 0.5) ? 'about' : 'projects';
+  const sec = spec === 'walk' ? 'walk' : spec === 'pubs' ? 'publications' : spec === 'tokyo' ? 'contact' : spec === 'room:bench' ? 'instruments' : (spec === 'room:about' && document.querySelector('#about').getBoundingClientRect().top < innerHeight * 0.5 && document.querySelector('#projects').getBoundingClientRect().top > innerHeight * 0.5) ? 'about' : 'projects';
   document.querySelector(`.menu a[data-s="${sec}"]`)?.setAttribute('aria-current', 'true');
   document.body.classList.toggle('in-walk', spec === 'walk');
   // keep the panel on the measured side: the seam settles just right of it (unless the visitor has moved it)
@@ -581,13 +682,111 @@ let scrollQueued = false;
 function checkScene() {
   scrollQueued = false;
   const mid = innerHeight / 2;
-  for (const b of blocks) { const r = b.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) { applyScene(b.dataset.scene); return; } }
+  for (const b of blocks) { const r = b.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) { if (b.dataset.bench != null && W) W.setBench(+b.dataset.bench); applyScene(b.dataset.scene); return; } }
 }
 addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(checkScene); } }, { passive: true });
 addEventListener('resize', () => requestAnimationFrame(checkScene));
 
 /* Visual comfort — façade pattern on the window */
 document.querySelectorAll('[data-pat]').forEach((b) => b.addEventListener('click', () => W.setPattern(b.dataset.pat)));
+
+/* ---------- Instruments ---------- */
+const sup = (n) => String(n).replace(/[0-9-]/g, (c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)] || '⁻');
+const fmtL = (L) => L >= 1e5 ? `${(L / 10 ** Math.floor(Math.log10(L))).toFixed(1)} × 10${sup(Math.floor(Math.log10(L)))}` : L >= 100 ? Math.round(L).toLocaleString('en') : L >= 10 ? L.toFixed(0) : L.toFixed(1);
+// hdrspace: a bracket, then the merge; the cursor reads each pixel
+{
+  const img = $('hdrimg'), r = $('hdrr'), tag = $('hdrtag'), read = $('hdrread'), leg = $('fcleg'), box = $('hdrbox');
+  const SAT = [30000, 4000, 500, 60, 8], EVS = ['−6 EV', '−3 EV', '0 EV', '+3 EV', '+6 EV'];
+  let lum = null; const N = 640;
+  const want = () => { if (lum) return; lum = 'loading'; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = c.height = N; const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(im, 0, 0, N, N); lum = g.getImageData(0, 0, N, N).data; }; im.src = 'img/hdr/logL.png';
+    ['b0', 'b1', 'b3', 'b4', 'fc'].forEach((k) => { const p = new Image(); p.src = `img/hdr/${k}.jpg`; }); };
+  const show = () => { const v = +r.value; img.src = v < 5 ? `img/hdr/b${v}.jpg` : 'img/hdr/fc.jpg'; tag.textContent = v < 5 ? `${EVS[v]} · ${lang === 'ja' ? '一枚の露出' : 'one exposure'}` : (lang === 'ja' ? '合成 · cd/m²' : 'merged · cd/m²'); leg.hidden = v < 5; };
+  r.addEventListener('input', () => { want(); show(); });
+  box.addEventListener('pointerenter', want);
+  box.addEventListener('pointermove', (e) => {
+    if (!lum || lum === 'loading') return;
+    const ib = img.getBoundingClientRect(), bb = box.getBoundingClientRect();
+    const x = Math.floor((e.clientX - ib.left) / ib.width * N), y = Math.floor((e.clientY - ib.top) / ib.height * N);
+    const q = x >= 0 && y >= 0 && x < N && y < N ? lum[(y * N + x) * 4] : 0;
+    if (!q) { read.hidden = true; return; }
+    const L = Math.pow(10, q / 255 * 9 - 1), v = +r.value;
+    let t, bad = false;
+    if (v === 5) t = `${fmtL(L)} cd/m²`;
+    else if (L > SAT[v]) { t = lang === 'ja' ? '白飛び — 値なし' : 'clipped — no value'; bad = true; }
+    else if (L < SAT[v] / 400) { t = lang === 'ja' ? '暗すぎ — ノイズ' : 'too dark — noise'; bad = true; }
+    else t = `${fmtL(L)} cd/m²`;
+    read.textContent = t; read.classList.toggle('bad', bad); read.hidden = false;
+    read.style.left = (e.clientX - bb.left) + 'px'; read.style.top = (e.clientY - bb.top) + 'px';
+  });
+  box.addEventListener('pointerleave', () => { read.hidden = true; });
+  langHooks.push(show); show();
+}
+// AirQ-Logger: the analysis screen, with example data (a deterministic, plausible home day)
+{
+  const svg = $('epsvg'), H = 144, hrs = Array.from({ length: H }, (_, i) => i / 6);
+  const wig = (i, a) => Math.sin(i * 1.7) * a * 0.5 + Math.sin(i * 0.37 + 1) * a * 0.5;
+  const bump = (h, c, w) => Math.exp(-((h - c) ** 2) / (2 * w * w));
+  const DATA = {
+    co2: { name: 'CO2', unit: 'ppm', v: hrs.map((h, i) => 430 + 720 * Math.min(1, h / 6.5) * (h < 7 ? 1 : 0) + 380 * bump(h, 7.6, 0.5) + 520 * bump(h, 20.5, 1.6) + 260 * (h > 22 ? (h - 22) / 2 : 0) + wig(i, 25)) },
+    pm: { name: 'PM2.5', unit: 'µg/m³', v: hrs.map((h, i) => 4 + 1.5 * Math.sin(h / 3) + 30 * bump(h, 19.2, 0.35) + 8 * bump(h, 7.4, 0.3) + Math.abs(wig(i, 1.2))) },
+    t: { name: 'T', unit: '°C', v: hrs.map((h, i) => 21 + 1.4 * Math.sin((h - 9) / 24 * 2 * Math.PI) + 1.1 * bump(h, 19.3, 0.8) + wig(i, 0.08)) },
+    rh: { name: 'RH', unit: '%', v: hrs.map((h, i) => 46 - 4 * Math.sin((h - 9) / 24 * 2 * Math.PI) + 16 * bump(h, 7.3, 0.25) + 5 * bump(h, 19.3, 0.6) + wig(i, 0.6)) }
+  };
+  let key = 'co2', win = [0, 24];
+  const X0 = 34, X1 = 432, Y0 = 8, Y1 = 176;
+  function draw() {
+    const d = DATA[key], v = d.v, lo = Math.min(...v), hi = Math.max(...v), pad = (hi - lo) * 0.12, a = lo - pad, b = hi + pad;
+    const x = (h) => X0 + (X1 - X0) * h / 24, y = (val) => Y1 - (Y1 - Y0) * (val - a) / (b - a);
+    const pts = v.map((val, i) => `${x(hrs[i]).toFixed(1)},${y(val).toFixed(1)}`).join(' ');
+    const sel = v.filter((_, i) => hrs[i] >= win[0] && hrs[i] < win[1]), mean = sel.reduce((s, q) => s + q, 0) / sel.length, mx = Math.max(...sel);
+    const dec = key === 't' ? 1 : 0, f = (q) => q.toFixed(dec);
+    svg.innerHTML = `<defs><pattern id="dith" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="#1a1a1a"/></pattern></defs>
+      <rect x="${X0}" y="${Y0}" width="${X1 - X0}" height="${Y1 - Y0}" fill="none" stroke="#1a1a1a"/>
+      ${win[0] > 0 ? `<rect x="${X0}" y="${Y0}" width="${x(win[0]) - X0}" height="${Y1 - Y0}" fill="url(#dith)" opacity=".5"/>` : ''}
+      ${win[1] < 24 ? `<rect x="${x(win[1])}" y="${Y0}" width="${X1 - x(win[1])}" height="${Y1 - Y0}" fill="url(#dith)" opacity=".5"/>` : ''}
+      <polyline points="${pts}" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round"/>
+      ${[0, 6, 12, 18, 24].map((h) => `<text x="${x(h)}" y="194" font-size="11" text-anchor="middle" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${String(h).padStart(2, '0')}</text>`).join('')}
+      <text x="${X0 - 5}" y="${Y0 + 9}" font-size="11" text-anchor="end" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${f(b)}</text>
+      <text x="${X0 - 5}" y="${Y1}" font-size="11" text-anchor="end" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${f(a)}</text>`;
+    $('eptitle').textContent = d.name;
+    $('epstat').textContent = `${lang === 'ja' ? '平均' : 'mean'} ${f(mean)} · max ${f(mx)} ${d.unit} · ${lang === 'ja' ? '例' : 'example'}`;
+  }
+  $('epsens').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; key = bt.dataset.k; $('epsens').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); draw(); });
+  $('epwin').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; win = bt.dataset.w.split('-').map(Number); $('epwin').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); draw(); });
+  langHooks.push(draw); draw();
+}
+// Room sensor kit: lux vs melanopic EDI (example day), and the radiant cube
+{
+  const svg = $('kitsvg'), X0 = 30, X1 = 292, Y0 = 10, Y1 = 166, lmin = 0.5, lmax = 3000;
+  const x = (h) => X0 + (X1 - X0) * h / 24, y = (L) => Y1 - (Y1 - Y0) * (Math.log10(Math.max(lmin, L)) - Math.log10(lmin)) / (Math.log10(lmax) - Math.log10(lmin));
+  const day = (h) => h < 6.2 || h > 20.3 ? 0 : 900 * Math.pow(Math.sin(Math.PI * (h - 6.2) / 14.1), 1.6) * (0.85 + 0.15 * Math.sin(h * 2.3));
+  const lamp = (h) => h > 18.5 && h < 23.3 ? 160 * Math.min(1, (h - 18.5) * 2) * Math.min(1, (23.3 - h) * 3) : h > 6.6 && h < 7.6 ? 120 : 0;
+  const hs = Array.from({ length: 241 }, (_, i) => i / 10);
+  const line = (fn) => hs.map((h) => `${x(h).toFixed(1)},${y(fn(h)).toFixed(1)}`).join(' ');
+  function draw() {
+    const ja = lang === 'ja';
+    svg.innerHTML = `${[1, 10, 100, 1000].map((L) => `<line x1="${X0}" x2="${X1}" y1="${y(L)}" y2="${y(L)}" stroke="rgba(241,239,234,.14)"/><text x="${X0 - 4}" y="${y(L) + 3}" font-size="9" text-anchor="end" fill="rgba(241,239,234,.6)" font-family="IBM Plex Mono, monospace">${L >= 1000 ? '1k' : L}</text>`).join('')}
+      <line x1="${x(8)}" x2="${x(18)}" y1="${y(250)}" y2="${y(250)}" stroke="#8fa8ff" stroke-dasharray="3 3" opacity=".7"/><line x1="${x(0.3)}" x2="${x(5.6)}" y1="${y(250)}" y2="${y(250)}" stroke="#8fa8ff" stroke-dasharray="1 3" opacity=".5"/><text x="${x(0.3)}" y="${y(250) - 4}" font-size="8.5" fill="#8fa8ff" font-family="IBM Plex Mono, monospace">${ja ? '日中 ≥ 250' : 'day ≥ 250'}</text>
+      <polyline points="${line((h) => day(h) + lamp(h))}" fill="none" stroke="#f1efea" stroke-width="1.8"/>
+      <polyline points="${line((h) => day(h) * 0.92 + lamp(h) * 0.42)}" fill="none" stroke="#8fa8ff" stroke-width="1.8"/>
+      ${[0, 6, 12, 18, 24].map((h) => `<text x="${x(h)}" y="${Y1 + 14}" font-size="9" text-anchor="middle" fill="rgba(241,239,234,.6)" font-family="IBM Plex Mono, monospace">${String(h).padStart(2, '0')}</text>`).join('')}
+      <text x="${X1}" y="${Y0 + 8}" font-size="9" text-anchor="end" fill="#f1efea" font-family="IBM Plex Mono, monospace">lux</text><text x="${X1}" y="${Y0 + 19}" font-size="9" text-anchor="end" fill="#8fa8ff" font-family="IBM Plex Mono, monospace">melanopic EDI</text>`;
+  }
+  const FACES = { up: ['up', '上'], down: ['floor', '床'], s: ['window', '窓'], n: ['room', '室内'], e: ['right', '右'], w: ['left', '左'] };
+  const STATES = [{ up: 21.0, down: 20.6, s: 17.8, n: 21.4, e: 21.2, w: 21.1 }, { up: 21.7, down: 27.6, s: 19.6, n: 21.9, e: 21.6, w: 21.4 }];
+  let st = 0;
+  const col = (t) => { const k = Math.max(0, Math.min(1, (t - 17) / 11)); const a = [143, 168, 255], b = [241, 239, 234], c = [232, 163, 61];
+    const m = k < 0.4 ? a.map((q, i) => q + (b[i] - q) * k / 0.4) : b.map((q, i) => q + (c[i] - q) * (k - 0.4) / 0.6); return `rgb(${m.map(Math.round).join(',')})`; };
+  function cube() {
+    const T = STATES[st], ja = lang === 'ja';
+    $('cube').querySelectorAll('span').forEach((sp) => { const t = T[sp.dataset.f]; sp.innerHTML = `<i>${FACES[sp.dataset.f][ja ? 1 : 0]}</i>${t.toFixed(1)}`; sp.style.setProperty('--c', col(t)); });
+    const mrt = Math.pow(Object.values(T).reduce((s, t) => s + (t + 273.15) ** 4, 0) / 6, 0.25) - 273.15;
+    $('mrt').textContent = `MRT ${mrt.toFixed(1)} °C`;
+  }
+  $('kitsun').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; st = +bt.dataset.sun; $('kitsun').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); cube(); });
+  langHooks.push(draw, cube); draw(); cube();
+}
+
 /* Solskin AI — the preference triangle (electricity · shading · view) */
 const TRI = { E: [130, 22], S: [22, 208], V: [238, 208] };
 const triCol = { E: '#ffd25c', S: '#8fa8ff', V: '#6fe0c0' };
