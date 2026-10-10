@@ -7,12 +7,19 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { toon, gradientMap } from './kit.js?v=d1954a06';
-import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=3e9c0b28';
+import { CITIES, buildCity, vermeerTexture, alpineTexture } from './cities.js?v=e25fc9d2';
 import { createRoom, ROOM_STATES } from './room.js?v=f2867de1';
 
 export { CITIES, ROOM_STATES };
 
-const Z0 = 6, Z1 = -96;              // the walk: from z0 to z1 along -z
+const Z0 = 6, Z1 = -96;
+// the felt side: the painter has the sky, and one thing in each city — a landmark (a world box [centre x, centre z,
+// half x, half z, top y]) or, where the city already has its own point, nothing more: London's stencil, Delft's tiles, Tokyo's pixel colleague
+const LANDMARK = {
+  lausanne: [40, -215, 22, 22, 27],        // the lakeside castle
+  stockholm: [6, -175, 7.5, 7.5, 98],      // the city hall tower
+  zurich: [0, -180.5, 11.8, 17.5, 66],     // the Grossmünster
+};              // the walk: from z0 to z1 along -z
 const EYE = 1.62;
 const K_LUM = 2600;                  // scene-linear 1.0  →  cd/m²
 const GLARE = 4000;                  // cd/m² above which the measured view hatches amber
@@ -23,7 +30,7 @@ const FinalShader = {
     tDiffuse: { value: null }, tDepth: { value: null }, uNear: { value: 0.1 }, uFar: { value: 9000 }, uInkFelt: { value: 0.6 }, uSplit: { value: 0.5 }, uExpo: { value: 1 }, uK: { value: K_LUM }, uGlare: { value: GLARE },
     uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uGrade: { value: new THREE.Vector3(1, 1, 1) },
     uFade: { value: 0 }, uFadeCol: { value: new THREE.Color(0xf4efe6) }, uPaper: { value: new THREE.Color(0xf1ede4) }, uInk: { value: new THREE.Color(0x1d2733) },
-    uMeasured: { value: 1 }, uFeltEV: { value: 1 }, uFalse: { value: 0 }, uArt: { value: 0 },
+    uMeasured: { value: 1 }, uFeltEV: { value: 1 }, uFalse: { value: 0 }, uArt: { value: 0 }, uArtGround: { value: 0 }, uArtSky: { value: 1 }, uLand: { value: new THREE.Vector4(0, 0, 0, -1) }, uLandY: { value: -1 },
     uSat: { value: 1.1 }, uCon: { value: 1.0 }, uLift: { value: new THREE.Vector3(0, 0, 0) },
     uSkyTop: { value: new THREE.Color(0x3a74c8) }, uSkyBot: { value: new THREE.Color(0xcfe2f0) }, uSkyMix: { value: 0 }, uOvercast: { value: 0 },
     uInvProj: { value: new THREE.Matrix4() }, uCamWorld: { value: new THREE.Matrix4() }, uSunDir: { value: new THREE.Vector3(0, 1, 0) },
@@ -31,7 +38,7 @@ const FinalShader = {
   },
   vertexShader: /* glsl */`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: /* glsl */`
-    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured, uFalse, uArt; uniform vec2 uRes;
+    uniform sampler2D tDiffuse, tDepth; uniform float uNear, uFar, uInkFelt; uniform float uSplit, uExpo, uK, uGlare, uTime, uFade, uMeasured, uFalse, uArt, uArtGround, uArtSky, uLandY; uniform vec4 uLand; uniform vec2 uRes;
     float hash(vec2 p){ p = fract(p*vec2(443.897,441.423)); p += dot(p, p.yx+19.19); return fract((p.x+p.y)*p.x); }
     uniform vec3 uGrade, uFadeCol, uPaper, uInk, uLift, uSkyTop, uSkyBot; uniform float uFeltEV; uniform float uSat, uCon, uSkyMix, uOvercast, uCloudCov, uCloudScale; uniform mat4 uInvProj, uCamWorld; uniform vec3 uSunDir, uCloudLit, uCloudShade; uniform vec2 uWind; varying vec2 vUv;
     float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
@@ -82,6 +89,19 @@ const FinalShader = {
       } else if (uArt > 5.5) {   // Hiroshige: no strokes — a woodblock: the grain of the block and the fibres of the paper
         stroke = 0.5 + 0.5 * (vnoise(vec2(sp.x * 0.9, sp.y * 0.05)) - 0.5) + 0.25 * (hash(floor(sp * 0.5)) - 0.5);
       }
+      // how much of the painter reaches the street: the sky always, the street only as much as uArtGround allows
+      float skyA = step(0.99999, texture2D(tDepth, vUv).x) * uArtSky;
+      // the city's landmark (a box in world space, found from depth): the one building the painter is allowed to touch
+      float landA = 0.0;
+      if (uLandY > 0.0 && skyA < 0.5) {
+        vec4 vr = uInvProj * vec4(vUv * 2.0 - 1.0, 1.0, 1.0); vr /= vr.w;
+        vec3 vp = vr.xyz / -vr.z * lin(vUv);
+        vec3 wp = (uCamWorld * vec4(vp, 1.0)).xyz;
+        vec2 q = abs(wp.xz - uLand.xy) / uLand.zw;
+        landA = step(max(q.x, q.y), 1.0) * step(wp.y, uLandY) * step(0.3, wp.y);
+      }
+      float wA = max(max(skyA, landA), uArtGround);
+      hdr = mix(hdrM, hdr, max(max(skyA, landA), step(0.99, uArtGround)));
       vec2 px = vUv*uRes;
       float vig = smoothstep(1.25, 0.35, length((vUv-0.5)*vec2(uRes.x/uRes.y,1.0)*1.05));
       float g = hash(px + fract(uTime*7.13)*91.7) - 0.5;
@@ -110,12 +130,12 @@ const FinalShader = {
           cc += rim * uCloudLit * 0.25 * (1.0 - uOvercast);
           skyCol = mix(skyCol, cc, c);
         }
-        if (uArt > 2.5 && uArt < 3.5 && dir.y > 0.0) {                    // Hodler: clouds in rows parallel to the lake
+        if (uArt > 2.5 && uArt < 3.5 && dir.y > 0.0 && uArtSky > 0.5) {                    // Hodler: clouds in rows parallel to the lake
           float rib = sin(dir.y * 70.0 + fbm(dir.xz / (dir.y + 0.1) * 0.4) * 5.0);
           float cr = smoothstep(0.55, 0.8, rib) * smoothstep(0.02, 0.1, dir.y) * (1.0 - smoothstep(0.35, 0.6, dir.y));
           skyCol = mix(skyCol, mix(vec3(.98,.95,.86), vec3(.78,.80,.88), smoothstep(0.65, 0.8, rib)), cr);
         }
-        if (uArt > 5.5) {                                                  // Hiroshige: the bokashi — Prussian blue printed down from the top
+        if (uArt > 5.5 && uArtSky > 0.5) {                                 // Hiroshige: the bokashi — Prussian blue printed down from the top
           skyCol = mix(skyCol, vec3(.02,.07,.26), smoothstep(0.55, 0.95, vUv.y) * 0.9);
           skyCol = mix(skyCol, vec3(.96,.86,.70), smoothstep(0.35, 0.0, dir.y) * 0.35);   // a warm wash at the horizon
         }
@@ -127,6 +147,7 @@ const FinalShader = {
       felt = felt + uLift * (1.0 - felt);
       felt = mix(felt, felt*vec3(1.03,1.0,0.95), smoothstep(0.55,1.0,dot(felt,vec3(0.33))));
       float ink = edgeAt(vUv, px);
+      vec3 feltPlain = felt; float inkPlain = ink;
       if (uArt > 0.5) {
         float l = dot(felt, vec3(0.2126, 0.7152, 0.0722));
         float st = clamp((stroke - 0.5) * 3.2 + 0.5, 0.0, 1.0);
@@ -164,6 +185,7 @@ const FinalShader = {
         float bristle = uArt < 1.5 ? 0.40 : uArt < 2.5 ? 0.36 : uArt < 3.5 ? 0.16 : uArt < 4.5 ? 0.26 : uArt < 5.5 ? 0.12 : 0.22;
         felt *= (1.0 - bristle * 0.5) + bristle * st;                       // bristle marks, paper grain or woodblock fibre
       }
+      felt = clamp(feltPlain + (felt - feltPlain) * (wA + landA * 0.7), 0.0, 1.0); ink = mix(inkPlain, ink, wA);   // the landmark gets the painter at full strength and then some
       felt = srgb(felt);
       felt = mix(felt, felt*vec3(0.32,0.30,0.34), ink*uInkFelt);
       felt = felt * mix(0.8, 1.0, vig) + g*0.022;
@@ -343,7 +365,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
   const cache = new Map();
   let cur = -1, city = null, water = null;
   function getCity(i) {
-    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); streetArt(i, c); pixelPal(i, c); }
+    if (!cache.has(i)) { const c = buildCity(i, mats, ctx); c.static = c.root.children[c.root.children.length - 1]; cache.set(i, c); c.bakedP = bakeLight(i, c); roadPaint(i, c); streetArt(i, c); pixelPal(i, c); delftTiles(i, c); }
     return cache.get(i);
   }
   /* ray-traced sky light and bounce light, baked once in Blender (bake/bake_city.py) into lm/<city>.webp.
@@ -551,6 +573,82 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     });
   }
 
+
+  /* Delft: a tile tableau on a canal house, the way Dutch facades carry them — after Vermeer's "Girl with a Pearl Earring"
+     (c. 1665, public domain), redrawn as 26 × 32 pixels, one glazed tile per pixel, inside a ring of Delft blue tiles.
+     The pearl is the one tile that is not paint but a highlight, and the meter finds it. */
+  function delftTiles(i, c) {
+    if (CITIES[i].key !== 'delft') return;
+    const PAL = { '.': '#111412', ',': '#1e2420', B: '#284ea8', b: '#182c68', L: '#688cd4', Y: '#e2b84e', y: '#a07628', F: '#f2d4b2', f: '#d6aa82', s: '#a07052', n: '#563a2c', E: '#281c18', W: '#ece4d4', R: '#c4463c', r: '#8c342e', P: '#f6f8fa', p: '#868c96', J: '#8c642e', j: '#543a1a', K: '#b88c42', C: '#eae4d4' };
+    const G = [
+      '..........................',
+      '..........................',
+      '..........,,,,,...........',
+      '.........bBBBBb...........',
+      '........bBLLBBBb..........',
+      '.......bBLLBBBBBby........',
+      '......bBBLBBBBBBbYy.......',
+      '......bBBBBBBBBbbYYy......',
+      '......BBBBBBBBBbbYYy......',
+      '......bBBBBBBBbbyYYYy.....',
+      '......YYYYYYYYYbbYYYy.....',
+      '......sFFFFffsnbyYYYy.....',
+      '......FFFFFffssnyYYYy.....',
+      '.....sFWEFFfWEsnyYYYy.....',
+      '.....fFFFFFfffsnyYYYYy....',
+      '....sfFFFFFFfssnnyYYYy....',
+      '....ffFFFFFsffsnnyYYYy....',
+      '....sfFFFFFfffsnn.yYYy....',
+      '.....PfFFRRrffsn...yYYy...',
+      '.....pnfFFFffsnn...yYYy...',
+      '......nnfffssnn....yYy....',
+      '.......nssssnn.....yYy....',
+      '.......nsssnn......yYy....',
+      '......CCCsnnCC.....yy.....',
+      '....JCCCCCCCCCJj...y......',
+      '...KJJCCCCCCJJJjj.........',
+      '..KKJJJJJJJJJJJjjj........',
+      '..KJJJJJJJJJJJjjjjj.......',
+      '.KKJJJJJJJJJJJjjjjjj......',
+      '.KJJJJJJJJJJJjjjjjjjj.....',
+      'KKJJJJJJJJJJjjjjjjjjj.....',
+      'KJJJJJJJJJJjjjjjjjjjjj....'
+    ];
+    const NX = 26 + 2, NY = G.length + 2, T = 32, cv = document.createElement('canvas'); cv.width = NX * T; cv.height = NY * T;
+    const g = cv.getContext('2d'); let r = 7; const rnd = () => ((r = (r * 16807) % 2147483647) - 1) / 2147483646;
+    g.fillStyle = '#cfc8b8'; g.fillRect(0, 0, cv.width, cv.height);                     // grout
+    const blue = '#24499a';
+    for (let ty = 0; ty < NY; ty++) for (let tx = 0; tx < NX; tx++) {
+      const x = tx * T + 1.5, y = ty * T + 1.5, w = T - 3, border = tx === 0 || ty === 0 || tx === NX - 1 || ty === NY - 1;
+      const col = new THREE.Color(border ? '#eef0ee' : PAL[G[ty - 1][tx - 1]]).multiplyScalar(0.95 + rnd() * 0.08);
+      g.fillStyle = '#' + col.getHexString(); g.fillRect(x, y, w, w);
+      if (border) {                                                                       // corner "ox-head" quarters and a small star
+        g.fillStyle = blue;
+        for (const [cx, cy, a] of [[x, y, 0], [x + w, y, Math.PI / 2], [x + w, y + w, Math.PI], [x, y + w, -Math.PI / 2]]) { g.beginPath(); g.moveTo(cx, cy); g.arc(cx, cy, w * 0.26, a, a + Math.PI / 2); g.fill(); }
+        g.beginPath(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, rr = k % 2 ? w * 0.09 : w * 0.22; g.lineTo(x + w / 2 + Math.cos(a) * rr, y + w / 2 + Math.sin(a) * rr); } g.fill();
+      }
+      const gl = g.createLinearGradient(x, y, x + w, y + w); gl.addColorStop(0, 'rgba(255,255,255,0.16)'); gl.addColorStop(0.45, 'rgba(255,255,255,0)'); gl.addColorStop(1, 'rgba(0,0,0,0.08)');
+      g.fillStyle = gl; g.fillRect(x, y, w, w);                                           // the glaze, never quite flat
+    }
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    const S = 0.17, Wd = NX * S, Ht = NY * S;
+    const front = new THREE.MeshToonMaterial({ map: tex, gradientMap: bakedRamp }), edge = new THREE.MeshToonMaterial({ color: 0xcfc8b8, gradientMap: bakedRamp });
+    const tab = new THREE.Mesh(new THREE.BoxGeometry(0.05, Ht, Wd), [edge, front, edge, edge, edge, edge]);
+    tab.castShadow = true; tab.receiveShadow = true;
+    // across the canal, on the left-hand house fronts (the walk looks that way), above the doors, facing the water
+    const z = -26, y = 1.7 + Ht / 2;
+    c.static.updateMatrixWorld(true);
+    const hit = new THREE.Raycaster(new THREE.Vector3(-7.0, y, z), new THREE.Vector3(-1, 0, 0), 0, 6).intersectObject(c.static, true)[0];   // cast from beyond the trees
+    const x = (hit ? hit.point.x : -9.0) + 0.2;      // hung proud of the window frames
+    tab.rotation.y = Math.PI; tab.position.set(x, y, z); c.root.add(tab);
+    // the pearl: not paint but a highlight. This wall is in shade, so the pearl mirrors the clear sky: about 5000 cd/m²,
+    // ten to thirty times the shaded tiles around it — on the measured side it is the brightest thing on this side of the canal
+    let px = 0, py = 0; G.forEach((row, yy) => { const k = row.indexOf('P'); if (k >= 0) { px = k; py = yy; } });
+    const pearl = new THREE.Mesh(new THREE.CircleGeometry(S * 0.42, 16), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.0, 2.02, 2.1), toneMapped: false }));
+    pearl.rotation.y = Math.PI / 2;
+    pearl.position.set(x + 0.03, y + Ht / 2 - (py + 1.5) * S, z + Wd / 2 - (px + 1.5) * S);
+    c.root.add(pearl);
+  }
   function lightFill() { hemi.intensity = hemiBase * (city && city.baked && useBaked ? BAKED_HEMI : 1); }
   function setBaked(v) {
     useBaked = !!v;
@@ -576,6 +674,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     hemi.intensity = 1.15 + 0.25 * warm; hemi.groundColor.set(0x9a8268);
     scene.fog = new THREE.Fog(C.fog[0], C.fog[1], C.fog[2]);
     applyLook(C.look || {}, C.cloudDeck || {}, L, C.grade, C.expo);
+    const LM = LANDMARK[C.key]; fin.uniforms.uLand.value.set(...(LM || [0, 0, 1, 1]).slice(0, 4)); fin.uniforms.uLandY.value = LM ? LM[4] : -1;
     const lk = C.look || {};
     sun.shadow.radius = lk.shadowSoft ?? 1.4;
     if (lk.sunI !== undefined) { sun.intensity = lk.sunI; hemi.intensity = lk.hemiI; }
@@ -665,7 +764,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     let S = scene, cam = camera;
     if (mode === 'room') {
       room.update(dt, state.t, { x: state.lookX, y: state.lookY });
-      const lk = room.look(); applyLook(lk.look, lk.deck, room.L, [1, 1, 1], lk.expo);
+      const lk = room.look(); applyLook(lk.look, lk.deck, room.L, [1, 1, 1], lk.expo); fin.uniforms.uLandY.value = -1;
       fin.uniforms.uFeltEV.value += (Math.pow(2, room.state.ev) - fin.uniforms.uFeltEV.value) * Math.min(1, dt * 8);
       S = room.scene; cam = room.camera;
     } else {
@@ -720,7 +819,7 @@ export async function createWalk({ canvas, assets = './assets/', onProgress = ()
     setSplit(v) { state.split = v; }, setLook(x, y) { state.lookX = x; state.lookY = y; },
     setProbe(u, v) { state.probeAt.set(u, v); },
     setMeasured(on) { state.measured = on; },
-    setFalseColour(on) { state.falseColour = !!on; }, wantGrid(on) { state.wantGrid = !!on; },
+    setFalseColour(on) { state.falseColour = !!on; }, setArtGround(v) { fin.uniforms.uArtGround.value = v; }, setArtSky(v) { fin.uniforms.uArtSky.value = v; }, setLandmark(on) { const C = CITIES[cur], LM = LANDMARK[C.key]; fin.uniforms.uLandY.value = on && LM ? LM[4] : -1; }, wantGrid(on) { state.wantGrid = !!on; },
     fade(v) { fin.uniforms.uFade.value = v; }, setFadeColor(c) { fin.uniforms.uFadeCol.value.set(c); },
     prebuild(i) { getCity(i); },
     setMode(m) { if (m === mode) return; mode = m; if (m === 'walk') { const c = cur; cur = -1; setCity(c); } },

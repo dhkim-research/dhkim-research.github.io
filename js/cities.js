@@ -319,7 +319,7 @@ export function buildCity(i, mats, ctx) {
     const kinds = ['step', 'bell', 'tri', 'step', 'bell'];
     const f = () => ({ canal: true, kind: pick(kinds), W: R(5.2, 7.6), H: R(8.5, 12.5), gh: R(4.5, 6.5), color: pick([0x7d3a28, 0x8e4632, 0x6a3426, 0x9a5a3e, 0x7a4a3a, 0xe6dccb]), shutters: rnd.next() < 0.3 ? pick([0x2f5a46, 0xb3302b]) : null });
     row(b, -1, -9.0, 40, -128, f, 0.05); row(b, 1, 9.0, 40, -128, f, 0.05);
-    for (let z = 30; z > -125; z -= 12.5) { tree(b, I, -4.3, z, 10.5, 0x46653a); tree(b, I, 4.3, z - 6, 10.5, 0x46653a); }
+    for (let z = 30; z > -125; z -= 12.5) { tree(b, z === -20 ? mat4(0, -80, 0) : I, -4.3, z, 10.5, 0x46653a); tree(b, I, 4.3, z - 6, 10.5, 0x46653a); }   // one tree sunk out of sight: a gap for the tile tableau (walk.js); kept in the geometry so the baked lightmap still fits
     for (let z = 22; z > -120; z -= 23) bike(b, I, -4.2, z, 0.25);
     // a stone bridge over the canal
     const BM = mat4(0, 0, -64);
@@ -327,7 +327,6 @@ export function buildCity(i, mats, ctx) {
     geom(b, 'wall', BM, new THREE.TorusGeometry(2.6, 0.45, 6, 18, Math.PI), 0, -1.0, 0, 0x8a5a44, 0, 1, 0.6, 9.2);
     box(b, 'trim', BM, 0, 0.95, 2.0, 8.6, 0.5, 0.2, 0xd8d1c4); box(b, 'trim', BM, 0, 0.95, -2.0, 8.6, 0.5, 0.2, 0xd8d1c4);
     delftHall(b, 0, -180);
-    root.add(poster(ctx.vermeer, 3.2, 4.2, 8.93, 5.6, -46, -Math.PI / 2));
   }
 
   if (key === 'lausanne') {
