@@ -86,6 +86,20 @@
   .coords .d { color: #8f88a8; }
   .coords .s { color: #5d6f96; font-size: 11px; }
 
+  /* ---------- the one start hint (no title card) ---------- */
+  .walkchip {
+    position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 8px); opacity: 0; visibility: hidden; pointer-events: auto;
+    display: flex; align-items: baseline; gap: 12px; padding: 11px 18px 11px 16px;
+    background: rgba(253, 248, 238, .92); color: #2f2a45; border: 1.5px solid #2f2a45;
+    border-radius: 3px; box-shadow: 4px 4px 0 rgba(47, 42, 69, .85);
+    font: 600 13px/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; cursor: pointer;
+    transition: opacity .35s ease, transform .35s ease, visibility .35s;
+  }
+  .walkchip b { color: #c9474f; letter-spacing: .02em; }
+  .walkchip span { font: 500 11px/1.2 ui-monospace, Menlo, monospace; color: #6c6585; letter-spacing: .04em; }
+  .walkchip.on { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
   /* ---------- title / pause screen ---------- */
   .overlay {
     position: absolute; inset: 0; pointer-events: auto;
@@ -455,7 +469,7 @@
     .overlay, .menu-action { transition: none; }
   }
 </style>
-  <script type="module" crossorigin src="./assets/index-B0g2tJHs.js"></script>
+  <script type="module" crossorigin src="./assets/index-BpuTSjGf.js"></script>
 </head>
 <body>
   <canvas id="view"></canvas>
