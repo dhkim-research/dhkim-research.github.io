@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Dong Hyun Kim — architect and lighting researcher working on the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science.">
+<meta name="theme-color" content="#f1efea">
+<meta property="og:title" content="Dong Hyun Kim — Daylight Lab">
+<meta property="og:description" content="Measured light, felt light. An academic journey through six cities, a room of projects, and a record of publications.">
+<meta property="og:image" content="https://daylightlab.jp/classic/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://daylightlab.jp/classic/">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f1efea'/%3E%3Cpath d='M0 0h16v32H0z' fill='%23151515'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e8a33d'/%3E%3C/svg%3E">
+<title>Daylight Lab</title>
+<link rel="preload" as="image" href="img/poster_wide.webp" media="(orientation: landscape)">
+<link rel="preload" as="image" href="img/poster_tall.webp" media="(orientation: portrait)">
+<script>document.documentElement.classList.add('booting')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,200..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans+JP:wght@300;400;500&display=swap">
+<style>
+  :root { --paper: #f1efea; --ink: #151515; --muted: #615c55; --amber: #e8a33d; --amber-ink: #8a5200; --glass: rgba(241, 239, 234, .86); --rule: rgba(21,21,21,.16); color-scheme: light; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.55 "IBM Plex Sans", "IBM Plex Sans JP", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+  [lang=ja] body, [lang=ja] .panel p { font-family: "IBM Plex Sans JP", "IBM Plex Sans", sans-serif; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+  a { color: inherit; }
+
+  /* fixed layers */
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: pan-y; z-index: 0; }
+  #skyc { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; opacity: 0; pointer-events: none; transition: opacity .7s; }
+  body.sky-on #skyc { opacity: 1; pointer-events: auto; }
+
+  /* navigation */
+  .nav { position: fixed; z-index: 10; top: 0; left: 0; right: 0; padding: calc(env(safe-area-inset-top, 0px) + 16px) 24px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; pointer-events: none; }
+  .nav > * { pointer-events: auto; }
+  .brand { display: block; text-decoration: none; background: var(--glass); padding: 10px 14px 11px; }
+  .brand b { display: block; font: 500 clamp(19px, 1.9vw, 26px)/1 "Archivo", sans-serif; font-stretch: 118%; letter-spacing: -.01em; }
+  .brand span { display: block; margin-top: 7px; font: 400 10.5px/1.3 "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; opacity: .78; }
+  .brand span i { font-style: normal; text-transform: none; letter-spacing: .02em; }
+  .menu { display: flex; align-items: center; gap: 2px; background: var(--glass); padding: 4px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; }
+  .menu a { text-decoration: none; padding: 8px 10px; color: var(--muted); white-space: nowrap; }
+  .menu a[aria-current=true] { color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--ink); }
+  .menu a:hover { color: var(--ink); }
+  .menu .sep { width: 1px; height: 18px; background: var(--rule); margin: 0 4px; }
+  .menu button { background: none; border: 0; padding: 8px 8px; cursor: pointer; color: var(--muted); font: inherit; letter-spacing: inherit; }
+  .menu button[aria-pressed=true] { color: var(--ink); }
+
+  /* the seam */
+  .seam { position: fixed; z-index: 5; top: 0; bottom: 0; width: 0; pointer-events: none; }
+  .seam .grip { position: absolute; top: 50%; left: -19px; width: 38px; height: 38px; margin-top: -19px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); display: grid; place-items: center; pointer-events: auto; cursor: ew-resize; touch-action: none; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+  .seam .grip svg { width: 18px; height: 18px; }
+  .seam .lab { position: absolute; top: 118px; white-space: nowrap; font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; padding: 5px 8px; background: var(--glass); }
+  .seam .lab.l { right: 10px; } .seam .lab.r { left: 10px; }
+  .seam .lab i { font-style: normal; font-family: "IBM Plex Sans JP", sans-serif; letter-spacing: .04em; opacity: .7; margin-left: 6px; }
+  body:not(.in-walk) .seam .lab { opacity: 0; }
+  body.in-pubs:not(.sky-on) .seam { display: none; }
+  .seam .lab { transition: opacity .5s; }
+  body.sky-on .seam .lab { background: rgba(21,21,21,.6); color: #f1efea; }
+
+  /* the meter */
+  /* the cursor is a spot luminance meter: a 9° finder field, the 1° acceptance spot, an LCD readout.
+     Both circles are sized from the camera's field of view, so 1° on screen is 1° in the scene. */
+  .probe { position: fixed; z-index: 6; pointer-events: none; left: 0; top: 0; display: none; --s: 16px; color: var(--ink); }
+  .probe .fov { position: absolute; left: 0; top: 0; width: calc(var(--s) * 9); height: calc(var(--s) * 9); transform: translate(-50%, -50%); border: 1px solid rgba(21,21,21,.5); border-radius: 50%; }
+  .probe .fov i { position: absolute; background: currentColor; opacity: .7; }
+  .probe .fov i:nth-child(1) { left: 50%; top: -1px; width: 1px; height: 7px; } .probe .fov i:nth-child(2) { left: 50%; bottom: -1px; width: 1px; height: 7px; }
+  .probe .fov i:nth-child(3) { top: 50%; left: -1px; height: 1px; width: 7px; } .probe .fov i:nth-child(4) { top: 50%; right: -1px; height: 1px; width: 7px; }
+  .probe .spot { position: absolute; left: 0; top: 0; width: max(7px, var(--s)); height: max(7px, var(--s)); transform: translate(-50%, -50%); border: 1.5px solid var(--ink); border-radius: 50%; box-shadow: 0 0 0 1px rgba(241,239,234,.7); }
+  .probe .deg { position: absolute; left: 0; top: 0; transform: translate(calc(max(7px, var(--s)) / 2 + 4px), calc(-100% - 2px)); font: 500 9px "IBM Plex Mono", monospace; }
+  .probe .val { position: absolute; left: calc(var(--s) * 3.3); top: calc(var(--s) * 3.3); white-space: nowrap; font: 500 14px/1 "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; letter-spacing: .02em; background: #151515; color: #f1efea; padding: 6px 8px 5px; }
+  .probe .val small { font-size: 9.5px; margin-left: 5px; opacity: .7; letter-spacing: .04em; }
+  .probe.felt .fov { border-style: dashed; border-color: rgba(255,255,255,.85); color: #fff; }
+  .probe.felt .spot, .probe.felt .deg { display: none; }
+  .probe.felt .val { background: rgba(21,21,21,.6); font: italic 300 15px "IBM Plex Sans", sans-serif; }
+  .probe.glare .val { color: #f4b04a; }
+  .iso { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+  body.sky-on .iso, body.in-pubs .iso { display: none; }
+
+  /* scrolling content */
+  main { position: relative; z-index: 3; pointer-events: none; }
+  .sec { min-height: 100vh; min-height: 100svh; box-sizing: border-box; padding: 150px 28px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .panel { pointer-events: auto; max-width: 470px; background: var(--glass); padding: 24px 26px 26px; box-sizing: border-box; }
+  .panel .kick { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-ink); }
+  .panel h2 { margin: 8px 0 0; font: 400 clamp(30px, 3.3vw, 46px)/1.02 "Archivo", sans-serif; font-stretch: 116%; letter-spacing: -.015em; text-wrap: balance; }
+  .panel h3 { margin: 18px 0 6px; font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .panel p { margin: 12px 0 0; max-width: 60ch; }
+  .panel .lede { font: 300 17px/1.5 "IBM Plex Sans", sans-serif; }
+  [lang=ja] .panel .lede { font: 300 17px/1.7 "IBM Plex Sans JP", sans-serif; }
+  .plate { margin: -24px -26px 18px; background: #121416; }
+  .plate img { display: block; width: 100%; height: auto; max-width: 100%; }
+  .plate figcaption { padding: 7px 26px 8px; font: 400 11px/1.45 "IBM Plex Mono", monospace; color: rgba(241,239,234,.78); background: #121416; }
+  #projects .panel { max-width: 560px; }
+  .cmpbox { position: relative; overflow: hidden; line-height: 0; cursor: ew-resize; }
+  .cmpbox img { display: block; width: 100%; height: auto; }
+  .cmpbox img.top { position: absolute; inset: 0; height: 100%; object-fit: cover; clip-path: inset(0 0 0 var(--x)); }
+  .cmpbox .bar { position: absolute; top: 0; bottom: 0; left: var(--x); width: 0; pointer-events: none; }
+  .cmpbox .bar::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: #fff8e8; }
+  .cmpbox .bar i { position: absolute; top: 50%; left: -15px; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink); }
+  .cmpbox .cl { position: absolute; top: 10px; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; background: rgba(21,21,21,.6); color: #f1efea; padding: 3px 7px; line-height: 1.4; }
+  .cmpbox .cl.l { left: 10px; } .cmpbox .cl.r { right: 10px; }
+  .cmpbox input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  .decide { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; align-items: center; margin-top: 4px; }
+  #tri { width: 100%; height: auto; touch-action: none; user-select: none; }
+  #tri .dot { cursor: grab; }
+  .dside .seg { margin-top: 0; }
+  .seg.pats { margin: 16px 0 2px; }
+  .wts { display: grid; grid-template-columns: 86px minmax(0, 1fr) 34px; gap: 5px 8px; align-items: center; margin: 12px 0 0; font-size: 11px; }
+  .wts dt { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .wts dd { margin: 0; height: 6px; background: var(--rule); position: relative; }
+  .wts dd i { position: absolute; inset: 0 auto 0 0; background: var(--c); }
+  .wts span { text-align: right; font-variant-numeric: tabular-nums; }
+  .envr { margin-top: 10px; font-size: 11px; color: var(--muted); }
+  .panel p.small { font-size: 13.5px; color: var(--muted); }
+  .meta dd.lk a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .meta { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 14px; font-size: 13px; }
+  .meta dt { font: 500 10.5px/1.9 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .meta dd { margin: 0; }
+  .cv { list-style: none; margin: 10px 0 0; padding: 0; font: 400 12.5px/1.45 "IBM Plex Mono", monospace; }
+  .cv li { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; padding: 7px 0; border-top: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+  .cv li > span:first-child { color: var(--muted); }
+  .cv a { text-decoration: none; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .cv a:hover { border-bottom-color: var(--ink); }
+  .live { margin-top: 14px; display: flex; align-items: center; gap: 10px; font: 500 12px "IBM Plex Mono", monospace; }
+  .live .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px rgba(232,163,61,.25); }
+  .seg { margin-top: 14px; display: inline-flex; border: 1px solid var(--ink); }
+  .seg button { background: none; border: 0; padding: 7px 11px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .06em; cursor: pointer; color: var(--muted); }
+  .seg button[aria-pressed=true] { background: var(--ink); color: var(--paper); }
+  .flow { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 500 11px "IBM Plex Mono", monospace; }
+  .flow span { border: 1px solid var(--ink); padding: 4px 7px; }
+  .flow i { font-style: normal; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; background: none; border: 1px solid var(--ink); padding: 8px 12px; cursor: pointer; color: var(--ink); text-decoration: none; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .collab { list-style: none; margin: 12px 0 0; padding: 0; font-size: 14px; }
+  .collab li { padding: 9px 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; }
+  .collab b { font-weight: 500; }
+
+  /* hero (walk) */
+  .hero { position: relative; justify-content: flex-end; padding-bottom: 20px; }
+  .hero .note { pointer-events: auto; max-width: 440px; background: var(--glass); padding: 12px 16px 13px; margin-bottom: 14px; }
+  .hero .note .k a { text-decoration: none; border-bottom: 1px solid currentColor; }
+  .hero .note .k { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-ink); }
+  .hero .note p { margin: 4px 0 0; font: italic 300 15px/1.45 "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  [lang=ja] .hero .note p { font: 300 15px/1.6 "IBM Plex Sans JP", sans-serif; }
+  .hero .note .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+  .strip { pointer-events: auto; display: grid; grid-template-columns: auto repeat(6, minmax(0, 1fr)) auto; background: var(--glass); border-top: 1px solid var(--ink); }
+  .strip button { all: unset; cursor: pointer; padding: 10px 12px 11px; position: relative; min-width: 0; }
+  .strip .play { display: grid; place-items: center; width: 22px; padding: 10px 14px; border-right: 1px solid var(--rule); }
+  .strip .play svg { width: 12px; height: 12px; }
+  .strip .ch .n { font: 500 10px "IBM Plex Mono", monospace; letter-spacing: .06em; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .strip .ch .c { display: block; font: 500 14px/1.2 "Archivo", sans-serif; font-stretch: 110%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .strip .ch .bar { position: absolute; left: 0; right: 0; top: -1px; height: 3px; transform-origin: left; transform: scaleX(0); background: var(--ink); }
+  .strip .ch[aria-current=true] .n { color: var(--amber-ink); }
+  .strip .ch:not([aria-current=true]) .c { opacity: .55; }
+  .strip .enter { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-left: 1px solid var(--rule); font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+  .strip .enter:hover { background: var(--ink); color: var(--paper); }
+  .hint { position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 128px); right: 24px; font-size: 10.5px; letter-spacing: .06em; background: var(--glass); padding: 5px 8px; transition: opacity 1s; pointer-events: none; }
+  .hint.off { opacity: 0; }
+
+  /* title card between chapters */
+  .card { position: fixed; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; transition: opacity .6s; }
+  .card.on { opacity: 1; }
+  .card div { text-align: center; }
+  .card .y { font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .14em; color: var(--amber-ink); }
+  .card h2 { margin: 10px 0 0; font: 300 clamp(44px, 7vw, 110px)/.95 "Archivo", sans-serif; font-stretch: 122%; letter-spacing: -.02em; }
+  .card .jp { margin-top: 12px; font: 300 15px "IBM Plex Sans JP", sans-serif; letter-spacing: .2em; color: var(--muted); }
+
+  /* publications */
+  .pubsec { justify-content: flex-start; padding-top: 140px; }
+  .pubwrap { pointer-events: auto; background: var(--paper); max-width: 1120px; width: 100%; margin: 0 auto; padding: 30px 34px 34px; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0,0,0,.12); }
+  .phead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--ink); }
+  .phead .kick { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-ink); }
+  .phead h2 { margin: 8px 0 0; font: 400 clamp(30px, 3.4vw, 48px)/1 "Archivo", sans-serif; font-stretch: 116%; letter-spacing: -.015em; }
+  .counts { display: grid; grid-template-columns: repeat(5, auto); gap: 4px 22px; }
+  .counts div { min-width: 0; }
+  .counts b { display: block; font: 300 clamp(26px, 2.6vw, 36px)/1 "Archivo", sans-serif; font-stretch: 112%; font-variant-numeric: tabular-nums; }
+  .counts span { font: 500 10px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .ph { margin: 26px 0 10px; font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .sel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .sel a { display: flex; flex-direction: column; gap: 8px; text-decoration: none; padding: 14px 14px 16px; border-top: 3px solid var(--c); background: rgba(21,21,21,.035); min-width: 0; }
+  .sel a:hover { background: rgba(21,21,21,.07); }
+  .sel .y { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .06em; color: var(--muted); }
+  .sel .t { font: 500 15px/1.32 "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  .sel .v { margin-top: auto; font-size: 12.5px; color: var(--muted); }
+  .spec { position: relative; background: #121416; color: #f1efea; padding: 10px 0 26px; overflow-x: auto; }
+  .spec svg { display: block; width: 100%; min-width: 640px; height: auto; }
+  .spec .ln { cursor: pointer; }
+  .speckey { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; font-size: 10.5px; letter-spacing: .05em; color: var(--muted); }
+  .speckey > span { display: inline-flex; align-items: center; gap: 6px; }
+  .speckey i { display: inline-block; width: 14px; height: 12px; background: #121416; position: relative; }
+  .speckey i::after { content: ""; position: absolute; left: 6px; width: 2px; background: #ffd25c; }
+  .speckey .k1::after { top: 0; bottom: 0; box-shadow: 0 0 4px #ffd25c; }
+  .speckey .k2::after { top: 3px; bottom: 3px; opacity: .6; width: 1px; }
+  .speckey .k3::after { top: 2px; bottom: 2px; width: 2px; background: repeating-linear-gradient(#ffd25c 0 2px, transparent 2px 4px); }
+  .speckey .k4::after { top: 2px; bottom: 2px; background: #e8a33d; width: 3px; border-radius: 2px; }
+  .linkbtn { margin-left: auto; background: none; border: 0; border-bottom: 1px solid var(--ink); padding: 2px 0; font: inherit; letter-spacing: inherit; color: var(--ink); cursor: pointer; }
+  .listhead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 26px 0 10px; }
+  .chips button { background: none; border: 1px solid var(--rule); padding: 5px 9px; font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .05em; cursor: pointer; color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
+  .chips button i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  .chips button[aria-pressed=true] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .plist { columns: 2 340px; column-gap: 34px; }
+  .plist h5 { break-after: avoid; margin: 16px 0 4px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .1em; color: var(--amber-ink); }
+  .plist h5:first-child { margin-top: 0; }
+  .plist .it { break-inside: avoid; padding: 8px 0 9px 12px; border-top: 1px solid var(--rule); font-size: 14px; position: relative; }
+  .plist .it::before { content: ""; position: absolute; left: 0; top: 12px; width: 4px; height: 12px; background: var(--c); }
+  .plist .it.lead .t { font-weight: 600; }
+  .plist .it .t { font-weight: 450; line-height: 1.35; }
+  .plist .it .s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .plist .it .s b { color: var(--ink); font-weight: 600; }
+  .plist .it a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .plist .it.hl { background: rgba(232,163,61,.18); }
+  .tag { display: inline-block; font: 500 9.5px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; border: 1px solid currentColor; padding: 1px 5px; margin-left: 6px; color: var(--amber-ink); vertical-align: 1px; }
+  .pcard { position: fixed; z-index: 8; max-width: 340px; background: var(--paper); border: 1px solid var(--ink); padding: 12px 14px 13px; pointer-events: none; display: none; box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+  .pcard .k { font: 500 10.5px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--amber-ink); }
+  .pcard h4 { margin: 6px 0 0; font: 500 15px/1.35 "IBM Plex Sans", sans-serif; }
+  .pcard .v { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .pcard .a { margin-top: 4px; font-size: 12.5px; }
+  .pcard .a b { font-weight: 600; }
+  body.sky-on .pcard { pointer-events: auto; }
+  .pcard a { display: inline-block; margin-top: 8px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; }
+  .skyclose { position: fixed; z-index: 9; right: 24px; bottom: 24px; display: none; pointer-events: auto; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; background: var(--paper); border: 1px solid var(--ink); padding: 9px 13px; cursor: pointer; color: var(--ink); }
+  body.sky-on .skyclose { display: block; }
+  body.sky-on .pubwrap { visibility: hidden; }
+  .contact .mail { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .contact .mail code { font: 400 clamp(17px, 1.8vw, 22px) "Archivo", sans-serif; font-stretch: 108%; user-select: all; border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
+  .contact .links { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px 16px; font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .07em; text-transform: uppercase; }
+  footer.fine { position: relative; z-index: 3; pointer-events: none; padding: 0 28px 24px; font: 400 11px "IBM Plex Mono", monospace; color: var(--muted); }
+  footer.fine span { background: var(--glass); padding: 4px 8px; }
+
+  /* the first frame: the baked London street, shown before any script has run; the live scene takes over under it */
+  .loading { position: fixed; inset: 0; z-index: 2; background: #9ea6ab url(img/poster_wide.webp) center / cover no-repeat; transition: opacity .9s ease; }
+  @media (orientation: portrait) { .loading { background-image: url(img/poster_tall.webp); } }
+  .loading.done { opacity: 0; pointer-events: none; }
+  .loading .lb { position: absolute; left: 0; right: 0; top: 0; }
+  .loading .t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .loading .track { height: 2px; background: transparent; }
+  .loading .fill { height: 2px; background: var(--amber); width: 0; transition: width .3s; }
+  html.booting { overflow: hidden; }
+  html.booting main, html.booting .nav, html.booting .seam { pointer-events: none; }
+  .loading .err { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100vw - 48px)); background: var(--glass); padding: 14px 16px; color: var(--amber-ink); font-size: 13px; }
+
+  /* Instruments */
+  .bench { list-style: none; margin: 18px 0 0; padding: 0; font-size: 12px; }
+  .bench li { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; padding: 8px 0; border-top: 1px solid var(--rule); }
+  .bench b { font-weight: 500; color: var(--amber-ink); } .bench li > span:last-child { color: var(--muted); }
+  .plate .seg { margin-top: 0; border-color: rgba(241,239,234,.45); flex-wrap: wrap; }
+  .plate .seg button { color: rgba(241,239,234,.72); padding: 6px 9px; }
+  .plate .seg button[aria-pressed=true] { background: var(--paper); color: var(--ink); }
+  .hdrbox { position: relative; display: grid; place-items: center; background: #0f1012; padding: 12px 0 4px; touch-action: pan-y; }
+  .hdrbox img { width: min(100%, 330px); aspect-ratio: 1; height: auto; cursor: crosshair; border-radius: 50%; }
+  .hdrtag { position: absolute; left: 14px; top: 12px; font-size: 10.5px; letter-spacing: .06em; color: var(--paper); background: rgba(0,0,0,.45); padding: 3px 7px; }
+  .hdrread { position: absolute; z-index: 2; pointer-events: none; transform: translate(14px, -130%); white-space: nowrap; font-size: 12px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: 3px 7px; font-variant-numeric: tabular-nums; }
+  .hdrread.bad { color: var(--amber-ink); border-color: var(--amber-ink); }
+  .hdrctl { background: #121416; padding: 8px 26px 2px; }
+  .hdrctl input { width: 100%; margin: 0; accent-color: var(--amber); }
+  .hdrctl .ticks { display: flex; justify-content: space-between; font-size: 10px; color: rgba(241,239,234,.7); font-variant-numeric: tabular-nums; }
+  .fclegend { position: relative; background: #121416; padding: 12px 26px 4px; display: flex; justify-content: space-between; font-size: 9.5px; color: rgba(241,239,234,.75); }
+  .fclegend i { position: absolute; left: 26px; right: 26px; top: 4px; height: 5px; background: linear-gradient(90deg, #121028, #342478, #1680a0, #60c478, #f6d448, #fa6028); }
+  .shot { margin: 16px 0 0; } .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+  .shot figcaption { margin-top: 4px; font-size: 10px; letter-spacing: .06em; color: var(--muted); }
+  .ep { background: #d9d6cc; color: #1a1a1a; padding: 14px 20px 8px; }
+  .ephead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 11px; } .ephead b { font-size: 14px; font-weight: 600; }
+  .ep svg { display: block; width: 100%; height: auto; margin-top: 6px; }
+  .epctl, .kitctl { background: #121416; padding: 10px 26px 4px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .kitrow { background: #121416; display: grid; grid-template-columns: minmax(0, 1fr) 132px; gap: 14px; align-items: center; padding: 14px 20px 4px; }
+  .kitrow svg { display: block; width: 100%; height: auto; }
+  .cube { display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(4, 34px); gap: 2px; font: 500 11px "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  .cube span { display: grid; place-items: center; align-content: center; color: #151515; background: var(--c, #ccc); transition: background .8s; line-height: 1.05; }
+  .cube span i { font-style: normal; font-size: 8.5px; opacity: .7; letter-spacing: .04em; }
+  .cube [data-f=up] { grid-area: 1 / 2; } .cube [data-f=w] { grid-area: 2 / 1; } .cube [data-f=s] { grid-area: 2 / 2; } .cube [data-f=e] { grid-area: 2 / 3; } .cube [data-f=down] { grid-area: 3 / 2; } .cube [data-f=n] { grid-area: 4 / 2; }
+  .mrt { font-size: 12px; color: var(--paper); }
+
+  /* one day: the hour of every section, and where the sun is */
+  .clock { position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 68px); right: 24px; display: flex; align-items: center; gap: 10px; background: var(--glass); padding: 6px 12px 6px 8px; pointer-events: none; transition: opacity .6s; }
+  .clock svg { width: 40px; height: 40px; display: block; }
+  .clock .ring { fill: none; stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+  .clock .day { fill: none; stroke: var(--ink); stroke-width: 1; opacity: .5; }
+  .clock line { stroke: var(--ink); stroke-width: 1; }
+  .clock #sdot { fill: var(--amber); stroke: var(--ink); stroke-width: 1; transition: fill .6s; }
+  .clock.night #sdot { fill: var(--paper); }
+  .clock b { display: block; font: 300 26px/1 "Archivo", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .clock span { display: block; margin-top: 3px; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  body.sky-on .clock { opacity: 0; }
+  .kick .tm { font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  /* art direction: photographs are prints — paper mat, ink hairline, caption on the paper.
+     Instruments (hdrspace, the logger, the kit) stay screens: dark, lit from within. */
+  .plate.print { background: #f8f6ef; padding: 10px 10px 0; border-bottom: 1px solid var(--rule); }
+  .plate.print img, .plate.print .cmpbox { outline: 1px solid rgba(21,21,21,.28); outline-offset: -1px; }
+  .plate.print figcaption { background: transparent; color: var(--muted); padding: 8px 2px 10px; }
+  .hint { display: none !important; }      /* the clock and the About line say it now */
+
+  .seam .mmode { position: absolute; left: 10px; top: 160px; pointer-events: auto; display: grid; justify-items: start; gap: 6px; transition: opacity .5s; }   /* on the felt side, clear of the text */
+  .seam .mmode .seg { margin: 0; background: var(--glass); }
+  .seam .mmode .seg button { padding: 5px 8px; font-size: 10px; white-space: nowrap; }
+  .seam .mmode .leg { background: var(--glass); padding: 4px 7px; font-size: 9.5px; letter-spacing: .04em; color: var(--muted); white-space: nowrap; }
+  .seam .mmode .leg.lg-fc { display: none; position: relative; gap: 12px; padding-top: 11px; color: var(--ink); }
+  .seam .mmode .leg.lg-fc i { position: absolute; left: 7px; right: 7px; top: 4px; height: 4px; background: linear-gradient(90deg, #121028, #342478, #1680a0, #60c478, #f6d448, #fa6028); }
+  .seam.fc .mmode .leg.lg-fc { display: flex; } .seam.fc .mmode .leg.lg-iso { display: none; }
+  body.in-pubs .seam .mmode, body.sky-on .seam .mmode { opacity: 0; pointer-events: none; }
+
+  /* the text is printed on the measured drawing: solid paper, no box edge — the drawing clears a soft margin
+     around it, as a map clears room for its title — and two crop marks, the way a print is trimmed */
+  .panel, .hero .note { background: var(--paper); box-shadow: 0 0 34px 26px var(--paper); position: relative; clip-path: inset(-70px -22px -70px -70px); }   /* the cleared margin stops short of the seam */
+  .panel::before, .panel::after, .hero .note::before, .hero .note::after { content: ""; position: absolute; width: 13px; height: 13px; border: 0 solid var(--ink); opacity: .6; pointer-events: none; }
+  .panel::before, .hero .note::before { left: -14px; top: -14px; border-left-width: 1px; border-top-width: 1px; }
+  .panel::after, .hero .note::after { right: -14px; bottom: -14px; border-right-width: 1px; border-bottom-width: 1px; }
+  .panel .plate { box-shadow: none; }
+
+  @media (max-width: 760px) {
+    .nav { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; flex-direction: column; align-items: stretch; gap: 6px; }
+    .brand { padding: 8px 10px; } .brand span { font-size: 9.5px; }
+    .menu { overflow-x: auto; font-size: 10px; } .menu a { padding: 7px 7px; }
+    .sec { padding: 150px 12px 40px; justify-content: flex-end; }
+    .panel { max-width: none; padding: 18px 18px 20px; box-shadow: 0 0 22px 16px var(--paper); clip-path: none; } .hero .note { box-shadow: 0 0 22px 16px var(--paper); }
+    .panel::before, .panel::after, .hero .note::before, .hero .note::after { width: 9px; height: 9px; } .panel::before, .hero .note::before { left: -10px; top: -10px; } .panel::after, .hero .note::after { right: -10px; bottom: -10px; }
+    .plate { margin: -18px -18px 14px; } .plate figcaption { padding: 6px 18px 7px; } .plate.print { padding: 8px 8px 0; } .plate.print figcaption { padding: 7px 2px 9px; }
+    #projects .panel { max-width: none; }
+    .decide { grid-template-columns: minmax(0, 1fr); }
+    #tri { max-width: 240px; }
+    .hero { padding: 0 0 0; } .hero .note { margin: 0 12px 10px; }
+    .strip { grid-template-columns: auto repeat(6, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom, 0px); }
+    .strip .enter { grid-column: 1 / -1; justify-content: center; border-left: 0; border-top: 1px solid var(--rule); }
+    .strip button { padding: 9px 6px 10px; } .strip .ch .n { display: none; } .strip .ch .c { font-size: 11.5px; }
+    .seam .lab { top: 132px; font-size: 9.5px; } .seam .lab i { display: none; }
+    .seam .mmode { top: 168px; } .seam .mmode .leg.lg-iso { display: none; } .seam .mmode .leg.lg-fc { gap: 8px; }
+    .hint { display: none; }
+    .clock { top: calc(env(safe-area-inset-top, 0px) + 112px); right: 12px; padding: 4px 9px 4px 5px; gap: 7px; } .clock svg { width: 30px; height: 30px; } .clock b { font-size: 19px; }
+    .collab li, .cv li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .pubwrap { padding: 20px 16px 24px; }
+    .counts { grid-template-columns: repeat(3, auto); }
+    .sel { grid-template-columns: minmax(0, 1fr); }
+    .pubsec { padding: 150px 8px 40px; }
+    .hdrctl, .epctl, .kitctl, .fclegend { padding-left: 18px; padding-right: 18px; } .fclegend i { left: 18px; right: 18px; }
+    .kitrow { grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 12px 14px 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card, .loading, #skyc { transition: none; } }
+</style>
+</head>
+<body>
+
+<noscript><div style="position:fixed;inset:0;display:grid;place-items:center;background:#f1efea;z-index:30;padding:24px;font:15px/1.6 sans-serif"><div style="max-width:520px"><h1 style="font-weight:500">Dong Hyun Kim</h1><p>Architect and lighting researcher — the gap between measured light and felt light. Assistant Professor, Department of Architecture, Tokyo University of Science (from July 2026). Previously postdoctoral researcher at ETH Zürich, KTH Lighting Design (visiting), EPFL and TU Delft; BSc, MSc and PhD at The Bartlett, UCL.</p><p>donghyun.kim@rs.tus.ac.jp · <a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en">Google Scholar</a> · <a href="https://www.linkedin.com/in/donghkim">LinkedIn</a></p></div></div></noscript>
+
+
+<canvas id="stage" aria-label="An academic journey through six cities and a daylit room, split into measured and felt light"></canvas>
+<canvas id="skyc" aria-label="Publication Sky: papers drawn as light sources on a fisheye sky"></canvas>
+
+<header class="nav">
+  <a class="brand" href="#journey"><b>Dong Hyun Kim</b><span>Daylight Lab · <i data-en="measured light, felt light" data-ja="測った光と、感じた光">measured light, felt light</i></span></a>
+  <nav class="menu" aria-label="Sections">
+    <a href="#journey" data-s="walk" data-en="Journey" data-ja="歩み">Journey</a>
+    <a href="#about" data-s="about" data-en="About" data-ja="紹介">About</a>
+    <a href="#projects" data-s="projects" data-en="Projects" data-ja="研究">Projects</a>
+    <a href="#instruments" data-s="instruments" data-en="Instruments" data-ja="計測器">Instruments</a>
+    <a href="#publications" data-s="publications" data-en="Publications" data-ja="論文">Publications</a>
+    <a href="#contact" data-s="contact" data-en="Contact" data-ja="連絡">Contact</a>
+    <span class="sep"></span>
+    <button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="ja" aria-pressed="false">日本語</button>
+  </nav>
+</header>
+
+<div class="seam" id="seam">
+  <span class="lab l">Measured<i>測った光</i></span>
+  <span class="lab r">Felt<i>感じた光</i></span>
+  <div class="mmode" id="mmode"><div class="seg" role="group" aria-label="How the measured side draws luminance"><button type="button" data-mm="iso" aria-pressed="true" data-en="Isolines" data-ja="等輝度線">Isolines</button><button type="button" data-mm="fc" aria-pressed="false" data-en="False colour" data-ja="疑似カラー">False colour</button></div>
+    <div class="leg lg-iso mono" data-en="lines every ¼ decade · labels in cd/m²" data-ja="線は1/4桁ごと · 数値は cd/m²">lines every ¼ decade · labels in cd/m²</div>
+    <div class="leg lg-fc mono"><i></i><span>1</span><span>10</span><span>100</span><span>1k</span><span>10k</span><span>100k cd/m²</span></div></div>
+  <div class="grip" id="grip" role="slider" aria-label="Measured and felt split" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4 1.5 9 6 14M12 4l4.5 5-4.5 5"/></svg>
+  </div>
+</div>
+<div class="clock" id="clock" aria-hidden="true"><svg viewBox="0 0 56 56"><circle class="ring" cx="28" cy="28" r="19"/><path class="day" d="M9 28 A19 19 0 0 1 47 28"/><line x1="3" x2="53" y1="28" y2="28"/><circle id="sdot" cx="9" cy="28" r="3.6"/></svg><div><b id="clk">08:10</b><span class="mono" id="clkl">London</span></div></div>
+<div class="hint mono" id="hint" data-en="Your cursor is a luminance meter · drag the seam" data-ja="カーソルは輝度計 · 境界線を動かす">Your cursor is a luminance meter · drag the seam</div>
+<div class="probe" id="probe"><div class="fov"><i></i><i></i><i></i><i></i></div><div class="spot"></div><span class="deg">1°</span><div class="val" id="pval">—</div></div>
+<canvas class="iso" id="iso" aria-hidden="true"></canvas>
+<div class="card" id="card"><div><div class="y mono" id="cy"></div><h2 id="ct"></h2><div class="jp" id="cj"></div></div></div>
+<div class="pcard" id="pcard"></div>
+
+<main>
+  <!-- WALK -->
+  <section class="sec hero" id="journey" data-scene="walk">
+    <div class="note" id="note"><div class="k" id="nk"></div><p id="np"></p><div class="sub" id="ns"></div></div>
+    <nav class="strip" id="strip" aria-label="Chapters">
+      <button class="play" id="play" type="button" aria-label="Pause"><svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="2.6" height="9"/><rect x="7.4" y="1.5" width="2.6" height="9"/></svg></button>
+    </nav>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about" data-scene="room:about" data-t="15:30">
+    <div class="panel">
+      <div class="kick" data-en="About · through the window" data-ja="紹介 · 窓の向こうへ">About · through the window</div>
+      <h2 data-en="Between what a meter reads and what a person feels." data-ja="計測器が読む光と、人が感じる光のあいだ。">Between what a meter reads and what a person feels.</h2>
+      <h3 data-en="Felt" data-ja="感じた光">Felt</h3>
+      <p class="lede" data-en="I am an architect and lighting researcher. A room can pass every daylight metric and still feel harsh; a dim café can read as ‘inadequate’ and feel exactly right. My work sits in that gap — measuring light carefully with HDR imaging and photometry, and asking people what the light does to them." data-ja="建築と照明の研究者です。昼光指標をすべて満たしても居心地の悪い部屋があり、「暗すぎる」と測られても心地よいカフェがあります。HDR画像と測光で光を丁寧に測り、その光が人に何をもたらすのかを問う——その隙間が私の研究の場所です。">I am an architect and lighting researcher. A room can pass every daylight metric and still feel harsh; a dim café can read as ‘inadequate’ and feel exactly right. My work sits in that gap — measuring light carefully with HDR imaging and photometry, and asking people what the light does to them.</p>
+      <p data-en="I also like sensors — most of my studies begin by building or calibrating the thing that measures. Your cursor here is one: on the measured side it reads luminance." data-ja="センサーも好きです。研究の多くは、測る道具をつくり、較正するところから始まります。このページのカーソルもそのひとつ——測った光の側では輝度を読み取ります。">I also like sensors — most of my studies begin by building or calibrating the thing that measures. Your cursor here is one: on the measured side it reads luminance.</p>
+      <h3 data-en="Measured" data-ja="測った光">Measured</h3>
+      <ul class="cv">
+        <li><span>2026–</span><span data-en="Assistant Professor, Department of Architecture, Tokyo University of Science" data-ja="東京理科大学 建築学科 助教">Assistant Professor, Department of Architecture, Tokyo University of Science</span></li>
+        <li><span>2025–2026</span><span><span data-en="Postdoctoral researcher," data-ja="博士研究員,">Postdoctoral researcher,</span> <a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a></span></li>
+        <li><span>2024</span><span><span data-en="Visiting postdoc," data-ja="客員ポスドク,">Visiting postdoc,</span> <a href="https://www.arch.kth.se/en/organisation/ljus-design/ljus-och-design-1.546665" target="_blank" rel="noopener">KTH Lighting Design ↗</a></span></li>
+        <li><span>2021–2024</span><span><span data-en="Postdoctoral researcher (Swiss Government Excellence Fellow 2021–22)," data-ja="博士研究員（スイス政府エクセレンス・フェロー 2021–22）,">Postdoctoral researcher (Swiss Government Excellence Fellow 2021–22),</span> <a href="https://www.epfl.ch/labs/lipid/" target="_blank" rel="noopener">EPFL ↗</a></span></li>
+        <li><span>2018–2020</span><span><span data-en="Postdoctoral researcher," data-ja="博士研究員,">Postdoctoral researcher,</span> <a href="https://www.tudelft.nl/en/architecture-and-the-built-environment/about-the-faculty/departments/architectural-engineering-and-technology/organisation/chairs/indoor-environment" target="_blank" rel="noopener">TU Delft ↗</a></span></li>
+        <li><span>2007–2018</span><span><span data-en="BSc Architectural Studies, MSc Light &amp; Lighting, PhD Built Environment," data-ja="建築学士・照明修士・建築環境博士,">BSc Architectural Studies, MSc Light &amp; Lighting, PhD Built Environment,</span> <a href="https://www.ucl.ac.uk/bartlett/" target="_blank" rel="noopener">The Bartlett, UCL ↗</a></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec" data-scene="room:solskin" data-t="16:00">
+      <div class="panel">
+        <figure class="plate print cmp" id="cmp" style="--x:50%"><div class="cmpbox"><img src="img/solskin_open.jpg?v=6c403aa9" alt="Solskin façade fully open, seen from inside" loading="lazy" decoding="async"><img class="top" src="img/solskin_closed.jpg?v=15ceb0c6" alt="Solskin façade fully closed, seen from inside" loading="lazy" decoding="async"><span class="cl l mono">open</span><span class="cl r mono">closed</span><div class="bar" aria-hidden="true"><i></i></div><input type="range" min="0" max="100" value="50" aria-label="Compare open and closed façade"></div><figcaption data-en="The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure." data-ja="ETHチューリッヒZCBSラボのSolskinファサード — ドラッグして全開（眺望・昼光）と全閉（日射遮蔽・発電）を比較。同一露出のHDR画像。">The Solskin façade at the ZCBS Lab, ETH Zürich — drag to compare fully open (view, daylight) with fully closed (shade, electricity). HDR captures, same exposure.</figcaption></figure>
+        <div class="kick"><span class="tm">16:00</span> · 2025–2026 · ETH Zürich × Solskin</div>
+        <h2>Solskin AI</h2>
+        <p class="lede" data-en="Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once." data-ja="Solskinは太陽を追って動くアダプティブ・ソーラーファサード。発電しながら室内に日陰をつくります。ETHチューリッヒとZurich Soft RoboticsによるSolskin AIでは、AIによる制御で、建物のエネルギー、在室者の快適性、一人ひとりのニーズを同時に満たすことをめざしています。">Solskin is an adaptive solar façade: its panels follow the sun, making electricity while shading the room. Solskin AI, with ETH Zürich and Zurich Soft Robotics, uses AI to control it so that building energy, occupant comfort and each person’s needs are met at once.</p>
+        <h3 data-en="Three needs, one façade" data-ja="三つのニーズ、一つのファサード">Three needs, one façade</h3>
+        <div class="decide">
+          <svg id="tri" viewBox="0 0 260 236" role="img" aria-label="Balance between electricity, shading and view"></svg>
+          <div class="dside">
+            <div class="seg" role="group" aria-label="Balance">
+              <button type="button" data-pm="day" aria-pressed="true" data-en="Through a day" data-ja="一日の流れ">Through a day</button><button type="button" data-pm="drag" aria-pressed="false" data-en="Yours" data-ja="あなた">Yours</button>
+            </div>
+            <dl class="wts mono" id="wts"></dl>
+            <div class="envr mono" id="envr"></div>
+          </div>
+        </div>
+        <p class="small" data-en="Electricity, shade, view — the façade weighs all three. Drag the point and watch the panels in the room answer." data-ja="発電、日陰、眺め——ファサードはその三つを天秤にかけます。点をドラッグすると、部屋のパネルが応えます。">Electricity, shade, view — the façade weighs all three. Drag the point and watch the panels in the room answer.</p>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Innosuisse — Swiss Innovation Agency</dd><dt data-en="Partners" data-ja="パートナー">Partners</dt><dd class="lk"><a href="https://systems.arch.ethz.ch/" target="_blank" rel="noopener">ETH Zürich ↗</a> · <a href="https://www.solskin.swiss/en" target="_blank" rel="noopener">Solskin (Zurich Soft Robotics) ↗</a></dd><dt data-en="Note" data-ja="注">Note</dt><dd data-en="The triangle and the room are an illustration, not project data or the project’s control logic." data-ja="三角形と部屋は説明用の図解であり、プロジェクトのデータや制御ロジックではありません。">The triangle and the room are an illustration, not project data or the project’s control logic.</dd></dl>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:comfort" data-t="17:15">
+      <div class="panel">
+        <figure class="plate print"><img src="img/comfort.jpg?v=dd4fa86d" alt="Sunlight patterns cast by stripe, bamboo and Voronoi façade panels in the test room" loading="lazy" decoding="async"><figcaption data-en="The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6)." data-ja="西向きの実験室に設置した三つのファサード模様 — ストライプ、竹、ボロノイ（開口率 約0.6）。">The three façade patterns in the west-facing test room, sun in view — stripe, bamboo, Voronoi (opening ratio ≈ 0.6).</figcaption></figure>
+        <div class="kick"><span class="tm">17:15</span> · 2021–2024 · EPFL</div>
+        <h2 data-en="Visual Comfort &amp; Visual Interest" data-ja="視覚的快適性と視覚的興味">Visual Comfort &amp; Visual Interest</h2>
+        <p class="lede" data-en="Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did." data-ja="美しい日だまりの模様は、まぶしさを和らげるのか。30人が、ストライプ・竹・ボロノイの3つのファサード越しに太陽を視野に入れて作業しました。感じるまぶしさを変えたのは模様ではなく、その場の心地よさでした。">Do beautiful sun patterns make glare easier to live with? Thirty people worked with the sun in view behind three façade screens — stripes, bamboo and Voronoi. The pattern didn’t change how much glare they felt. How pleasant the scene felt did.</p>
+        <div class="seg pats" role="group" aria-label="Façade pattern">
+          <button type="button" data-pat="none" aria-pressed="false" data-en="None" data-ja="なし">None</button><button type="button" data-pat="stripe" aria-pressed="false" data-en="Stripe" data-ja="ストライプ">Stripe</button><button type="button" data-pat="bamboo" aria-pressed="false" data-en="Bamboo" data-ja="竹">Bamboo</button><button type="button" data-pat="voronoi" aria-pressed="true" data-en="Voronoi" data-ja="ボロノイ">Voronoi</button>
+        </div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>Swiss National Science Foundation (SNSF) · Swiss Government Excellence Fellowship</dd><dt data-en="Status" data-ja="状況">Status</dt><dd data-en="Manuscript in preparation" data-ja="論文準備中">Manuscript in preparation</dd></dl>
+        <button class="btn" type="button" data-sky="daylight" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:emotion" data-t="18:10">
+      <div class="panel">
+        <figure class="plate print"><img src="img/emotion.jpg?v=213c7860" alt="Sixteen fisheye photographs of one office-like room under different lighting scenes" loading="lazy" decoding="async"><figcaption data-en="One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL." data-ja="ひとつのオフィス空間、16の照明シーン — UCLでの博士研究の実験写真（魚眼）。">One office-like room, sixteen lighting scenes — fisheye photographs from the PhD experiments at UCL.</figcaption></figure>
+        <div class="kick"><span class="tm">18:10</span> · 2013–2018 · UCL</div>
+        <h2>Light &amp; Emotion</h2>
+        <p class="lede" data-en="How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes." data-ja="光は部屋の感じ方をどう変えるのか。博士研究では、空間の種類だけでなく感情のために照明をデザインすべきだと考え、照明デザイナーとともに一つのオフィス空間・16の照明シーンで確かめました。">How does light make a room feel? My PhD argued that lighting should be designed for emotion, not only for the type of space — and put it to the test with lighting designers, in one office-like room under sixteen scenes.</p>
+        <div class="live"><span class="dot"></span><span id="moodv">—</span></div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>UCL Research Fellowship · Korea Engineering Industry Scholarship</dd><dt data-en="Output" data-ja="成果">Output</dt><dd class="lk"><a href="https://discovery.ucl.ac.uk/id/eprint/10042464/" target="_blank" rel="noopener">PhD dissertation, UCL (2018) ↗</a><br>Kim &amp; Mansfield, <i>Building and Environment</i> (2021)<br>Kim &amp; Mansfield, CIE Midterm Meeting (2017)</dd></dl>
+        <button class="btn" type="button" data-sky="emotion" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:hidyn" data-t="21:00">
+      <div class="panel">
+        <figure class="plate print"><img src="img/hidyn.jpg?v=1c308c0c" alt="A false-colour luminance image of seven reference light sources next to a photograph of the Hidyni rig with a camera" loading="lazy" decoding="async"><figcaption data-en="Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1." data-ja="HiDynの高コントラスト輝度基準器「Hidyni」：6桁にわたる7つの光源を、HDRカメラで測った姿（左）と見たままの姿（右）。写真：HiDyn成果報告書D1。">Hidyni, the HiDyn high-contrast luminance reference: seven sources spanning six orders of magnitude, as an HDR camera measures it (left) and as it looks (right). Photo: HiDyn deliverable D1.</figcaption></figure>
+        <div class="kick"><span class="tm">21:00</span> · 2022–2025 · EURAMET</div>
+        <h2>HiDyn</h2>
+        <p class="lede" data-en="Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards." data-ja="グレアは感じやすく、測りにくい。夜空を背にした街灯は6桁もの輝度差をもち、カメラの1回の露出には収まりません。欧州計量プロジェクトHiDynでは、グレアと障害光の評価にHDR輝度カメラをどこまで信頼できるかを確かめ、規格につながるグッドプラクティスガイドをまとめました。">Glare is easy to feel and hard to measure. A street light against the night sky spans six orders of magnitude — far more than one camera exposure can hold. In HiDyn, a European metrology project, we tested how far HDR luminance cameras can be trusted for glare and obtrusive light, and wrote the good-practice guides that feed the standards.</p>
+        <div class="live"><span class="dot"></span><span id="evv">HDR bracket · 0 EV</span></div>
+        <dl class="meta"><dt data-en="Funding" data-ja="助成">Funding</dt><dd>European Partnership on Metrology · 21NRM01 HiDyn</dd><dt data-en="My part" data-ja="担当">My part</dt><dd data-en="Camera tests for daylight glare, quality indices, good-practice guides" data-ja="昼光グレアのためのカメラ評価、品質指標、グッドプラクティスガイド">Camera tests for daylight glare, quality indices, good-practice guides</dd></dl>
+        <button class="btn" type="button" data-sky="glare" data-en="See the papers ↗" data-ja="論文を見る ↗">See the papers ↗</button>
+      </div>
+    </div>
+    <div class="sec" data-scene="room:late" data-t="21:45">
+      <div class="panel">
+        <div class="kick" data-en="Collaborations" data-ja="共同研究">Collaborations</div>
+        <h2 data-en="Light, shared." data-ja="分かち合う光。">Light, shared.</h2>
+        <ul class="collab">
+          <li><b>TU Delft</b><span data-en="Indoor Environment group, SenseLab — health and indoor environment in schools, offices and hospitals" data-ja="室内環境グループ、SenseLab — 学校・オフィス・病院の健康と室内環境">Indoor Environment group, SenseLab — health and indoor environment in schools, offices and hospitals</span></li>
+          <li><b>EPFL</b><span data-en="HDR calibration workflows and daylit sky categorisation" data-ja="HDR較正ワークフローと昼光天空の分類">HDR calibration workflows and daylit sky categorisation</span></li>
+          <li><b>TU Delft · 3D</b><span data-en="Image-based characterisation of material optical properties" data-ja="画像に基づく材料光学特性の推定">Image-based characterisation of material optical properties</span></li>
+          <li><b>KTH Lighting Design</b><span data-en="Healthy and comfortable classroom lighting" data-ja="健康で快適な教室照明">Healthy and comfortable classroom lighting</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUMENTS -->
+  <section id="instruments">
+    <div class="sec" data-scene="room:bench" data-bench="0" data-t="22:15">
+      <div class="panel">
+        <div class="kick" data-en="Instruments · the night bench" data-ja="計測器 · 夜の作業机">Instruments · the night bench</div>
+        <h2 data-en="I build the instruments I measure with." data-ja="測るための道具は、自分でつくる。">I build the instruments I measure with.</h2>
+        <p class="lede" data-en="I like sensors. Most of my studies start long before the first participant — with a camera that has to be calibrated, or a logger that has to survive three weeks on a windowsill. These are tools I wrote or built along the way. The code is open, so anyone can check the numbers." data-ja="センサーが好きです。研究の多くは、最初の参加者よりずっと前——較正しなければならないカメラや、窓辺で三週間動き続けなければならないロガーから始まります。ここにあるのは、その途中で書いたり組み立てたりした道具です。コードは公開しているので、誰でも数値を確かめられます。">I like sensors. Most of my studies start long before the first participant — with a camera that has to be calibrated, or a logger that has to survive three weeks on a windowsill. These are tools I wrote or built along the way. The code is open, so anyone can check the numbers.</p>
+        <ul class="bench mono"><li><b>01</b> hdrspace <span data-en="calibrated HDR" data-ja="較正HDR">calibrated HDR</span></li><li><b>02</b> AirQ-Logger <span data-en="air, on e-paper" data-ja="空気をe-paperに">air, on e-paper</span></li><li><b>03</b> <span data-en="Room sensor kit" data-ja="室内センサーキット">Room sensor kit</span> <span data-en="light, heat, air" data-ja="光・熱・空気">light, heat, air</span></li></ul>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="1" data-t="22:35">
+      <div class="panel">
+        <figure class="plate hdrdemo" id="hdrdemo">
+          <div class="hdrbox" id="hdrbox"><img id="hdrimg" src="img/hdr/b2.jpg?v=db6c68b3" alt="Fisheye HDR of a test office with the sun in view, shown one exposure at a time" loading="lazy" decoding="async"><span class="hdrread mono" id="hdrread" hidden></span><span class="hdrtag mono" id="hdrtag">0 EV</span></div>
+          <div class="hdrctl"><input type="range" id="hdrr" min="0" max="5" step="1" value="2" aria-label="Exposure in the bracket, then merged"><div class="ticks mono"><span>−6</span><span>−3</span><span>0</span><span>+3</span><span>+6</span><span data-en="merge" data-ja="合成">merge</span></div></div>
+          <div class="fclegend mono" id="fcleg" hidden><i></i><span>1</span><span>10</span><span>100</span><span>1k</span><span>10k</span><span>100k cd/m²</span></div>
+          <figcaption data-en="Five exposures, three stops apart: none of them holds both the sun and the keyboard. Merged, every pixel is a luminance — hover to read it. A test office; the exposures are simulated from the merged HDR." data-ja="3段ずつ離した5枚の露出。どれも太陽とキーボードを同時には写せません。合成すると、すべての画素が輝度になります——カーソルで読み取れます。実験用オフィス。各露出は合成HDRから再現したものです。">Five exposures, three stops apart: none of them holds both the sun and the keyboard. Merged, every pixel is a luminance — hover to read it. A test office; the exposures are simulated from the merged HDR.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 01 · software · 2026" data-ja="計測器 01 · ソフトウェア · 2026">Instrument 01 · software · 2026</div>
+        <h2>hdrspace</h2>
+        <p class="lede" data-en="Ordinary raw converters make pictures; hdrspace makes measurements. It turns a bracket of camera RAW files into one HDR image in cd/m², keeps the whole chain linear, and writes every step into the file — so each number can be traced back to the shutter that made it." data-ja="普通のRAW現像ソフトがつくるのは写真。hdrspaceがつくるのは測定値です。カメラのRAWブラケットを cd/m² のHDR画像一枚にまとめ、処理をすべて線形に保ち、各ステップをファイルに書き込みます。どの数値も、それを撮ったシャッターまでたどれます。">Ordinary raw converters make pictures; hdrspace makes measurements. It turns a bracket of camera RAW files into one HDR image in cd/m², keeps the whole chain linear, and writes every step into the file — so each number can be traced back to the shutter that made it.</p>
+        <dl class="meta sheet"><dt data-en="Measures" data-ja="測るもの">Measures</dt><dd data-en="Luminance (cd/m²) · colour (CIE XYZ)" data-ja="輝度（cd/m²）・色（CIE XYZ）">Luminance (cd/m²) · colour (CIE XYZ)</dd><dt data-en="In" data-ja="入力">In</dt><dd data-en="Camera RAW brackets, fisheye or not, with shutter, aperture and colour calibration" data-ja="カメラRAWブラケット（魚眼にも対応）、シャッター・絞り・色の較正つき">Camera RAW brackets, fisheye or not, with shutter, aperture and colour calibration</dd><dt data-en="Out" data-ja="出力">Out</dt><dd data-en="Radiance HDR, every step in the header" data-ja="Radiance HDR、全工程をヘッダーに記録">Radiance HDR, every step in the header</dd><dt data-en="Also" data-ja="ほかに">Also</dt><dd data-en="Glare (evalglare in C++), view visibility (HDR-VDP 3), perceptual maps, tone mapping" data-ja="グレア（evalglareのC++移植）、眺望の見え（HDR-VDP 3）、知覚マップ、トーンマッピング">Glare (evalglare in C++), view visibility (HDR-VDP 3), perceptual maps, tone mapping</dd><dt data-en="Code" data-ja="コード">Code</dt><dd class="lk">macOS · C++ · GPL-3.0 · <a href="https://github.com/dhkim-research/hdrspace" target="_blank" rel="noopener">GitHub ↗</a></dd></dl>
+        <figure class="shot"><img src="img/hdr/app.jpg?v=32eef4cc" alt="The hdrspace app: a fisheye HDR in the viewer with the tool rail and inspector" loading="lazy" decoding="async"><figcaption class="mono" data-en="the app · viewer" data-ja="アプリ · ビューア">the app · viewer</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="2" data-t="22:55">
+      <div class="panel">
+        <figure class="plate epaper" id="epaper">
+          <div class="ep"><div class="ephead mono"><b id="eptitle">CO2</b><span id="epstat"></span></div><svg id="epsvg" viewBox="0 0 440 200" role="img" aria-label="A day of sensor readings drawn as on an e-paper screen"></svg></div>
+          <div class="epctl">
+            <div class="seg" role="group" aria-label="Sensor" id="epsens"><button type="button" data-k="co2" aria-pressed="true">CO₂</button><button type="button" data-k="pm" aria-pressed="false">PM2.5</button><button type="button" data-k="t" aria-pressed="false">T</button><button type="button" data-k="rh" aria-pressed="false">RH</button></div>
+            <div class="seg" role="group" aria-label="Time window" id="epwin"><button type="button" data-w="0-24" aria-pressed="true">All</button><button type="button" data-w="8-12" aria-pressed="false">08–12</button><button type="button" data-w="12-16" aria-pressed="false">12–16</button><button type="button" data-w="16-20" aria-pressed="false">16–20</button><button type="button" data-w="20-24" aria-pressed="false">20–24</button></div>
+          </div>
+          <figcaption data-en="The logger’s analysis screen, redrawn: pick a sensor and a time-of-day window, as on the device. Example data, not field measurements." data-ja="ロガーの解析画面を再現：本体と同じく、センサーと時間帯を選べます。例示用のデータで、実測値ではありません。">The logger’s analysis screen, redrawn: pick a sensor and a time-of-day window, as on the device. Example data, not field measurements.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 02 · firmware · M5Stack PaperS3" data-ja="計測器 02 · ファームウェア · M5Stack PaperS3">Instrument 02 · firmware · M5Stack PaperS3</div>
+        <h2>AirQ-Logger</h2>
+        <p class="lede" data-en="Up to ten small air-quality nodes talk over ESP-NOW to one e-paper logger, which writes every packet to a microSD card. Local logging comes first. Wi-Fi only when asked — it shares the 2.4 GHz radio, and a lost sample is worse than a late upload." data-ja="最大10台の小さな空気質ノードが、ESP-NOWで一台のe-paperロガーに送信し、ロガーはすべてをmicroSDに書き込みます。まずはローカルに記録すること。Wi-Fiは必要なときだけ——同じ2.4 GHzの無線を使うので、アップロードが遅れるより、データが欠けるほうが困るからです。">Up to ten small air-quality nodes talk over ESP-NOW to one e-paper logger, which writes every packet to a microSD card. Local logging comes first. Wi-Fi only when asked — it shares the 2.4 GHz radio, and a lost sample is worse than a late upload.</p>
+        <dl class="meta sheet"><dt data-en="Measures" data-ja="測るもの">Measures</dt><dd>CO₂ · PM1–PM10 · T · RH · VOC · NOx</dd><dt data-en="Nodes" data-ja="ノード">Nodes</dt><dd data-en="Up to 10 M5Stack AirQ, over ESP-NOW" data-ja="M5Stack AirQ 最大10台、ESP-NOW">Up to 10 M5Stack AirQ, over ESP-NOW</dd><dt data-en="Out" data-ja="出力">Out</dt><dd data-en="TSV on microSD; optional HTTPS upload" data-ja="microSDにTSV、HTTPSアップロードは任意">TSV on microSD; optional HTTPS upload</dd><dt data-en="Code" data-ja="コード">Code</dt><dd class="lk">Arduino C++ · MIT · <a href="https://github.com/dhkim-research/AirQ-Logger" target="_blank" rel="noopener">GitHub ↗</a></dd></dl>
+      </div>
+    </div>
+
+    <div class="sec" data-scene="room:bench" data-bench="3" data-t="23:15">
+      <div class="panel">
+        <figure class="plate kit" id="kit">
+          <div class="kitrow">
+            <svg id="kitsvg" viewBox="0 0 300 190" role="img" aria-label="Illuminance and melanopic EDI over an example day, on a log scale"></svg>
+            <div class="cube" id="cube" aria-label="Plane radiant temperatures on the six faces of the cube">
+              <span data-f="up"></span><span data-f="w"></span><span data-f="s"></span><span data-f="e"></span><span data-f="n"></span><span data-f="down"></span>
+            </div>
+          </div>
+          <div class="kitctl"><div class="seg" role="group" aria-label="Sun on the floor" id="kitsun"><button type="button" data-sun="0" aria-pressed="true" data-en="Overcast" data-ja="曇り">Overcast</button><button type="button" data-sun="1" aria-pressed="false" data-en="Sun on the floor" data-ja="床に日だまり">Sun on the floor</button></div><span class="mrt mono" id="mrt"></span></div>
+          <figcaption data-en="Left: lux and melanopic EDI through an example day — daylight is rich in the blue that the body’s clock reads, warm evening lamps are not. Right: six faces, six radiant temperatures; their fourth-power mean is the mean radiant temperature. Example values, not field data." data-ja="左：例示した一日の照度とメラノピックEDI。体内時計が読み取る青を、昼光は多く含み、夕方の暖色の照明はあまり含みません。右：六つの面、六つの放射温度。その4乗平均が平均放射温度です。例示値で、実測データではありません。">Left: lux and melanopic EDI through an example day — daylight is rich in the blue that the body’s clock reads, warm evening lamps are not. Right: six faces, six radiant temperatures; their fourth-power mean is the mean radiant temperature. Example values, not field data.</figcaption>
+        </figure>
+        <div class="kick" data-en="Instrument 03 · field kit" data-ja="計測器 03 · フィールドキット">Instrument 03 · field kit</div>
+        <h2 data-en="Room sensor kit" data-ja="室内センサーキット">Room sensor kit</h2>
+        <p class="lede" data-en="For field studies in homes: a few battery sensors that sit quietly for weeks. One reads light the way the body does — melanopic EDI next to plain lux. A small cube reads the six surfaces around it for radiant temperature. The rest log CO₂, particles, humidity and whether anyone is there." data-ja="住宅でのフィールド調査のために：数週間、静かに置いておけるバッテリー式センサーの組み合わせ。ひとつは体が読むように光を測り、照度と並べてメラノピックEDIを記録します。小さなキューブは周囲の六つの面から放射温度を読み、残りはCO₂、粒子、湿度、そして在室を記録します。">For field studies in homes: a few battery sensors that sit quietly for weeks. One reads light the way the body does — melanopic EDI next to plain lux. A small cube reads the six surfaces around it for radiant temperature. The rest log CO₂, particles, humidity and whether anyone is there.</p>
+        <dl class="meta sheet"><dt data-en="Light" data-ja="光">Light</dt><dd data-en="8-channel spectral → lux, CCT, melanopic EDI (CIE S 026)" data-ja="8チャンネル分光 → 照度・色温度・メラノピックEDI（CIE S 026）">8-channel spectral → lux, CCT, melanopic EDI (CIE S 026)</dd><dt data-en="Heat" data-ja="熱">Heat</dt><dd data-en="Six-face radiant cube → mean radiant temperature" data-ja="六面の放射キューブ → 平均放射温度">Six-face radiant cube → mean radiant temperature</dd><dt data-en="Air" data-ja="空気">Air</dt><dd>CO₂ · PM2.5 · PM10 · T · RH</dd><dt data-en="People" data-ja="人">People</dt><dd data-en="mmWave presence, no camera" data-ja="ミリ波で在室検知、カメラなし">mmWave presence, no camera</dd></dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section class="sec pubsec" id="publications" data-scene="pubs" data-t="23:50">
+    <div class="pubwrap">
+      <div class="phead">
+        <div>
+          <div class="kick" data-en="Publications" data-ja="論文">Publications</div>
+          <h2 data-en="A spectrum of work" data-ja="研究のスペクトル">A spectrum of work</h2>
+        </div>
+        <div class="counts" id="counts"></div>
+      </div>
+
+      <h3 class="ph" data-en="Selected" data-ja="代表論文">Selected</h3>
+      <div class="sel" id="sel"></div>
+
+      <h3 class="ph"><span data-en="Spectrum — every line is a paper" data-ja="スペクトル — 一本の線が一編の論文">Spectrum — every line is a paper</span></h3>
+      <div class="spec" id="spec" role="img" aria-label="Publications by year and theme"></div>
+      <div class="speckey mono"><span><i class="k1"></i><span data-en="Lead author" data-ja="筆頭・責任著者">Lead author</span></span><span><i class="k2"></i><span data-en="Co-author" data-ja="共著">Co-author</span></span><span><i class="k3"></i><span data-en="Report" data-ja="報告書">Report</span></span><span><i class="k4"></i><span data-en="In progress" data-ja="進行中">In progress</span></span><button type="button" class="linkbtn" id="skybtn" data-en="Fisheye sky view ↗" data-ja="魚眼の空で見る ↗">Fisheye sky view ↗</button></div>
+
+      <div class="listhead"><h3 class="ph" data-en="All publications" data-ja="すべての論文">All publications</h3><div class="chips" id="chips"></div></div>
+      <div class="plist" id="plist"></div>
+    </div>
+    <button type="button" class="skyclose" id="skyclose" data-en="Close sky ✕" data-ja="閉じる ✕">Close sky ✕</button>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="sec contact" id="contact" data-scene="tokyo" data-t="31:40">
+    <div class="panel">
+      <div class="kick" data-en="Contact · Tokyo" data-ja="連絡 · 東京">Contact · Tokyo</div>
+      <h2 data-en="The window is open." data-ja="窓は開いている。">The window is open.</h2>
+      <p data-en="A new lab at Tokyo University of Science, from July 2026. Students and collaborators curious about light, perception and HDR are welcome to write." data-ja="2026年7月より東京理科大学で新しい研究室を始めます。光、知覚、HDRに関心のある学生・共同研究者の方はお気軽にご連絡ください。">A new lab at Tokyo University of Science, from July 2026. Students and collaborators curious about light, perception and HDR are welcome to write.</p>
+      <div class="mail"><code>donghyun.kim@rs.tus.ac.jp</code><button class="btn" type="button" id="copy" style="margin-top:0" data-en="Copy" data-ja="コピー">Copy</button></div>
+      <div class="links"><a href="https://scholar.google.com/citations?user=qFFf1GEAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar ↗</a><a href="https://www.linkedin.com/in/donghkim" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+    </div>
+  </section>
+</main>
+<footer class="fine"><span>© 2026 Dong Hyun Kim · daylightlab.jp</span></footer>
+
+<div class="loading" id="loading"><div class="lb"><div class="t"><span data-en="Gathering daylight" data-ja="光を集めています">Gathering daylight</span><span id="lp">0%</span></div><div class="track"><div class="fill" id="lf"></div></div><div class="err" id="lerr" hidden></div></div></div>
+
+<script type="importmap">{ "imports": { "three": "./lib/three.module.min.js", "three/addons/": "./lib/addons/" } }</script>
+<script type="module">
+import { createWalk } from './js/walk.js?v=4b32b33c';
+import { createSky } from './js/sky.js?v=62e90914';
+import { PUBS, THEMES } from './js/pubs.js?v=d0ccaa0d';
+
+const CH = [
+  { y: '2007–2018', t: 'London', jp: 'ロンドン', k: 'The Bartlett, UCL', url: 'https://www.ucl.ac.uk/bartlett/',
+    en: 'BSc Architecture, MSc Light & Lighting, PhD Built Environment. Learning to measure light under a sky that rarely held still.',
+    ja: '建築、照明、建築環境を学んだ十一年。めったに晴れない空の下で、光を測ることを覚えた。', sub_en: 'Alone, with an umbrella.', sub_ja: 'ひとり、傘をさして。' },
+  { y: '2018–2020', t: 'Delft', jp: 'デルフト', k: 'TU Delft · Postdoc', url: 'https://www.tudelft.nl/en/architecture-and-the-built-environment/about-the-faculty/departments/architectural-engineering-and-technology/organisation/chairs/indoor-environment',
+    en: 'Married at the Stadhuis on the Markt — the red-and-white shutters, the big Dutch clouds.',
+    ja: 'マルクト広場の市庁舎で結婚した。赤と白の鎧戸、オランダの大きな雲。', sub_en: 'Two shadows now.', sub_ja: '影はふたつになった。' },
+  { y: '2021–2024', t: 'Lausanne', jp: 'ローザンヌ', k: 'EPFL · Postdoc', url: 'https://www.epfl.ch/labs/lipid/',
+    en: 'Visual comfort and glare by the lake. Our daughter was born across the water in Morges.',
+    ja: '湖のほとりで、視覚的快適性とグレアの研究。娘はモルジュで生まれた。', sub_en: 'Two shadows and a pram.', sub_ja: 'ふたつの影と、ベビーカー。' },
+  { y: '2024', t: 'Stockholm', jp: 'ストックホルム', k: 'KTH Lighting Design · Visiting Postdoc', url: 'https://www.arch.kth.se/en/organisation/ljus-design/ljus-och-design-1.546665',
+    en: 'Visiting postdoc at KTH Lighting Design — a northern autumn of low sun and long shadows.',
+    ja: 'KTH 照明デザイン学科の客員ポスドク。低い太陽と長い影の、北の秋。', sub_en: 'Two shadows and a pram, in the gold.', sub_ja: 'ふたつの影とベビーカー、金色の光の中で。' },
+  { y: '2025–2026', t: 'Zürich', jp: 'チューリッヒ', k: 'ETH Zürich · Postdoc', url: 'https://systems.arch.ethz.ch/',
+    en: 'Façades, buildings and comfort that answer the sun.',
+    ja: '太陽に応える外皮と建築、そして快適性。', sub_en: 'Three of us, walking.', sub_ja: '三人で歩く。' },
+  { y: '2026–', t: 'Tokyo', jp: '東京', k: 'Tokyo University of Science',
+    en: 'Assistant Professor, Department of Architecture. A new beginning under a clear sky.',
+    ja: '建築学科 助教。澄んだ空の下での、新しい始まり。', sub_en: 'Three of us, and an open window.', sub_ja: '三人と、開いた窓。' }
+];
+
+const $ = (id) => document.getElementById(id);
+const canvas = $('stage');
+let lang = 'en';
+const langHooks = [];
+const SPEED = 2.1, LEN = 102;
+let W, sky, playing = true, prog = 0, chapter = 0, split = 0.36, look = { x: 0, y: 0, tx: 0, ty: 0 }, busy = false;
+let scene = 'walk', sceneBusy = false, pendingScene = null;
+
+/* ---------- chapter strip ---------- */
+const strip = $('strip');
+CH.forEach((c, i) => {
+  const b = document.createElement('button'); b.className = 'ch'; b.type = 'button';
+  b.innerHTML = `<span class="bar"></span><span class="n">${String(i + 1).padStart(2, '0')} · ${c.y}</span><span class="c">${c.t}</span>`;
+  b.addEventListener('click', () => goTo(i)); strip.appendChild(b);
+});
+const enter = document.createElement('a'); enter.className = 'enter'; enter.href = '#about'; enter.innerHTML = '<span data-en="Enter" data-ja="入る">Enter</span> <span aria-hidden="true">↓</span>'; strip.appendChild(enter);
+const chBtns = [...strip.querySelectorAll('.ch')];
+
+/* ---------- language ---------- */
+function setLang(l) {
+  lang = l; document.documentElement.lang = l;
+  document.querySelectorAll('.menu button[data-l]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
+  document.querySelectorAll('[data-en]').forEach((el) => { el.textContent = el.dataset[l]; });
+  caption(chapter); buildPubs(); if (sky) sky.setLang(l); if (W && W.room) setW(W.room.weights);
+  langHooks.forEach((f) => f());
+}
+document.querySelectorAll('.menu button[data-l]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.l)));
+function caption(i) {
+  const c = CH[i];
+  $('nk').innerHTML = `${c.y} · ` + (c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${c.k} ↗</a>` : c.k);
+  $('np').textContent = lang === 'ja' ? c.ja : c.en; $('ns').textContent = lang === 'ja' ? c.sub_ja : c.sub_en;
+  chBtns.forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
+}
+
+/* ---------- seam ---------- */
+function placeSeam() { $('seam').style.left = (split * 100) + '%'; $('grip').setAttribute('aria-valuenow', Math.round(split * 100)); if (W) W.setSplit(split); if (sky) sky.setSplit(split); }
+let dragging = false, userSplit = false, splitTarget = null;
+$('grip').addEventListener('pointerdown', (e) => { dragging = true; userSplit = true; splitTarget = null; $('grip').setPointerCapture(e.pointerId); e.preventDefault(); });
+$('grip').addEventListener('pointermove', (e) => { if (dragging) { split = Math.min(1, Math.max(0, e.clientX / innerWidth)); placeSeam(); } });
+$('grip').addEventListener('pointerup', () => { dragging = false; });
+$('grip').addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') split = Math.max(0, split - 0.05); if (e.key === 'ArrowRight') split = Math.min(1, split + 0.05); placeSeam(); });
+
+/* ---------- look + meter ---------- */
+const probe = $('probe'), pval = $('pval');
+let pointer = null, turn = 0, drag = null; const hover = { x: 0, y: 0 };
+const aim = () => { look.tx = hover.x + turn; look.ty = hover.y; };
+canvas.addEventListener('pointermove', (e) => {
+  if (drag) { turn = Math.max(-3.4, Math.min(3.4, drag.turn - (e.clientX - drag.x) / innerWidth * 4.2)); }
+  else if (e.pointerType === 'mouse') { hover.x = (e.clientX / innerWidth - 0.5) * 2 * 1.25; hover.y = -(e.clientY / innerHeight - 0.5) * 2 * 0.9; }
+  aim(); pointer = { x: e.clientX, y: e.clientY };
+});
+canvas.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; drag = { x: e.clientX, turn }; canvas.setPointerCapture(e.pointerId); canvas.style.cursor = 'grabbing'; });
+const endDrag = () => { drag = null; canvas.style.cursor = ''; };
+canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointerleave', () => { if (drag) return; pointer = null; hover.x = 0; hover.y = 0; aim(); probe.style.display = 'none'; });
+canvas.addEventListener('dblclick', () => { turn = 0; aim(); });
+const fmt = (L) => L >= 10000 ? Math.round(L / 100) * 100 : L >= 1000 ? Math.round(L / 10) * 10 : L >= 100 ? Math.round(L) : L.toFixed(1);
+function feltWord(L) {
+  const en = L > 4000 ? 'glaring' : L > 1500 ? 'bright, a little sharp' : L > 400 ? 'bright' : L > 120 ? 'soft' : L > 30 ? 'quiet' : 'dim';
+  const ja = L > 4000 ? 'まぶしい' : L > 1500 ? '明るい、少し鋭い' : L > 400 ? '明るい' : L > 120 ? 'やわらかい' : L > 30 ? '静か' : '薄暗い';
+  return lang === 'ja' ? ja : en;
+}
+function meter() {
+  if (!pointer || !W || skyOn || scene === 'pubs') { probe.style.display = 'none'; return; }
+  const u = pointer.x / innerWidth, v = 1 - pointer.y / innerHeight;
+  W.setProbe(u, v);
+  const L = W.state.probeL, measured = u < split;
+  probe.style.display = 'block'; probe.style.transform = `translate(${pointer.x}px, ${pointer.y}px)`;
+  probe.style.setProperty('--s', (W.state.spotPx || 16).toFixed(1) + 'px');
+  probe.classList.toggle('felt', !measured); probe.classList.toggle('glare', measured && L > 4000);
+  if (measured) pval.innerHTML = `${fmt(L)}<small>cd/m²</small>`; else pval.textContent = feltWord(L);
+}
+
+/* ---------- measured side: isolines or false colour, and contour labels like a map ---------- */
+let falseCol = false;
+$('mmode').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; falseCol = b.dataset.mm === 'fc';
+  $('mmode').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === b))); $('seam').classList.toggle('fc', falseCol); if (W) W.setFalseColour(falseCol); });
+const iso = $('iso'), ictx = iso.getContext('2d'); let isoT = -1, isoLabels = [];
+function isoSize() { const d = Math.min(2, devicePixelRatio || 1); iso.width = Math.round(innerWidth * d); iso.height = Math.round(innerHeight * d); }
+addEventListener('resize', isoSize); isoSize();
+const isoText = (n) => ['1', '3.2', '10', '32', '100', '316', '1k', '3.2k', '10k', '32k', '100k', '316k'][n] || '';   // half-decades of cd/m²
+function isoUpdate() {
+  const G = W.state.grid; if (!G || G.t === isoT) return; isoT = G.t;
+  const { w, h, lg } = G, sx = innerWidth / w, sy = innerHeight / h, maxX = split * innerWidth - 36, cand = [];
+  const top = innerWidth > 760 ? 110 : 200, bottom = innerHeight - (scene === 'walk' ? 100 : 40);
+  const at = (x, y) => lg[y * w + x] * 2;                 // half-decades
+  // never under text: panels, captions, the menu, the clock
+  const keep = [...document.querySelectorAll('.panel, .nav, .clock, .strip, .mmode, .seam .lab, #note')].map((el) => el.getBoundingClientRect()).filter((r) => r.width && r.bottom > 0 && r.top < innerHeight);
+  const covered = (px, py) => keep.some((r) => px > r.left - 10 && px < r.right + 10 && py > r.top - 10 && py < r.bottom + 10);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+    const a = at(x, y);
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const b = at(x + dx, y + dy), fa = Math.floor(a), fb = Math.floor(b); if (fa === fb) continue;
+      const n = Math.max(fa, fb); if (n < 0 || n > 11) continue;
+      const t = (n - a) / (b - a), px = (x + 0.5 + dx * t) * sx, py = (y + 0.5 + dy * t) * sy;
+      if (px < 24 || px > maxX || py < top || py > bottom || covered(px, py)) continue;
+      const gx = (at(x + 1, y) - at(x - 1, y)) / (2 * sx), gy = (at(x, y + 1) - at(x, y - 1)) / (2 * sy), g = Math.hypot(gx, gy);
+      if (g > 1 / 14 || g < 1 / 500) continue;            // too crowded, or too flat to follow
+      let ang = Math.atan2(gy, gx) + Math.PI / 2; if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
+      cand.push({ x: px, y: py, n, ang, score: 1 / (Math.abs(Math.log(g * 70)) + 0.35) });
+    }
+  }
+  for (const L of isoLabels) {
+    let best = null, bd = 48;
+    for (const c of cand) if (c.n === L.n) { const d = Math.hypot(c.x - L.tx, c.y - L.ty); if (d < bd) { bd = d; best = c; } }
+    L.alive = !!best; if (best) { L.tx = best.x; L.ty = best.y; L.ta = best.ang; best.used = true; }
+  }
+  cand.sort((p, q) => q.score - p.score);
+  for (const c of cand) {
+    if (isoLabels.filter((L) => L.alive).length >= 9) break;
+    if (c.used || isoLabels.some((L) => L.alive && (Math.hypot(L.tx - c.x, L.ty - c.y) < 120 || (L.n === c.n && Math.hypot(L.tx - c.x, L.ty - c.y) < 260)))) continue;
+    isoLabels.push({ n: c.n, x: c.x, y: c.y, tx: c.x, ty: c.y, a: c.ang, ta: c.ang, o: 0, alive: true });
+  }
+}
+function isoDraw(dt) {
+  const d = iso.width / innerWidth; ictx.setTransform(1, 0, 0, 1, 0, 0); ictx.clearRect(0, 0, iso.width, iso.height);
+  const on = W && W.state.measured && !skyOn && scene !== 'pubs' && split > 0.06;
+  W.wantGrid(on); if (!on) { isoLabels = []; return; }
+  isoUpdate();
+  ictx.font = `500 ${10 * d}px "IBM Plex Mono", ui-monospace, monospace`; ictx.textAlign = 'center'; ictx.textBaseline = 'middle';
+  const edge = split * innerWidth;
+  for (const L of isoLabels) {
+    L.x += (L.tx - L.x) * Math.min(1, dt * 7); L.y += (L.ty - L.y) * Math.min(1, dt * 7); L.a += (L.ta - L.a) * Math.min(1, dt * 7);
+    const visible = L.alive && L.x < edge - 30;
+    L.o += ((visible ? 1 : 0) - L.o) * Math.min(1, dt * (visible ? 4 : 8));
+    if (L.o < 0.02) continue;
+    const txt = isoText(L.n), tw = ictx.measureText(txt).width;
+    ictx.save(); ictx.globalAlpha = L.o; ictx.translate(L.x * d, L.y * d); ictx.rotate(L.a);
+    ictx.fillStyle = falseCol ? 'rgba(12,12,22,.82)' : 'rgba(241,237,228,.96)'; ictx.fillRect(-tw / 2 - 3 * d, -6.5 * d, tw + 6 * d, 13 * d);
+    ictx.fillStyle = falseCol ? '#f1efea' : '#1d2733'; ictx.fillText(txt, 0, 0.5 * d); ictx.restore();
+  }
+  isoLabels = isoLabels.filter((L) => L.alive || L.o > 0.02);
+}
+
+/* ---------- walk chapters ---------- */
+const card = $('card');
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+function showCard(i) { const c = CH[i]; $('cy').textContent = c.y; $('ct').textContent = c.t; $('cj').textContent = c.jp; card.classList.add('on'); }
+async function fadeTo(v, ms, col) {
+  if (col) W.setFadeColor(col);
+  const from = W.state.fade ?? 0, t0 = performance.now();
+  return new Promise((res) => { const step = () => { const k = Math.min(1, (performance.now() - t0) / ms), e = k * k * (3 - 2 * k); W.state.fade = from + (v - from) * e; W.fade(W.state.fade); k < 1 ? requestAnimationFrame(step) : res(); }; step(); });
+}
+async function goTo(i) {
+  if (busy) return; busy = true;
+  if (scene !== 'walk') { location.hash = ''; document.getElementById('journey').scrollIntoView(); }
+  showCard(i); await fadeTo(1, 650, 0xf4efe6);
+  chapter = i; prog = 0; turn = 0; aim(); W.setMode('walk'); W.setCity(i); W.setProgress(0); caption(i);
+  await wait(600); card.classList.remove('on'); await fadeTo(0, 850);
+  busy = false;
+  if (i + 1 < CH.length) setTimeout(() => W.prebuild(i + 1), 400);
+}
+const playBtn = $('play');
+const PAUSE = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="2.6" height="9"/><rect x="7.4" y="1.5" width="2.6" height="9"/></svg>';
+const PLAY = '<svg viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 1.5v9l8-4.5z"/></svg>';
+playBtn.addEventListener('click', () => { playing = !playing; playBtn.innerHTML = playing ? PAUSE : PLAY; playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play'); });
+
+/* ---------- scenes: walk · room states · sky · tokyo ---------- */
+async function applyScene(spec) {
+  if (spec === scene) return;
+  if (sceneBusy) { pendingScene = spec; return; }
+  sceneBusy = true;
+  const prev = scene; scene = spec;
+  if (spec !== 'pubs') setSky(false);
+  document.body.classList.toggle('in-pubs', spec === 'pubs');
+  document.querySelectorAll('.menu a').forEach((a) => a.setAttribute('aria-current', 'false'));
+  const sec = spec === 'walk' ? 'walk' : spec === 'pubs' ? 'publications' : spec === 'tokyo' ? 'contact' : spec === 'room:bench' ? 'instruments' : spec === 'room:late' ? 'projects' : (spec === 'room:about' && document.querySelector('#about').getBoundingClientRect().top < innerHeight * 0.5 && document.querySelector('#projects').getBoundingClientRect().top > innerHeight * 0.5) ? 'about' : 'projects';
+  document.querySelector(`.menu a[data-s="${sec}"]`)?.setAttribute('aria-current', 'true');
+  document.body.classList.toggle('in-walk', spec === 'walk');
+  // keep the panel on the measured side: the seam settles just right of it (unless the visitor has moved it)
+  if (!userSplit && innerWidth > 760) {
+    const host = spec === 'walk' ? null : [...document.querySelectorAll('[data-scene]')].find((b) => b.dataset.scene === spec && b.getBoundingClientRect().top < innerHeight * 0.6 && b.getBoundingClientRect().bottom > innerHeight * 0.4);
+    const pnl = host && host.querySelector('.panel');
+    splitTarget = pnl ? Math.min(0.6, (pnl.getBoundingClientRect().right + 28) / innerWidth) : 0.36;
+  }
+  const roomName = spec === 'pubs' ? 'late' : spec.startsWith('room') ? spec.split(':')[1] : null;
+  const wantMode = roomName ? 'room' : 'walk';
+  if (roomName) W.setRoom(roomName);
+  if (W.mode !== wantMode || (spec === 'tokyo') || (prev === 'tokyo' && spec === 'walk')) {
+    // through the window: a short bloom of light, then the other side
+    await fadeTo(1, 380, 0xfffaf0);
+    if (wantMode === 'room') { W.setMode('room'); W.render(4); }
+    else if (spec === 'tokyo') { W.setMode('walk'); W.setCity(5); prog = 0.82; W.setProgress(prog); }
+    else { W.setMode('walk'); W.setCity(chapter); W.setProgress(prog); }
+    await fadeTo(0, 650);
+  }
+  sceneBusy = false; next();
+  requestAnimationFrame(checkScene);
+  function next() { if (pendingScene && pendingScene !== scene) { const p = pendingScene; pendingScene = null; applyScene(p); } else pendingScene = null; }
+}
+const blocks = [...document.querySelectorAll('[data-scene]')];
+// which block holds the middle of the viewport (a scroll check — works the same inside embedded frames)
+let scrollQueued = false;
+function checkScene() {
+  scrollQueued = false;
+  const mid = innerHeight / 2;
+  for (const b of blocks) { const r = b.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) { if (b.dataset.bench != null && W) W.setBench(+b.dataset.bench); applyScene(b.dataset.scene); return; } }
+}
+addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(checkScene); } }, { passive: true });
+addEventListener('resize', () => requestAnimationFrame(checkScene));
+
+/* Visual comfort — façade pattern on the window */
+document.querySelectorAll('[data-pat]').forEach((b) => b.addEventListener('click', () => W.setPattern(b.dataset.pat)));
+
+/* ---------- Instruments ---------- */
+const sup = (n) => String(n).replace(/[0-9-]/g, (c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)] || '⁻');
+const fmtL = (L) => L >= 1e5 ? `${(L / 10 ** Math.floor(Math.log10(L))).toFixed(1)} × 10${sup(Math.floor(Math.log10(L)))}` : L >= 100 ? Math.round(L).toLocaleString('en') : L >= 10 ? L.toFixed(0) : L.toFixed(1);
+// hdrspace: a bracket, then the merge; the cursor reads each pixel
+{
+  const img = $('hdrimg'), r = $('hdrr'), tag = $('hdrtag'), read = $('hdrread'), leg = $('fcleg'), box = $('hdrbox');
+  const SAT = [30000, 4000, 500, 60, 8], EVS = ['−6 EV', '−3 EV', '0 EV', '+3 EV', '+6 EV'];
+  let lum = null; const N = 640;
+  const want = () => { if (lum) return; lum = 'loading'; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = c.height = N; const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(im, 0, 0, N, N); lum = g.getImageData(0, 0, N, N).data; }; im.src = 'img/hdr/logL.png';
+    ['b0', 'b1', 'b3', 'b4', 'fc'].forEach((k) => { const p = new Image(); p.src = `img/hdr/${k}.jpg`; }); };
+  const show = () => { const v = +r.value; img.src = v < 5 ? `img/hdr/b${v}.jpg` : 'img/hdr/fc.jpg'; tag.textContent = v < 5 ? `${EVS[v]} · ${lang === 'ja' ? '一枚の露出' : 'one exposure'}` : (lang === 'ja' ? '合成 · cd/m²' : 'merged · cd/m²'); leg.hidden = v < 5; };
+  r.addEventListener('input', () => { want(); show(); });
+  box.addEventListener('pointerenter', want);
+  box.addEventListener('pointermove', (e) => {
+    if (!lum || lum === 'loading') return;
+    const ib = img.getBoundingClientRect(), bb = box.getBoundingClientRect();
+    const x = Math.floor((e.clientX - ib.left) / ib.width * N), y = Math.floor((e.clientY - ib.top) / ib.height * N);
+    const q = x >= 0 && y >= 0 && x < N && y < N ? lum[(y * N + x) * 4] : 0;
+    if (!q) { read.hidden = true; return; }
+    const L = Math.pow(10, q / 255 * 9 - 1), v = +r.value;
+    let t, bad = false;
+    if (v === 5) t = `${fmtL(L)} cd/m²`;
+    else if (L > SAT[v]) { t = lang === 'ja' ? '白飛び — 値なし' : 'clipped — no value'; bad = true; }
+    else if (L < SAT[v] / 400) { t = lang === 'ja' ? '暗すぎ — ノイズ' : 'too dark — noise'; bad = true; }
+    else t = `${fmtL(L)} cd/m²`;
+    read.textContent = t; read.classList.toggle('bad', bad); read.hidden = false;
+    read.style.left = (e.clientX - bb.left) + 'px'; read.style.top = (e.clientY - bb.top) + 'px';
+  });
+  box.addEventListener('pointerleave', () => { read.hidden = true; });
+  langHooks.push(show); show();
+}
+// AirQ-Logger: the analysis screen, with example data (a deterministic, plausible home day)
+{
+  const svg = $('epsvg'), H = 144, hrs = Array.from({ length: H }, (_, i) => i / 6);
+  const wig = (i, a) => Math.sin(i * 1.7) * a * 0.5 + Math.sin(i * 0.37 + 1) * a * 0.5;
+  const bump = (h, c, w) => Math.exp(-((h - c) ** 2) / (2 * w * w));
+  const DATA = {
+    co2: { name: 'CO2', unit: 'ppm', v: hrs.map((h, i) => 430 + 720 * Math.min(1, h / 6.5) * (h < 7 ? 1 : 0) + 380 * bump(h, 7.6, 0.5) + 520 * bump(h, 20.5, 1.6) + 260 * (h > 22 ? (h - 22) / 2 : 0) + wig(i, 25)) },
+    pm: { name: 'PM2.5', unit: 'µg/m³', v: hrs.map((h, i) => 4 + 1.5 * Math.sin(h / 3) + 30 * bump(h, 19.2, 0.35) + 8 * bump(h, 7.4, 0.3) + Math.abs(wig(i, 1.2))) },
+    t: { name: 'T', unit: '°C', v: hrs.map((h, i) => 21 + 1.4 * Math.sin((h - 9) / 24 * 2 * Math.PI) + 1.1 * bump(h, 19.3, 0.8) + wig(i, 0.08)) },
+    rh: { name: 'RH', unit: '%', v: hrs.map((h, i) => 46 - 4 * Math.sin((h - 9) / 24 * 2 * Math.PI) + 16 * bump(h, 7.3, 0.25) + 5 * bump(h, 19.3, 0.6) + wig(i, 0.6)) }
+  };
+  let key = 'co2', win = [0, 24];
+  const X0 = 34, X1 = 432, Y0 = 8, Y1 = 176;
+  function draw() {
+    const d = DATA[key], v = d.v, lo = Math.min(...v), hi = Math.max(...v), pad = (hi - lo) * 0.12, a = lo - pad, b = hi + pad;
+    const x = (h) => X0 + (X1 - X0) * h / 24, y = (val) => Y1 - (Y1 - Y0) * (val - a) / (b - a);
+    const pts = v.map((val, i) => `${x(hrs[i]).toFixed(1)},${y(val).toFixed(1)}`).join(' ');
+    const sel = v.filter((_, i) => hrs[i] >= win[0] && hrs[i] < win[1]), mean = sel.reduce((s, q) => s + q, 0) / sel.length, mx = Math.max(...sel);
+    const dec = key === 't' ? 1 : 0, f = (q) => q.toFixed(dec);
+    svg.innerHTML = `<defs><pattern id="dith" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="#1a1a1a"/></pattern></defs>
+      <rect x="${X0}" y="${Y0}" width="${X1 - X0}" height="${Y1 - Y0}" fill="none" stroke="#1a1a1a"/>
+      ${win[0] > 0 ? `<rect x="${X0}" y="${Y0}" width="${x(win[0]) - X0}" height="${Y1 - Y0}" fill="url(#dith)" opacity=".5"/>` : ''}
+      ${win[1] < 24 ? `<rect x="${x(win[1])}" y="${Y0}" width="${X1 - x(win[1])}" height="${Y1 - Y0}" fill="url(#dith)" opacity=".5"/>` : ''}
+      <polyline points="${pts}" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round"/>
+      ${[0, 6, 12, 18, 24].map((h) => `<text x="${x(h)}" y="194" font-size="11" text-anchor="middle" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${String(h).padStart(2, '0')}</text>`).join('')}
+      <text x="${X0 - 5}" y="${Y0 + 9}" font-size="11" text-anchor="end" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${f(b)}</text>
+      <text x="${X0 - 5}" y="${Y1}" font-size="11" text-anchor="end" font-family="IBM Plex Mono, monospace" fill="#1a1a1a">${f(a)}</text>`;
+    $('eptitle').textContent = d.name;
+    $('epstat').textContent = `${lang === 'ja' ? '平均' : 'mean'} ${f(mean)} · max ${f(mx)} ${d.unit} · ${lang === 'ja' ? '例' : 'example'}`;
+  }
+  $('epsens').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; key = bt.dataset.k; $('epsens').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); draw(); });
+  $('epwin').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; win = bt.dataset.w.split('-').map(Number); $('epwin').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); draw(); });
+  langHooks.push(draw); draw();
+}
+// Room sensor kit: lux vs melanopic EDI (example day), and the radiant cube
+{
+  const svg = $('kitsvg'), X0 = 30, X1 = 292, Y0 = 10, Y1 = 166, lmin = 0.5, lmax = 3000;
+  const x = (h) => X0 + (X1 - X0) * h / 24, y = (L) => Y1 - (Y1 - Y0) * (Math.log10(Math.max(lmin, L)) - Math.log10(lmin)) / (Math.log10(lmax) - Math.log10(lmin));
+  const day = (h) => h < 6.2 || h > 20.3 ? 0 : 900 * Math.pow(Math.sin(Math.PI * (h - 6.2) / 14.1), 1.6) * (0.85 + 0.15 * Math.sin(h * 2.3));
+  const lamp = (h) => h > 18.5 && h < 23.3 ? 160 * Math.min(1, (h - 18.5) * 2) * Math.min(1, (23.3 - h) * 3) : h > 6.6 && h < 7.6 ? 120 : 0;
+  const hs = Array.from({ length: 241 }, (_, i) => i / 10);
+  const line = (fn) => hs.map((h) => `${x(h).toFixed(1)},${y(fn(h)).toFixed(1)}`).join(' ');
+  function draw() {
+    const ja = lang === 'ja';
+    svg.innerHTML = `${[1, 10, 100, 1000].map((L) => `<line x1="${X0}" x2="${X1}" y1="${y(L)}" y2="${y(L)}" stroke="rgba(241,239,234,.14)"/><text x="${X0 - 4}" y="${y(L) + 3}" font-size="9" text-anchor="end" fill="rgba(241,239,234,.6)" font-family="IBM Plex Mono, monospace">${L >= 1000 ? '1k' : L}</text>`).join('')}
+      <line x1="${x(8)}" x2="${x(18)}" y1="${y(250)}" y2="${y(250)}" stroke="#8fa8ff" stroke-dasharray="3 3" opacity=".7"/><line x1="${x(0.3)}" x2="${x(5.6)}" y1="${y(250)}" y2="${y(250)}" stroke="#8fa8ff" stroke-dasharray="1 3" opacity=".5"/><text x="${x(0.3)}" y="${y(250) - 4}" font-size="8.5" fill="#8fa8ff" font-family="IBM Plex Mono, monospace">${ja ? '日中 ≥ 250' : 'day ≥ 250'}</text>
+      <polyline points="${line((h) => day(h) + lamp(h))}" fill="none" stroke="#f1efea" stroke-width="1.8"/>
+      <polyline points="${line((h) => day(h) * 0.92 + lamp(h) * 0.42)}" fill="none" stroke="#8fa8ff" stroke-width="1.8"/>
+      ${[0, 6, 12, 18, 24].map((h) => `<text x="${x(h)}" y="${Y1 + 14}" font-size="9" text-anchor="middle" fill="rgba(241,239,234,.6)" font-family="IBM Plex Mono, monospace">${String(h).padStart(2, '0')}</text>`).join('')}
+      <text x="${X1}" y="${Y0 + 8}" font-size="9" text-anchor="end" fill="#f1efea" font-family="IBM Plex Mono, monospace">lux</text><text x="${X1}" y="${Y0 + 19}" font-size="9" text-anchor="end" fill="#8fa8ff" font-family="IBM Plex Mono, monospace">melanopic EDI</text>`;
+  }
+  const FACES = { up: ['up', '上'], down: ['floor', '床'], s: ['window', '窓'], n: ['room', '室内'], e: ['right', '右'], w: ['left', '左'] };
+  const STATES = [{ up: 21.0, down: 20.6, s: 17.8, n: 21.4, e: 21.2, w: 21.1 }, { up: 21.7, down: 27.6, s: 19.6, n: 21.9, e: 21.6, w: 21.4 }];
+  let st = 0;
+  const col = (t) => { const k = Math.max(0, Math.min(1, (t - 17) / 11)); const a = [143, 168, 255], b = [241, 239, 234], c = [232, 163, 61];
+    const m = k < 0.4 ? a.map((q, i) => q + (b[i] - q) * k / 0.4) : b.map((q, i) => q + (c[i] - q) * (k - 0.4) / 0.6); return `rgb(${m.map(Math.round).join(',')})`; };
+  function cube() {
+    const T = STATES[st], ja = lang === 'ja';
+    $('cube').querySelectorAll('span').forEach((sp) => { const t = T[sp.dataset.f]; sp.innerHTML = `<i>${FACES[sp.dataset.f][ja ? 1 : 0]}</i>${t.toFixed(1)}`; sp.style.setProperty('--c', col(t)); });
+    const mrt = Math.pow(Object.values(T).reduce((s, t) => s + (t + 273.15) ** 4, 0) / 6, 0.25) - 273.15;
+    $('mrt').textContent = `MRT ${mrt.toFixed(1)} °C`;
+  }
+  $('kitsun').addEventListener('click', (e) => { const bt = e.target.closest('button'); if (!bt) return; st = +bt.dataset.sun; $('kitsun').querySelectorAll('button').forEach((q) => q.setAttribute('aria-pressed', String(q === bt))); cube(); });
+  langHooks.push(draw, cube); draw(); cube();
+}
+
+/* Solskin AI — the preference triangle (electricity · shading · view) */
+const TRI = { E: [130, 22], S: [22, 208], V: [238, 208] };
+const triCol = { E: '#ffd25c', S: '#8fa8ff', V: '#6fe0c0' };
+let pm = 'day', wUser = [0.25, 0.25, 0.5], dayT = 0.25;
+const norm3 = (w) => { const z = w[0] + w[1] + w[2] || 1; return w.map((x) => Math.max(0, x) / z); };
+// an invented, smooth wander through the triangle over a day — purely illustrative
+const wander = (t) => norm3([0.38 + 0.28 * Math.sin(2 * Math.PI * t - 1.2), 0.3 + 0.22 * Math.sin(2 * Math.PI * t + 0.9), 0.32 + 0.24 * Math.sin(2 * Math.PI * t + 3.1)]);
+const toXY = (w) => [w[0] * TRI.E[0] + w[1] * TRI.S[0] + w[2] * TRI.V[0], w[0] * TRI.E[1] + w[1] * TRI.S[1] + w[2] * TRI.V[1]];
+function toW(x, y) {
+  const [x1, y1] = TRI.E, [x2, y2] = TRI.S, [x3, y3] = TRI.V, d = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+  let a = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / d, b = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / d; return norm3([a, b, 1 - a - b].map((v) => Math.max(0, v)));
+}
+const triSvg = $('tri');
+function drawTri(w) {
+  const lab = (k, en, ja, x, y, anchor) => `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#151515" letter-spacing=".06em">${(lang === 'ja' ? ja : en).toUpperCase()}</text>`;
+  const [x, y] = toXY(w);
+  triSvg.innerHTML = `<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${triCol.E}" stop-opacity=".35"/><stop offset="1" stop-color="${triCol.V}" stop-opacity=".25"/></linearGradient></defs>
+    <path d="M${TRI.E} L${TRI.S} L${TRI.V} Z" fill="url(#tg)" stroke="#151515" stroke-width="1"/>
+    ${lab('E', 'Electricity', '発電', TRI.E[0], 12, 'middle')}${lab('S', 'Shading', '遮蔽', TRI.S[0] - 4, 226, 'start')}${lab('V', 'View', '眺望', TRI.V[0] + 4, 226, 'end')}
+    <circle class="dot" cx="${x}" cy="${y}" r="9" fill="#e8a33d" stroke="#151515" stroke-width="1.4"/>`;
+}
+function setW(w) {
+  W.setWeights(w); drawTri(w);
+  const names = [['Electricity', '発電', 'E'], ['Shading', '遮蔽', 'S'], ['View', '眺望', 'V']];
+  $('wts').innerHTML = names.map((n, i) => `<dt>${lang === 'ja' ? n[1] : n[0]}</dt><dd style="--c:${triCol[n[2]]}"><i style="width:${(w[i] * 100).toFixed(0)}%"></i></dd><span>${(w[i] * 100).toFixed(0)}%</span>`).join('');
+}
+let triDrag = false;
+const triPt = (e) => { const r = triSvg.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 260, (e.clientY - r.top) / r.height * 236]; };
+triSvg.addEventListener('pointerdown', (e) => { triDrag = true; triSvg.setPointerCapture(e.pointerId); setPM('drag'); wUser = toW(...triPt(e)); setW(wUser); });
+triSvg.addEventListener('pointermove', (e) => { if (triDrag) { wUser = toW(...triPt(e)); setW(wUser); } });
+triSvg.addEventListener('pointerup', () => { triDrag = false; });
+function setPM(m) { pm = m; document.querySelectorAll('[data-pm]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pm === m))); }
+document.querySelectorAll('[data-pm]').forEach((b) => b.addEventListener('click', () => setPM(b.dataset.pm)));
+function solskinTick(dt) {
+  if (pm === 'drag') { $('envr').textContent = ''; return; }
+  dayT = (dayT + dt / 24) % 1;
+  setW(wander(dayT));
+  const hh = 6 + dayT * 14, h = Math.floor(hh), mi = Math.floor((hh - h) * 60);
+  $('envr').textContent = `${String(h).padStart(2, '0')}:${String(mi).padStart(2, '0')}`;
+}
+// compare slider
+{ const c = $('cmp'), inp = c.querySelector('input'); inp.addEventListener('input', () => c.style.setProperty('--x', inp.value + '%')); }
+
+/* ---------- publications: counts · selected · spectrum · list (and an optional fisheye sky) ---------- */
+const pcard = $('pcard');
+let filter = null, skyOn = false;
+const bold = (a) => a.replace(/Kim, D\.H\./g, '<b>Kim, D.H.</b>');
+const scholar = (t) => 'https://scholar.google.com/scholar?q=' + encodeURIComponent('"' + t + '"');
+const href = (p) => p.url || (p.doi ? 'https://doi.org/' + p.doi : scholar(p.t));
+const KIND = { J: ['Journal', '論文誌'], C: ['Conference', '国際会議'], R: ['Report', '報告書'], T: ['Thesis', '学位論文'] };
+const STATUS = { review: ['Under review', '査読中'], prep: ['In preparation', '準備中'] };
+const L = (pair) => pair[lang === 'ja' ? 1 : 0];
+const themeName = (k) => L([THEMES[k].en, THEMES[k].ja]);
+function pubHTML(p) {
+  const kind = L(KIND[p.k]) + (p.status ? ' · ' + L(STATUS[p.status]) : '');
+  return `<div class="k">${p.y} · ${kind} · ${themeName(p.th)}</div><h4>${p.t}</h4><div class="v">${p.v}</div>${p.a ? `<div class="a">${bold(p.a)}</div>` : ''}`;
+}
+function pubCard(p, x, y) {
+  if (!p) { pcard.style.display = 'none'; return; }
+  pcard.innerHTML = pubHTML(p); pcard.style.display = 'block';
+  const w = pcard.offsetWidth, h = pcard.offsetHeight;
+  pcard.style.left = Math.min(innerWidth - w - 12, Math.max(12, x + 18)) + 'px';
+  pcard.style.top = Math.min(innerHeight - h - 12, Math.max(80, y - h / 2)) + 'px';
+}
+function buildCounts() {
+  const pub = PUBS.filter((p) => !p.status);
+  const n = [[pub.filter((p) => p.k === 'J').length, ['Journal articles', '論文誌']], [pub.filter((p) => p.k === 'C').length, ['Conference papers', '国際会議']],
+    [pub.filter((p) => p.k === 'R').length, ['HiDyn reports', 'HiDyn報告書']], [pub.filter((p) => p.role === 'lead' && p.k !== 'T').length, ['As lead author', '筆頭・責任著者']],
+    [PUBS.filter((p) => p.status).length, ['In progress', '進行中']]];
+  $('counts').innerHTML = n.map(([v, l]) => `<div><b>${v}</b><span>${L(l)}</span></div>`).join('');
+}
+function buildSelected() {
+  $('sel').innerHTML = PUBS.filter((p) => p.sel).sort((a, b) => b.y - a.y).map((p) =>
+    `<a href="${href(p)}" target="_blank" rel="noopener" style="--c:${THEMES[p.th].hue}"><span class="y">${p.y} · ${themeName(p.th)}</span><span class="t">${p.t}</span><span class="v">${p.v}</span></a>`).join('');
+}
+function buildSpectrum() {
+  const Y0 = 2011.5, Y1 = 2026.5, W0 = 1000, rowH = 46, top = 8, left = 150, right = 70, keys = Object.keys(THEMES), H = top + keys.length * rowH + 22;
+  const x = (y) => left + (y - Y0) / (Y1 - Y0) * (W0 - left - right);
+  let g = `<svg viewBox="0 0 ${W0} ${H}" xmlns="http://www.w3.org/2000/svg"><defs><filter id="gl" x="-2" y="-1" width="5" height="3"><feGaussianBlur stdDeviation="2.2"/></filter></defs>`;
+  for (let y = 2012; y <= 2026; y += 2) g += `<line x1="${x(y)}" x2="${x(y)}" y1="${top}" y2="${top + keys.length * rowH}" stroke="rgba(255,255,255,.08)"/><text x="${x(y)}" y="${H - 4}" fill="rgba(241,239,234,.6)" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="middle">${y}</text>`;
+  g += `<rect x="${W0 - right + 6}" y="${top}" width="${right - 12}" height="${keys.length * rowH}" fill="rgba(232,163,61,.08)"/><text x="${W0 - right / 2}" y="${H - 4}" fill="#e8a33d" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="middle">${lang === 'ja' ? '進行中' : 'next'}</text>`;
+  keys.forEach((k, r) => {
+    const cy = top + r * rowH, hue = THEMES[k].hue, dim = filter && filter !== k;
+    g += `<text x="14" y="${cy + rowH / 2 + 4}" fill="${dim ? 'rgba(241,239,234,.3)' : '#f1efea'}" font-family="IBM Plex Mono, monospace" font-size="11">${themeName(k).toUpperCase()}</text>`;
+    g += `<line x1="${left - 6}" x2="${W0 - 6}" y1="${cy + rowH}" y2="${cy + rowH}" stroke="rgba(255,255,255,.06)"/>`;
+    const items = PUBS.map((p, i) => ({ p, i })).filter(({ p }) => p.th === k);
+    const seen = {};
+    for (const { p, i } of items) {
+      const key = p.status ? 'next' : p.y; const n = (seen[key] = (seen[key] || 0) + 1) - 1;
+      const xx = p.status ? W0 - right + 14 + n * 9 : x(p.y) + (n - 0.5 * 0) * 7 - 7;
+      const lead = p.role === 'lead', hgt = lead ? rowH - 10 : rowH * 0.55, y0 = cy + (rowH - hgt) / 2, col = p.status ? '#e8a33d' : hue, op = dim ? 0.15 : (lead ? 1 : 0.62);
+      const dash = p.k === 'R' ? ' stroke-dasharray="3 3"' : '';
+      if (lead && !dim) g += `<line x1="${xx}" x2="${xx}" y1="${y0}" y2="${y0 + hgt}" stroke="${col}" stroke-width="5" opacity=".55" filter="url(#gl)"/>`;
+      g += `<line class="ln" data-i="${i}" x1="${xx}" x2="${xx}" y1="${y0}" y2="${y0 + hgt}" stroke="${col}" stroke-width="${lead ? 2.4 : 1.4}" opacity="${op}"${dash} stroke-linecap="round"/>`;
+      g += `<line class="ln" data-i="${i}" x1="${xx}" x2="${xx}" y1="${cy}" y2="${cy + rowH}" stroke="transparent" stroke-width="8"/>`;
+    }
+  });
+  $('spec').innerHTML = g + '</svg>';
+  $('spec').querySelectorAll('.ln').forEach((el) => {
+    el.addEventListener('pointerenter', (e) => pubCard(PUBS[+el.dataset.i], e.clientX, e.clientY));
+    el.addEventListener('pointermove', (e) => pubCard(PUBS[+el.dataset.i], e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => pubCard(null));
+    el.addEventListener('click', () => { const it = document.querySelector(`.plist .it[data-i="${el.dataset.i}"]`); if (it) { document.querySelectorAll('.plist .hl').forEach((h) => h.classList.remove('hl')); it.classList.add('hl'); it.scrollIntoView({ behavior: 'smooth', block: 'center' }); } });
+  });
+}
+function buildChips() {
+  const el = $('chips'); el.innerHTML = '';
+  const mk = (key, label) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = (key ? `<i style="--c:${THEMES[key].hue}"></i>` : '') + label; b.setAttribute('aria-pressed', String(filter === key)); b.onclick = () => setFilter(key); el.appendChild(b); };
+  mk(null, lang === 'ja' ? 'すべて' : 'All');
+  for (const k of Object.keys(THEMES)) mk(k, themeName(k));
+}
+function setFilter(f) { filter = f; if (sky) sky.setFilter(f); buildChips(); buildList(); buildSpectrum(); }
+function buildList() {
+  const ps = PUBS.map((p, i) => ({ ...p, i })).filter((p) => !filter || p.th === filter).sort((a, b) => (b.status ? 1 : 0) - (a.status ? 1 : 0) || b.y - a.y);
+  let html = '', yr = null;
+  for (const p of ps) {
+    const y = p.status ? (lang === 'ja' ? '進行中' : 'In progress') : p.y;
+    if (y !== yr) { html += `<h5>${y}</h5>`; yr = y; }
+    const title = p.status ? p.t : `<a href="${href(p)}" target="_blank" rel="noopener">${p.t}</a>`;
+    html += `<div class="it${p.role === 'lead' ? ' lead' : ''}" data-i="${p.i}" style="--c:${p.status ? '#e8a33d' : THEMES[p.th].hue}"><div class="t">${title}${p.status ? `<span class="tag">${L(STATUS[p.status])}</span>` : ''}</div><div class="s">${p.a ? bold(p.a) + ' · ' : ''}${p.v}${p.k === 'R' || p.k === 'T' ? ' · ' + L(KIND[p.k]) : ''}</div></div>`;
+  }
+  $('plist').innerHTML = html;
+}
+function buildPubs() { buildCounts(); buildSelected(); buildSpectrum(); buildChips(); buildList(); }
+function setSky(on) {
+  skyOn = on; document.body.classList.toggle('sky-on', on); if (!on) pubCard(null);
+  if (on && sky) { sky.resize(); sky.setSplit(split); }
+}
+$('skybtn').addEventListener('click', () => setSky(true));
+$('skyclose').addEventListener('click', () => setSky(false));
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && skyOn) setSky(false); });
+document.querySelectorAll('[data-sky]').forEach((b) => b.addEventListener('click', () => { setFilter(b.dataset.sky); document.getElementById('publications').scrollIntoView({ behavior: 'smooth' }); }));
+$('copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText('donghyun.kim@rs.tus.ac.jp'); $('copy').textContent = lang === 'ja' ? 'コピーしました' : 'Copied'; } catch { const r = document.createRange(); r.selectNodeContents(document.querySelector('.mail code')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } });
+
+
+/* ---------- one day: every section has its hour ---------- */
+const tBlocks = [...document.querySelectorAll('[data-t]')];
+const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+const clk = $('clk'), clkl = $('clkl'), sdot = $('sdot'), clockEl = $('clock');
+let clockN = 0;
+function dayClock() {
+  let m = null, where = '';
+  if (scene === 'walk') { m = 8 * 60 + 10 + (chapter + Math.max(0, prog)) * 70; where = lang === 'ja' ? CH[chapter].jp : CH[chapter].t; }
+  else {
+    const mid = innerHeight / 2;
+    for (let k = 0; k < tBlocks.length; k++) {
+      const r = tBlocks[k].getBoundingClientRect();
+      if (r.top <= mid && r.bottom > mid) {
+        const t0 = toMin(tBlocks[k].dataset.t); let t1 = k + 1 < tBlocks.length ? toMin(tBlocks[k + 1].dataset.t) : t0 + 25;
+        if (t1 - t0 > 180) t1 = t0 + 30;            // the night between Publications and Contact passes off-screen
+        m = t0 + (t1 - t0) * Math.min(1, Math.max(0, (mid - r.top) / r.height)); break;
+      }
+    }
+    if (m == null) return;
+  }
+  // the sun as the scene draws it
+  const L = W.mode === 'room' ? W.room.L : W.state.L, alt = Math.asin(Math.max(-1, Math.min(1, L.y))) * 180 / Math.PI;
+  const lit = W.mode === 'room' ? W.room.P.sunI > 0.3 : true;
+  const ja = lang === 'ja', next = m >= 1440, mm = ((m % 1440) + 1440) % 1440;
+  clk.textContent = `${String(Math.floor(mm / 60)).padStart(2, '0')}:${String(Math.floor(mm % 60)).padStart(2, '0')}`;
+  const sun = lit && alt > 0.5 && (h0 => h0 >= 6 && h0 <= 18.5)(mm / 60) ? (ja ? `太陽 ${Math.round(alt)}°` : `sun ${Math.round(alt)}°`) : (mm > 17 * 60 || mm < 5 * 60 ? (ja ? '夜' : 'night') : (ja ? '日の出前' : 'before sunrise'));
+  clkl.textContent = [next ? (ja ? '翌朝' : 'next morning') : '', where, sun].filter(Boolean).join(' · ');
+  // the dial: day on the upper half (06:00 → 18:30), night on the lower half
+  const h = mm / 60, day = h >= 6 && h <= 18.5;
+  const a = day ? Math.PI * (1 - (h - 6) / 12.5) : -Math.PI * (((h - 18.5 + 24) % 24) / 11.5);
+  sdot.setAttribute('cx', (28 + 19 * Math.cos(a)).toFixed(2)); sdot.setAttribute('cy', (28 - 19 * Math.sin(a)).toFixed(2));
+  clockEl.classList.toggle('night', !day);
+}
+/* ---------- boot ---------- */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+try {
+  W = await createWalk({ canvas, assets: './assets/', onProgress: (f) => { $('lp').textContent = Math.round(f * 100) + '%'; $('lf').style.width = (f * 100) + '%'; } });
+} catch (err) { document.documentElement.classList.remove('booting'); $('lerr').hidden = false; $('lerr').textContent = 'This page needs WebGL 2. ' + (err && err.message ? err.message : ''); throw err; }
+sky = createSky($('skyc'), { onPick: (s, x, y) => pubCard(s, x, y) });
+window.W = W; window.goTo = goTo;
+W.state.fade = 0; W.fade(0);
+setW(wander(dayT));
+document.body.classList.add('in-walk'); placeSeam(); caption(0); setLang('en');
+W.setCity(0);
+// hand over from the poster only when the live street looks like it: London's baked light loaded, two frames drawn
+await Promise.race([W.whenBaked(0), new Promise((r) => setTimeout(r, 2500))]);
+W.render(0.016); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+$('loading').classList.add('done'); document.documentElement.classList.remove('booting');
+let seen = false; try { seen = localStorage.getItem('dl-seen') === '1'; localStorage.setItem('dl-seen', '1'); } catch {}
+if (!seen && !(location.hash && location.hash !== '#journey')) { showCard(0); setTimeout(() => card.classList.remove('on'), 1700); }
+checkScene();
+setTimeout(() => W.prebuild(1), 2500); setTimeout(() => W.prebuild(5), 6000);
+setTimeout(() => $('hint').classList.add('off'), 9000);
+if (reduce) { playing = false; playBtn.innerHTML = PLAY; }
+
+let last = performance.now(), manual = false;
+window.__cap = { manual(on) { manual = on; }, step(dt) { tick(dt); } };
+function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; if (!manual) tick(dt); requestAnimationFrame(frame); }
+function tick(dt) {
+  const walking = scene === 'walk' && playing && !busy && !sceneBusy;
+  if (walking) {
+    prog += dt * SPEED / LEN;
+    if (prog >= 1) { prog = 1; goTo((chapter + 1) % CH.length); }
+  } else if (scene === 'tokyo') { prog = Math.min(0.99, prog + dt * 0.9 / LEN); }
+  W.state.walkRate = walking || scene === 'tokyo' ? SPEED / 1.45 : 0;
+  W.setProgress(prog);
+  look.x += (look.tx - look.x) * Math.min(1, dt * 4); look.y += (look.ty - look.y) * Math.min(1, dt * 4);
+  W.setLook(look.x, look.y);
+  if (splitTarget != null) { split += (splitTarget - split) * Math.min(1, dt * 4); placeSeam(); if (Math.abs(splitTarget - split) < 0.001) splitTarget = null; }
+  if (skyOn) sky.draw(performance.now() / 1000);
+  else W.render(dt);
+  chBtns.forEach((b, k) => { b.querySelector('.bar').style.transform = `scaleX(${k < chapter ? 1 : k === chapter ? prog : 0})`; });
+  if (W.mode === 'room') {
+    const rs = W.room.state;
+    $('moodv').textContent = rs.mood || '—';
+    $('evv').textContent = `HDR bracket · ${rs.ev > 0 ? '+' : ''}${rs.ev} EV`;
+    if (scene === 'room:solskin') solskinTick(dt);
+    if (scene === 'room:comfort') document.querySelectorAll('[data-pat]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pat === rs.pattern)));
+  }
+  meter(); isoDraw(dt);
+  if ((clockN = (clockN + 1) % 3) === 0) dayClock();
+}
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>

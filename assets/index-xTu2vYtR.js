@@ -4122,7 +4122,7 @@ body.card-open .walkchip { visibility: hidden !important; opacity: 0 !important;
   background: linear-gradient(135deg, rgba(66,74,112,.42), rgba(222,140,151,.18) 48%, rgba(246,229,219,.3));
   backdrop-filter: blur(6px) saturate(.85); }
 .sc-shade[hidden] { display: none; }
-.sc-card { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr); width: min(820px, 100%);
+.sc-card { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); width: min(820px, 100%);
   max-height: min(82vh, 760px); background: var(--sc-paper); color: var(--sc-ink); border: 2px solid var(--sc-ink); border-radius: 5px;
   box-shadow: 10px 12px 0 rgba(58,51,78,.23), 0 28px 70px -28px rgba(45,40,65,.75); overflow: hidden;
   font-family: 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Segoe UI', system-ui, sans-serif; outline: none; }
@@ -4145,6 +4145,8 @@ body.card-open .walkchip { visibility: hidden !important; opacity: 0 !important;
 .sc-lede { font-weight: 700; font-size: 16px !important; }
 .sc-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 10px 0 6px; }
 .sc-links a, .sc-cv a { color: var(--sc-ink); font-weight: 700; font-size: 13px; text-decoration: underline; text-decoration-color: var(--sc-red); text-underline-offset: 3px; }
+.sc-note { font-size: 12.5px !important; color: var(--sc-mute); margin-top: 14px !important; }
+.sc-note a { color: var(--sc-ink); }
 .sc-cv { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .sc-cv li { display: grid; grid-template-columns: 82px 82px minmax(0, 1fr); gap: 10px; font-size: 13.5px; line-height: 1.5; }
 .sc-cv span { font: 500 12px/1.6 ui-monospace, Menlo, monospace; color: var(--sc-mute); font-variant-numeric: tabular-nums; }
@@ -4174,7 +4176,7 @@ body.card-open .walkchip { visibility: hidden !important; opacity: 0 !important;
 .sc-fade { position: fixed; inset: 0; z-index: 35; background: var(--sc-paper); opacity: 0; pointer-events: none; transition: opacity .28s ease; }
 .sc-fade.on { opacity: 1; }
 @media (max-width: 640px) {
-  .sc-card { grid-template-columns: 1fr; max-height: 88vh; }
+  .sc-card { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); max-height: 88vh; }
   .sc-art { padding: 12px 16px; border-right: 0; border-bottom: 2px solid var(--sc-ink); }
   .sc-jp { writing-mode: horizontal-tb; top: 9px; font-size: 16px; }
   .sc-body { padding: 22px 20px 8px; }
@@ -4192,7 +4194,8 @@ body.card-open .walkchip { visibility: hidden !important; opacity: 0 !important;
       <ol class="sc-list">${cl.map(t=>`<li><button type="button" data-go="project:${t.id}"><b>${pn(t.title)}</b><span>${pn(t.meta)}</span></button></li>`).join("")}</ol>`};if(e==="about")return{art:["About","光と人"],html:`<div class="sc-kicker">${pn(id.role)}</div><h2>${pn(id.name)}</h2>
       <p class="sc-lede">${pn(C3.title)}</p>${C3.body.map(t=>`<p>${pn(t)}</p>`).join("")}
       <h3>Journey</h3><ol class="sc-cv">${L3.map(([t,n,o,s])=>`<li><span>${pn(t)}</span><b>${pn(n)}</b><em>${s?`<a href="${pn(s)}" target="_blank" rel="noopener">${pn(o)} ↗</a>`:pn(o)}</em></li>`).join("")}</ol>
-      <div class="sc-links">${id.links.map(j2).join("")}</div>`};if(e==="journey")return{art:["Journey","路線図"],html:`<div class="sc-kicker">The line so far · six stations</div><h2>London to Tokyo</h2>
+      <div class="sc-links">${id.links.map(j2).join("")}</div>
+      <p class="sc-note">Rather read than walk? The previous, text-first site is at <a href="classic/">daylightlab.jp/classic</a>.</p>`};if(e==="journey")return{art:["Journey","路線図"],html:`<div class="sc-kicker">The line so far · six stations</div><h2>London to Tokyo</h2>
       <p>The board at the station shows it as a railway line: every stop a city, every city a few years of work.</p>
       <ol class="sc-cv">${L3.map(([t,n,o,s])=>`<li><span>${pn(t)}</span><b>${pn(n)}</b><em>${s?`<a href="${pn(s)}" target="_blank" rel="noopener">${pn(o)} ↗</a>`:pn(o)}</em></li>`).join("")}</ol>`,actions:[["About me →",()=>ol.go("about")]]};if(e==="instruments")return{art:["Instruments","どうぐ"],html:`<div class="sc-kicker">Tools I wrote or built along the way</div><h2>I build the instruments I measure with.</h2>
       ${oD.map(t=>`<div class="sc-item"><h3>${pn(t.title)} <small>${pn(t.meta)}</small></h3><p>${pn(t.body)}</p>${t.link?`<div class="sc-links">${j2(t.link)}</div>`:""}</div>`).join("")}`};if(e==="publications"){const t=s=>J2.filter(a=>a[4]===s).length,n=[...new Set(J2.map(s=>s[0]))],o={J:"Journal",C:"Conference",R:"Report",T:"Thesis",P:"In progress"};return{art:["Library","図書館"],html:`<div class="sc-kicker">${t("J")} journal articles · ${t("C")} conference papers · ${t("R")} reports</div><h2>Publications</h2>
